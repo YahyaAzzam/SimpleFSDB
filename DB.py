@@ -45,11 +45,10 @@ def parse_args():
 
 
 def create(schema):
-    print(11)
+    print(schema)
 
 
 args = parse_args()
-args.command = input()
 if args.command == "create":
     create(args.schema)
 # elif args.command == "set":
