@@ -1,0 +1,33 @@
+{
+    "database_name" : "csed25",
+    "Tables" : [
+        {
+            "name" : "Reservations",
+            "columns" : ["First_name", "Last_name", "Passport_Id", "Gender", "Age", "Flight_Id", "Luggage_allowance", "Seat"],
+            "primary_key"  : "reservationId",
+            "Index_keys" : ["Last_name", "Seat"],
+            "Consistently" : "Eventual"
+        },
+        {
+            "name" : "Flights",
+            "columns" : ["PlaneId", "Seats_reserved", "Take_off", "Destination", "Stops", "Departure_time", "Departure_date", "Arrival_time", "Arrival_date"],
+            "primary_key"  : "flightId",
+            "Index_keys" : ["PlaneId", "Seats_reserved"],
+            "Consistently" : "Eventual"
+        },
+        {
+            "name" : "Planes",
+            "columns" : ["Plane_manufacture", "Seats_number", "Rows_number", "Seats_distribution"],
+            "primary_key"  : "PlaneId",
+            "Index_keys" : ["Seats_number", "Rows_number", "Seats_distribution"],
+            "Consistently" : "Eventual"
+        },
+	{
+            "name" : "Flights_Seats",
+            "columns" : ["Last_name", "ReservationId"],
+            "primary_key"  : "flightId_seatId",
+            "Index_keys" : ["ReservationId"],
+            "Consistently" : "Strong"
+        } 
+     ] 
+}
