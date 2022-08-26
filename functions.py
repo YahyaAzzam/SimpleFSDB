@@ -82,3 +82,31 @@ def deletes(database, table, primary_key):
         return True
     else:
         return False
+
+
+def run(args):
+    if args.command == "create_dir":
+        creates_dir(args.schema)
+        exit()
+    elif args.command == "create":
+        creates(args.schema, args.table, args.primary_key)
+        exit()
+    elif args.command == "set":
+        sets(args.database, args.table, args.primary_key, args.parameter, args.value)
+        exit()
+    elif args.command == "get":
+        m = gets(args.database, args.table, args.primary_key)
+        if not m:
+            print("Error, data not found")
+        else:
+            print(m)
+        exit()
+    elif args.command == "delete":
+        m = deletes(args.database, args.table, args.primary_key)
+        if not m:
+            print("Error, data not found")
+        exit()
+
+
+
+
