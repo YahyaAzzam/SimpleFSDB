@@ -25,5 +25,4 @@ elif args.command == "delete":
     exit()
 
 
-os.system("main.py -c  -sc Check-in-schema.json -db csed25 -t Seats -pk "+str(1)+".json")
 
