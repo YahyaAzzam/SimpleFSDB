@@ -1,28 +1,6 @@
 from functions import *
 from input import *
 
-args = parse_args()
-if args.command == "create_dir":
-    creates_dir(args.schema)
-    exit()
-elif args.command == "create":
-    creates(args.schema, args.table, args.primary_key)
-    exit()
-elif args.command == "set":
-    sets(args.database, args.table, args.primary_key, args.parameter, args.value)
-    exit()
-elif args.command == "get":
-    m = gets(args.database, args.table, args.primary_key)
-    if not m:
-        print("Error, data not found")
-    else:
-        print(m)
-    exit()
-elif args.command == "delete":
-    m = deletes(args.database, args.table, args.primary_key)
-    if not m:
-        print("Error, data not found")
-    exit()
 
-
+run(parse_args())
 
