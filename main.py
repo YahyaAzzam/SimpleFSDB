@@ -1,5 +1,5 @@
-import functions
-import input
+from functions import *
+from input import *
 
 args = parse_args()
 if args.command == "create_dir":
