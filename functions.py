@@ -14,33 +14,40 @@ def search(path, primary_key):
 def creates_dir(schema):
     x = json.load(open(schema, 'r'))
     p = os.path.join(os.getcwd(), x['database_name'])
-    os.mkdir(p)
-    for i in x['Tables']:
-        d = os.path.join(p, i['name'])
-        os.mkdir(d)
+    if not os.path.exists(p):
+        os.mkdir(p)
+        for i in x['Tables']:
+             d = os.path.join(p, i['name'])
+             os.mkdir(d)
+    else:
+        for i in x['Tables']:
+            d = os.path.join(p, i['name'])
+            if(not os.path.exists(d)):
+                os.mkdir(d)
 
 
 def creates(schema, table, primary_key):
     x = json.load(open(schema, 'r'))
     path = os.getcwd() + '\\' + x['database_name'] + '\\' + table + '\\' + primary_key
-    f = open(path, 'w')
-    f.write("{\n")
-    i = 0
-    for k in x['Tables']:
-        if k['name'] != table:
-            i = i + 1
-        else:
-            break
-    x = x['Tables'][i]
-    i = len(x['columns'])
-    j = 0
-    for t in x['columns']:
-        f.write("\t\"" + t + "\" : \"0\"")
-        j = j + 1
-        if j < i:
-            f.write(",\n")
-    f.write("\n}\n")
-    f.close()
+    if not os.path.exists(path):
+        f = open(path, 'w')
+        f.write("{\n")
+        i = 0
+        for k in x['Tables']:
+            if k['name'] != table:
+                i = i + 1
+            else:
+                break
+        x = x['Tables'][i]
+        i = len(x['columns'])
+        j = 0
+        for t in x['columns']:
+            f.write("\t\"" + t + "\" : \"0\"")
+            j = j + 1
+            if j < i:
+                f.write(",\n")
+        f.write("\n}\n")
+        f.close()
 
 
 def sets(database, table, primary_key, parameter, value):
