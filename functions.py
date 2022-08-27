@@ -17,12 +17,12 @@ def creates_dir(schema):
     if not os.path.exists(p):
         os.mkdir(p)
         for i in x['Tables']:
-             d = os.path.join(p, i['name'])
-             os.mkdir(d)
+            d = os.path.join(p, i['name'])
+            os.mkdir(d)
     else:
         for i in x['Tables']:
             d = os.path.join(p, i['name'])
-            if(not os.path.exists(d)):
+            if not os.path.exists(d):
                 os.mkdir(d)
 
 
@@ -48,6 +48,9 @@ def creates(schema, table, primary_key):
                 f.write(",\n")
         f.write("\n}\n")
         f.close()
+        return True
+    else:
+        return False
 
 
 def sets(database, table, primary_key, parameter, value):
@@ -113,7 +116,3 @@ def run(args):
         if not m:
             print("Error, data not found")
         exit()
-
-
-
-

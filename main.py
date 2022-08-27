@@ -3,4 +3,3 @@ from input import *
 
 
 run(parse_args())
-
