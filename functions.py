@@ -63,7 +63,7 @@ def sets(database, table, primary_key, parameter, value):
         f = open(path, 'r')
         x = json.load(f)
         f.close()
-        x = gets(database, table, primary_key)
+        
     i = 0
     k = 0
     for k in x:
