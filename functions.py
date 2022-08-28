@@ -1,10 +1,10 @@
 import json
 import os
-
+from keys import *
 
 def search(path, primary_key):
     y = False
-    for r, d, f in os.walk(path):
+    for r, d, f in  os.walk(path):
         if primary_key in f:
             y = True
             break
@@ -13,44 +13,46 @@ def search(path, primary_key):
 
 def creates_dir(schema):
     x = json.load(open(schema, 'r'))
-    p = os.path.join(os.getcwd(), x['database_name'])
+    p = os.path.join(os.getcwd(), x[keys().database])
     if not os.path.exists(p):
         os.mkdir(p)
-        for i in x['Tables']:
-            d = os.path.join(p, i['name'])
-            os.mkdir(d)
+        for i in x[keys().Tables]:
+             d = os.path.join(p, i[keys().name])
+             os.mkdir(d)
     else:
-        for i in x['Tables']:
-            d = os.path.join(p, i['name'])
-            if not os.path.exists(d):
+        for i in x[keys().Tables]:
+            d = os.path.join(p, i[keys().name])
+            if(not os.path.exists(d)):
                 os.mkdir(d)
 
 
+
 def creates(schema, table, primary_key):
-    x = json.load(open(schema, 'r'))
-    path = os.getcwd() + '\\' + x['database_name'] + '\\' + table + '\\' + primary_key
+    f=open(schema, 'r')
+    x = json.load(f)
+    f.close()
+    path = os.getcwd() + '\\' + x[keys().database] + '\\' + table + '\\' + primary_key
     if not os.path.exists(path):
+
         f = open(path, 'w')
         f.write("{\n")
         i = 0
-        for k in x['Tables']:
-            if k['name'] != table:
+        for k in x[keys().Tables]:
+            if k[keys().name] != table:
                 i = i + 1
             else:
                 break
-        x = x['Tables'][i]
-        i = len(x['columns'])
+        x = x[keys().Tables][i]
+        i = len(x[keys().columns])
         j = 0
-        for t in x['columns']:
+        for t in x[keys().columns]:
             f.write("\t\"" + t + "\" : \"0\"")
             j = j + 1
             if j < i:
                 f.write(",\n")
         f.write("\n}\n")
         f.close()
-        return True
-    else:
-        return False
+
 
 
 def sets(database, table, primary_key, parameter, value):
@@ -58,9 +60,10 @@ def sets(database, table, primary_key, parameter, value):
     x = gets(database, table, primary_key)
     if not x:
         creates('Check-in-schema.json', table, primary_key)
-        f = open(x, 'r')
+        f = open(path, 'r')
         x = json.load(f)
         f.close()
+        x = gets(database, table, primary_key)
     i = 0
     k = 0
     for k in x:
@@ -97,22 +100,26 @@ def deletes(database, table, primary_key):
 def run(args):
     if args.command == "create_dir":
         creates_dir(args.schema)
-        exit()
+        return
     elif args.command == "create":
         creates(args.schema, args.table, args.primary_key)
-        exit()
+        return
     elif args.command == "set":
         sets(args.database, args.table, args.primary_key, args.parameter, args.value)
-        exit()
+        return
     elif args.command == "get":
         m = gets(args.database, args.table, args.primary_key)
         if not m:
-            print("Error, data not found")
+            return("Error, data not found")
         else:
-            print(m)
-        exit()
+            return(m)
+
     elif args.command == "delete":
         m = deletes(args.database, args.table, args.primary_key)
         if not m:
-            print("Error, data not found")
-        exit()
+            return("Error, data not found")
+
+
+
+
+

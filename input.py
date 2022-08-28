@@ -4,7 +4,7 @@ import argparse
 def parse_args():
     parser = argparse.ArgumentParser(description="Auto Sizer agent")
     parser.add_argument(
-        "-c",
+        '-c',
         "--command",
         type=str,
         help="The needed command to execute (create, get, set or delete)",
@@ -46,3 +46,4 @@ def parse_args():
         help="Value of the parameter",
     )
     return parser.parse_args()
+
