@@ -4,12 +4,12 @@ from keys import *
 
 
 def search(path, primary_key):
-    y = False
+    found = False
     for roots, directories, files in os.walk(path):
         if primary_key in files:
-            y = True
+            found = True
             break
-    return y
+    return found
 
 
 def creates_dir(schema):
