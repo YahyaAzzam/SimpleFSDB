@@ -3,8 +3,8 @@ from functions import *
 
 class command_factory:
     def __init__(self, args):
-        self.cmd = args.command
-        self.args = args
+        self.cmd = args.command.lower()
+        self.args = args.lower()
 
     def execute(self):
         if self.cmd == "create_dir":
