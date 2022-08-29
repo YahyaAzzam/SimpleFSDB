@@ -6,3 +6,4 @@ class keys:
     primary_key = "primary_key"
     index_keys = "Index_keys"
     consistency = "consistency"
+    schema = "schema"

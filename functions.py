@@ -5,93 +5,84 @@ from keys import *
 
 def search(path, primary_key):
     y = False
-    for r, d, f in os.walk(path):
-        if primary_key in f:
+    for roots, directories, files in os.walk(path):
+        if primary_key in files:
             y = True
             break
     return y
 
 
 def creates_dir(schema):
-    x = json.load(open(schema, 'r'))
-    p = os.path.join(os.getcwd(), x[keys().database])
-    exists = True
-    if not os.path.exists(p):
-        exists = False
-        os.mkdir(p)
-        for i in x[keys().Tables]:
-            d = os.path.join(p, i[keys().name])
-            os.mkdir(d)
-    else:
-        for i in x[keys().Tables]:
-            d = os.path.join(p, i[keys().name])
-            if not os.path.exists(d):
-                exists = False
-                os.mkdir(d)
-    return exists
+    data = json.load(open(schema, 'r'))
+    path = os.path.join(os.getcwd(), data[keys().database])
+    os.makedirs(path, exist_ok=True)
+
+    for table in data[keys().Tables]:
+        t_path = os.path.join(path, table[keys().name])
+        os.makedirs(t_path, exist_ok=True)
 
 
 def creates(schema, table, primary_key):
-    f = open(schema, 'r')
-    x = json.load(f)
-    f.close()
-    path = os.path.join(os.getcwd(), x[keys().database])
+    file = open(schema, 'r')
+    column = json.load(file)
+    file.close()
+    path = os.path.join(os.getcwd(), column[keys().database])
     if not os.path.exists(path):
         return False
     path = path + '\\' + table + '\\' + primary_key
     if not os.path.exists(path):
-        f = open(path, 'w')
-        f.write("{\n")
-        i = 0
-        for k in x[keys().Tables]:
-            if k[keys().name] != table:
-                i = i + 1
+        json_object = {}
+        file = open(path, 'w')
+        index = 0
+        for key in column[keys().Tables]:
+            if key[keys().name] != table:
+                index = index + 1
             else:
+                column = column[keys().Tables][index]
                 break
-        x = x[keys().Tables][i]
-        i = len(x[keys().columns])
-        j = 0
-        for t in x[keys().columns]:
-            f.write("\t\"" + t + "\" : \"0\"")
-            j = j + 1
-            if j < i:
-                f.write(",\n")
-        f.write("\n}\n")
-        f.close()
+        for element in column[keys().columns]:
+            json_object[element] = '0'
+        json.dump(json_object, file)
+        file.close()
         return 1
     else:
         return 2
 
 
-def sets(database, table, primary_key, parameter, value):
+def sets(database, table, primary_key, parameters, values, schema):
     path = os.getcwd() + '\\' + database + '\\' + table + '\\' + primary_key
-    x = gets(database, table, primary_key)
-    if not x:
-        creates('Check-in-schema.json', table, primary_key)
-        f = open(path, 'r')
-        x = json.load(f)
-        f.close()
-
-    i = 0
-    k = 0
-    for k in x:
-        if k != parameter:
-            i = i + 1
-        else:
-            break
-    x[k] = value
-    f = open(path, 'w')
-    json.dump(x, f)
-    f.close()
+    json_object = gets(database, table, primary_key)
+    if not json_object:
+        if schema is None:
+            schema = os.getcwd() + '\\' + 'databases-schemas.json'
+            file = open(schema, 'r')
+            json_object = json.load(file)
+            file.close()
+            for db in json_object[keys.database]:
+                if db[keys.name()] == database:
+                    schema = db[keys.schema()]
+                    break
+        creates(schema, table, primary_key)
+        file = open(path, 'r')
+        json_object = json.load(file)
+        file.close()
+    index = 0
+    for element, par in json_object, parameters:
+        if element == par:
+            json_object[element] = values[index]
+            index = index + 1
+    file = open(path, 'w')
+    json.dump(json_object, file)
+    file.close()
 
 
 def gets(database, table, primary_key):
     path = os.getcwd() + '\\' + database + '\\' + table
     if search(path, primary_key):
-        f = open(path + '\\' + primary_key, 'r')
-        e = json.load(f)
-        f.close()
-        return e
+        file = open(path + '\\' + primary_key, 'r')
+        json_object = json.load(file)
+        file.close()
+        return json_object
     else:
         return False
 

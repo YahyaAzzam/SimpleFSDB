@@ -3,8 +3,8 @@ from functions import *
 
 class command_factory:
     def __init__(self, args):
-        self.cmd = args.command.lower()
-        self.args = args.lower()
+        self.cmd = args.command
+        self.args = args
 
     def execute(self):
         if self.cmd == "create_dir":
@@ -20,7 +20,7 @@ class command_factory:
                 print('Destination already exists')
             return
         elif self.cmd == "set":
-            sets(self.args.database, self.args.table, self.args.primary_key, self.args.parameter, self.args.value)
+            sets(self.args.database, self.args.table, self.args.primary_key, self.args.parameter, self.args.value, self.args.schema)
             return
         elif self.cmd == "get":
             m = gets(self.args.database, self.args.table, self.args.primary_key)
