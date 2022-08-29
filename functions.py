@@ -4,12 +4,12 @@ from keys import *
 
 
 def search(path, primary_key):
-    y = False
+    found = False
     for roots, directories, files in os.walk(path):
         if primary_key in files:
-            y = True
+            found = True
             break
-    return y
+    return found
 
 
 def creates_dir(schema):
@@ -49,30 +49,22 @@ def creates(schema, table, primary_key):
         return 2
 
 
-def sets(database, table, primary_key, parameters, values, schema):
+def sets(database, table, primary_key, parameter, value):
     path = os.getcwd() + '\\' + database + '\\' + table + '\\' + primary_key
-    json_object = gets(database, table, primary_key)
-    if not json_object:
-        if schema is None:
-            schema = os.getcwd() + '\\' + 'databases-schemas.json'
-            file = open(schema, 'r')
-            json_object = json.load(file)
-            file.close()
-            for db in json_object[keys.database]:
-                if db[keys.name()] == database:
-                    schema = db[keys.schema()]
-                    break
-        creates(schema, table, primary_key)
+    data = gets(database, table, primary_key)
+    if not data:
+        creates('Check-in-schema.json', table, primary_key)
         file = open(path, 'r')
-        json_object = json.load(file)
+        data = json.load(file)
         file.close()
+
     index = 0
-    for element, par in json_object, parameters:
-        if element == par:
-            json_object[element] = values[index]
-            index = index + 1
+    for index in data:
+        if index == parameter:
+            break
+    data[index] = value
     file = open(path, 'w')
-    json.dump(json_object, file)
+    json.dump(data, file)
     file.close()
 
 
