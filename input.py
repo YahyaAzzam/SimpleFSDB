@@ -46,4 +46,3 @@ def parse_args():
         help="Value of the parameter",
     )
     return parser.parse_args()
-

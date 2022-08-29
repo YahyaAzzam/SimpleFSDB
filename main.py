@@ -1,11 +1,5 @@
-from functions import *
 from input import *
+from command_factory import *
 
-
-
-
-
-run(parse_args())
-
-
-
+create = command_factory(parse_args())
+create.execute()

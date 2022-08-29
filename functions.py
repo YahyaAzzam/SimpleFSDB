@@ -2,9 +2,10 @@ import json
 import os
 from keys import *
 
+
 def search(path, primary_key):
     y = False
-    for r, d, f in  os.walk(path):
+    for r, d, f in os.walk(path):
         if primary_key in f:
             y = True
             break
@@ -14,26 +15,31 @@ def search(path, primary_key):
 def creates_dir(schema):
     x = json.load(open(schema, 'r'))
     p = os.path.join(os.getcwd(), x[keys().database])
+    exists = True
     if not os.path.exists(p):
+        exists = False
         os.mkdir(p)
         for i in x[keys().Tables]:
-             d = os.path.join(p, i[keys().name])
-             os.mkdir(d)
+            d = os.path.join(p, i[keys().name])
+            os.mkdir(d)
     else:
         for i in x[keys().Tables]:
             d = os.path.join(p, i[keys().name])
-            if(not os.path.exists(d)):
+            if not os.path.exists(d):
+                exists = False
                 os.mkdir(d)
-
+    return exists
 
 
 def creates(schema, table, primary_key):
-    f=open(schema, 'r')
+    f = open(schema, 'r')
     x = json.load(f)
     f.close()
-    path = os.getcwd() + '\\' + x[keys().database] + '\\' + table + '\\' + primary_key
+    path = os.path.join(os.getcwd(), x[keys().database])
     if not os.path.exists(path):
-
+        return False
+    path = path + '\\' + table + '\\' + primary_key
+    if not os.path.exists(path):
         f = open(path, 'w')
         f.write("{\n")
         i = 0
@@ -52,7 +58,9 @@ def creates(schema, table, primary_key):
                 f.write(",\n")
         f.write("\n}\n")
         f.close()
-
+        return 1
+    else:
+        return 2
 
 
 def sets(database, table, primary_key, parameter, value):
@@ -63,7 +71,7 @@ def sets(database, table, primary_key, parameter, value):
         f = open(path, 'r')
         x = json.load(f)
         f.close()
-        
+
     i = 0
     k = 0
     for k in x:
@@ -95,31 +103,3 @@ def deletes(database, table, primary_key):
         return True
     else:
         return False
-
-
-def run(args):
-    if args.command == "create_dir":
-        creates_dir(args.schema)
-        return
-    elif args.command == "create":
-        creates(args.schema, args.table, args.primary_key)
-        return
-    elif args.command == "set":
-        sets(args.database, args.table, args.primary_key, args.parameter, args.value)
-        return
-    elif args.command == "get":
-        m = gets(args.database, args.table, args.primary_key)
-        if not m:
-            return("Error, data not found")
-        else:
-            return(m)
-
-    elif args.command == "delete":
-        m = deletes(args.database, args.table, args.primary_key)
-        if not m:
-            return("Error, data not found")
-
-
-
-
-
