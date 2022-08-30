@@ -1,34 +1,37 @@
 from functions import *
 
 
-class command_factory:
-    def __init__(self, args):
-        self.cmd = args.command
-        self.args = args
-
+class ICommand:
     def execute(self):
-        if self.cmd == "create_dir":
-            m = creates_dir(self.args.schema)
-            if m:
+        pass
+
+
+class command_factory:
+    @staticmethod
+    def create(args):
+        cmd = args.command.lower()
+        if cmd == "create_dir":
+            make = create_dir_command(args.schema).execute()
+            if make:
                 print('Database already exists')
             return
-        elif self.cmd == "create":
-            m = creates(self.args.schema, self.args.table, self.args.primary_key)
-            if not m:
+        elif cmd == "create":
+            make = create_command(args.schema, args.table, args.primary_key).execute()
+            if not make:
                 print('Database not found')
-            elif m == 2:
+            elif make == 2:
                 print('Destination already exists')
             return
-        elif self.cmd == "set":
-            sets(self.args.database, self.args.table, self.args.primary_key, self.args.parameter, self.args.value, self.args.schema)
+        elif cmd == "set":
+            set_command(args.database, args.table, args.primary_key, args.parameter, args.value).execute()
             return
-        elif self.cmd == "get":
-            m = gets(self.args.database, self.args.table, self.args.primary_key)
-            if not m:
+        elif cmd == "get":
+            make = get_command(args.database, args.table, args.primary_key).execute()
+            if not make:
                 return "Error, data not found"
             else:
-                return m
-        elif self.cmd == "delete":
-            m = deletes(self.args.database, self.args.table, self.args.primary_key)
-            if not m:
+                return make
+        elif cmd == "delete":
+            make = delete_command(args.database, args.table, args.primary_key).execute()
+            if not make:
                 return "Error, data not found"
