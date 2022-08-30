@@ -1,8 +1,0 @@
-{
-  "database_name" : [
-    {
-      "name" : "csed25",
-      "schema" : "Check-in-schema.json"
-    }
-  ]
-}
