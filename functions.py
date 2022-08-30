@@ -19,11 +19,13 @@ class CreateDirCommand(ICommand):
         self.schema = schema
 
     def execute(self):
+        if self.schema is None:
+            return "Schema not found"
         data = json.load(open(self.schema, 'r'))
-        path = os.path.join(os.getcwd(), data[keys().database])
+        path = os.path.join(os.getcwd(), data[Keys().DATABASE])
         os.makedirs(path, exist_ok=True)
-        for table in data[keys().Tables]:
-            t_path = os.path.join(path, table[keys().name])
+        for table in data[Keys().TABLES]:
+            t_path = os.path.join(path, table[Keys().NAME])
             os.makedirs(t_path, exist_ok=True)
         return "Database created successfully"
 
@@ -35,30 +37,40 @@ class CreateCommand(ICommand):
         self.primary_key = primary_key
 
     def execute(self):
+        if self.schema is None:
+            return "Schema not found"
+        if self.table is None:
+            return "Table not found"
+        if self.primary_key is None:
+            return "Primary key not found"
         file = open(self.schema, 'r')
         column = json.load(file)
         file.close()
-        path = os.path.join(os.getcwd(), column[keys().database])
+        path = os.path.join(os.getcwd(), column[Keys().DATABASE])
         if not os.path.exists(path):
             return "Database not found"
         path = path + '\\' + self.table + '\\' + self.primary_key
         if not os.path.exists(path):
-            json_object = {}
             file = open(path, 'w')
             index = 0
-            for key in column[keys().Tables]:
-                if key[keys().name] != self.table:
+            for key in column[Keys().TABLES]:
+                if key[Keys().NAME] != self.table:
                     index = index + 1
                 else:
-                    column = column[keys().Tables][index]
+                    column = column[Keys().TABLES][index]
                     break
-            for element in column[keys().columns]:
-                json_object[element] = '0'
-            json.dump(json_object, file)
+            json.dump(self.__write_table_schema(column[Keys.COLUMNS]), file)
             file.close()
             return "Column created successfully"
         else:
             return "Column already found"
+
+    @staticmethod
+    def __write_table_schema(columns):
+        json_object = {}
+        for element in columns:
+            json_object[element] = '0'
+        return json_object
 
 
 class SetCommand(ICommand):
@@ -70,7 +82,17 @@ class SetCommand(ICommand):
         self.value = value
 
     def execute(self):
-        path = os.getcwd() + '\\' + self.database + '\\' + self.table + '\\' + self.primary_key
+        if self.database is None:
+            return "Database not found"
+        if self.table is None:
+            return "Table not found"
+        if self.primary_key is None:
+            return "Primary key not found"
+        if self.parameter is None:
+            return "Parameter not found"
+        if self.value is None:
+            return "Value not found"
+        path = os.path.join(os.getcwd(), self.database, self.table, self.primary_key)
         data = GetCommand(self.database, self.table, self.primary_key).execute()
         if not data:
             CreateCommand('Check-in-schema.json', self.table, self.primary_key).execute()
@@ -96,7 +118,13 @@ class GetCommand(ICommand):
         self.primary_key = primary_key
 
     def execute(self):
-        path = os.getcwd() + '\\' + self.database + '\\' + self.table
+        if self.database is None:
+            return "Database not found"
+        if self.table is None:
+            return "Table not found"
+        if self.primary_key is None:
+            return "Primary key not found"
+        path = os.path.join(os.getcwd(), self.database, self.table)
         if search(path, self.primary_key):
             file = open(path + '\\' + self.primary_key, 'r')
             json_object = json.load(file)
@@ -114,9 +142,15 @@ class DeleteCommand(ICommand):
         self.primary_key = primary_key
 
     def execute(self):
-        path = os.getcwd() + '\\' + self.database + '\\' + self.table
+        if self.database is None:
+            return "Database not found"
+        if self.table is None:
+            return "Table not found"
+        if self.primary_key is None:
+            return "Primary key not found"
+        path = os.path.join(os.getcwd(), self.database, self.table)
         if search(path, self.primary_key):
-            os.remove(path + '\\' + self.primary_key)
+            os.remove(os.path.join(path, self.primary_key))
             return "Data deleted successfully"
         else:
             return "Data not found"

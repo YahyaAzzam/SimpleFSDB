@@ -1,9 +1,9 @@
-class keys:
-    Tables = "Tables"
-    database = "database_name"
-    name = "name"
-    columns = "columns"
-    primary_key = "primary_key"
-    index_keys = "Index_keys"
-    consistency = "consistency"
-    schema = "schema"
+class Keys:
+    TABLES = "Tables"
+    DATABASE = "database_name"
+    NAME = "name"
+    COLUMNS = "columns"
+    PRIMARY_KEY = "primary_key"
+    INDEX_KEYS = "Index_keys"
+    CONSISTENCY = "consistency"
+    SCHEMA = "schema"
