@@ -1,7 +1,8 @@
 import json
 import os
 from keys import *
-from command_factory import *
+from Command_factory import *
+from ICommand import ICommand
 
 
 def search(path, primary_key):

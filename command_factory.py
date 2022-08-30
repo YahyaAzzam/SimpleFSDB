@@ -1,15 +1,9 @@
 from functions import *
 
 
-class ICommand:
-    def execute(self):
-        pass
-
-
 class command_factory:
-    @staticmethod
     def create(args):
-        cmd = args.command.lower()
+        cmd = args.command
         if cmd == "create_dir":
             make = create_dir_command(args.schema).execute()
             if make:
