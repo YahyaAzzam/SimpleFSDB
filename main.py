@@ -1,5 +1,4 @@
 from input import *
-from Command_factory import *
+from command_factory import *
 
-create = command_factory.create(parse_args())
-
+create = CommandFactory.create(parse_args())

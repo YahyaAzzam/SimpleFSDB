@@ -1,31 +1,24 @@
 from functions import *
 
 
-class command_factory:
+class CommandFactory:
     def create(args):
         cmd = args.command
         if cmd == "create_dir":
-            make = create_dir_command(args.schema).execute()
-            if make:
-                print('Database already exists')
+            check = CreateDirCommand(args.schema).execute()
+            print(check)
             return
         elif cmd == "create":
-            make = create_command(args.schema, args.table, args.primary_key).execute()
-            if not make:
-                print('Database not found')
-            elif make == 2:
-                print('Destination already exists')
+            check = CreateCommand(args.schema, args.table, args.primary_key).execute()
+            print(check)
             return
         elif cmd == "set":
-            set_command(args.database, args.table, args.primary_key, args.parameter, args.value).execute()
+            check = SetCommand(args.database, args.table, args.primary_key, args.parameter, args.value).execute()
+            print(check)
             return
         elif cmd == "get":
-            make = get_command(args.database, args.table, args.primary_key).execute()
-            if not make:
-                return "Error, data not found"
-            else:
-                return make
+            check = GetCommand(args.database, args.table, args.primary_key).execute()
+            print(check)
         elif cmd == "delete":
-            make = delete_command(args.database, args.table, args.primary_key).execute()
-            if not make:
-                return "Error, data not found"
+            check = DeleteCommand(args.database, args.table, args.primary_key).execute()
+            print(check)
