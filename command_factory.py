@@ -2,23 +2,24 @@ from functions import *
 
 
 class CommandFactory:
-    def create(args):
-        cmd = args.command
+    def __init__(self, args):
+        self.command = args.command
+        self.schema = args.schema
+        self.database = args.database
+        self.table = args.table
+        self.primary_key = args.primary_key
+        self.parameter = args.parameter
+        self.value = args.value
+
+    def create(self):
+        cmd = self.command
         if cmd == "create_dir":
-            check = CreateDirCommand(args.schema).execute()
-            print(check)
-            return
+            return CreateDirCommand(self.schema)
         elif cmd == "create":
-            check = CreateCommand(args.schema, args.table, args.primary_key).execute()
-            print(check)
-            return
+            return CreateCommand(self.schema, self.table, self.primary_key)
         elif cmd == "set":
-            check = SetCommand(args.database, args.table, args.primary_key, args.parameter, args.value).execute()
-            print(check)
-            return
+            return SetCommand(self.database, self.table, self.primary_key, self.parameter, self.value)
         elif cmd == "get":
-            check = GetCommand(args.database, args.table, args.primary_key).execute()
-            print(check)
+            return GetCommand(self.database, self.table, self.primary_key)
         elif cmd == "delete":
-            check = DeleteCommand(args.database, args.table, args.primary_key).execute()
-            print(check)
+            return DeleteCommand(self.database, self.table, self.primary_key)
