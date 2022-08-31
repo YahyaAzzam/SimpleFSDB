@@ -39,8 +39,8 @@ class Test(unittest.TestCase):
         # delete all the created files
         DeleteCommand("csed25", "Seats", "1.json").execute()
         DeleteCommand("csed25", "Seats", "2.json").execute()
-        path1 = os.getcwd() + '\\' + "csed25" + '\\' + "Seats" + '\\' + "1.json"
-        path2 = os.getcwd() + '\\' + "csed25" + '\\' + "Seats" + '\\' + "2.json"
+        path1 = os.path.join(os.getcwd(), "csed25", "Seats", "1.json")
+        path2 = os.path.join(os.getcwd(), "csed25", "Seats", "2.json")
         self.assertEqual(os.path.exists(path1) or os.path.exists(path2), False)
 
 
