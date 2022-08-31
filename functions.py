@@ -5,13 +5,6 @@ import os
 from keys import *
 
 
-def search(path, primary_key):
-    found = False
-    for roots, directories, files in os.walk(path):
-        if primary_key in files:
-            found = True
-            break
-    return found
 
 
 class CreateDirCommand(ICommand):
@@ -49,15 +42,12 @@ class CreateCommand(ICommand):
         path = os.path.join(os.getcwd(), column[Keys().DATABASE])
         if not os.path.exists(path):
             return "Database not found"
-        path = path + '\\' + self.table + '\\' + self.primary_key
+        path = os.path.join(path, self.table, self.primary_key)
         if not os.path.exists(path):
             file = open(path, 'w')
-            index = 0
             for key in column[Keys().TABLES]:
-                if key[Keys().NAME] != self.table:
-                    index = index + 1
-                else:
-                    column = column[Keys().TABLES][index]
+                if key[Keys().NAME] == self.table:
+                    column = key
                     break
             json.dump(self.__write_table_schema(column[Keys.COLUMNS]), file)
             file.close()
@@ -103,7 +93,8 @@ class SetCommand(ICommand):
         for index in data:
             if index == self.parameter:
                 break
-        data[index] = self.value
+
+        data[index]=self.value
         file = open(path, 'w')
         json.dump(data, file)
         file.close()
@@ -124,9 +115,9 @@ class GetCommand(ICommand):
             return "Table not found"
         if self.primary_key is None:
             return "Primary key not found"
-        path = os.path.join(os.getcwd(), self.database, self.table)
-        if search(path, self.primary_key):
-            file = open(path + '\\' + self.primary_key, 'r')
+        path = os.path.join(os.getcwd(), self.database, self.table,self.primary_key)
+        if os.path.exists(path):
+            file = open(path, 'r')
             json_object = json.load(file)
             file.close()
             return json_object
@@ -148,9 +139,9 @@ class DeleteCommand(ICommand):
             return "Table not found"
         if self.primary_key is None:
             return "Primary key not found"
-        path = os.path.join(os.getcwd(), self.database, self.table)
-        if search(path, self.primary_key):
-            os.remove(os.path.join(path, self.primary_key))
+        path = os.path.join(os.getcwd(), self.database, self.table,self.primary_key)
+        if os.path.exists(path):
+            os.remove(path)
             return "Data deleted successfully"
         else:
             return "Data not found"

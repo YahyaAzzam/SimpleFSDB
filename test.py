@@ -1,7 +1,6 @@
-from SimpleFSDB.functions import *
 from main import *
 import unittest
-import os
+
 
 
 class Test(unittest.TestCase):
