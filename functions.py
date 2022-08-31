@@ -2,12 +2,12 @@ from command_factory import *
 from ICommand import ICommand
 import json
 import os
-from keys import *
+import keys
 
 
 
 
-class CreateDirCommand(ICommand):
+class CreateCommand(ICommand):
     def __init__(self, schema):
         self.schema = schema
 
@@ -15,52 +15,38 @@ class CreateDirCommand(ICommand):
         if self.schema is None:
             return "Schema not found"
         data = json.load(open(self.schema, 'r'))
-        path = os.path.join(os.getcwd(), data[Keys().DATABASE])
+        path = os.path.join(os.getcwd(), data[keys.DATABASE])
         os.makedirs(path, exist_ok=True)
-        for table in data[Keys().TABLES]:
-            t_path = os.path.join(path, table[Keys().NAME])
+        for table in data[keys.TABLES]:
+            t_path = os.path.join(path, table[keys.NAME])
             os.makedirs(t_path, exist_ok=True)
         return "Database created successfully"
 
 
-class CreateCommand(ICommand):
-    def __init__(self, schema, table, primary_key):
-        self.schema = schema
-        self.table = table
-        self.primary_key = primary_key
-
-    def execute(self):
-        if self.schema is None:
-            return "Schema not found"
-        if self.table is None:
-            return "Table not found"
-        if self.primary_key is None:
-            return "Primary key not found"
-        file = open(self.schema, 'r')
-        column = json.load(file)
+def create_files(schema, table, primary_key):
+    file = open(schema, 'r')
+    column = json.load(file)
+    file.close()
+    path = os.path.join(os.getcwd(), column[keys.DATABASE])
+    if not os.path.exists(path):
+        return "Database not found"
+    path = os.path.join(path, table, primary_key)
+    if not os.path.exists(path):
+        file = open(path, 'w')
+        for key in column[keys.TABLES]:
+            if key[keys.NAME] == table:
+                column = key
+                break
+        json.dump(write_table_schema(column[keys.COLUMNS]), file)
         file.close()
-        path = os.path.join(os.getcwd(), column[Keys().DATABASE])
-        if not os.path.exists(path):
-            return "Database not found"
-        path = os.path.join(path, self.table, self.primary_key)
-        if not os.path.exists(path):
-            file = open(path, 'w')
-            for key in column[Keys().TABLES]:
-                if key[Keys().NAME] == self.table:
-                    column = key
-                    break
-            json.dump(self.__write_table_schema(column[Keys.COLUMNS]), file)
-            file.close()
-            return "Column created successfully"
-        else:
-            return "Column already found"
 
-    @staticmethod
-    def __write_table_schema(columns):
-        json_object = {}
-        for element in columns:
-            json_object[element] = '0'
-        return json_object
+
+
+def write_table_schema(columns):
+    json_object = {}
+    for element in columns:
+        json_object[element] = '0'
+    return json_object
 
 
 class SetCommand(ICommand):
@@ -84,11 +70,11 @@ class SetCommand(ICommand):
             return "Value not found"
         path = os.path.join(os.getcwd(), self.database, self.table, self.primary_key)
         data = GetCommand(self.database, self.table, self.primary_key).execute()
-        if not data:
-            CreateCommand('Check-in-schema.json', self.table, self.primary_key).execute()
-            file = open(path, 'r')
-            data = json.load(file)
-            file.close()
+        if data == "Data not found":
+            file = create_files('Check-in-schema.json', self.table, self.primary_key)
+            if file == "Database not found":
+                return file
+            data = GetCommand(self.database, self.table, self.primary_key).execute()
         index = 0
         for index in data:
             if index == self.parameter:

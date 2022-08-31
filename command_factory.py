@@ -13,10 +13,8 @@ class CommandFactory:
 
     def create(self):
         cmd = self.command
-        if cmd == "create_dir":
-            return CreateDirCommand(self.schema)
-        elif cmd == "create":
-            return CreateCommand(self.schema, self.table, self.primary_key)
+        if cmd == "create":
+            return CreateCommand(self.schema)
         elif cmd == "set":
             return SetCommand(self.database, self.table, self.primary_key, self.parameter, self.value)
         elif cmd == "get":

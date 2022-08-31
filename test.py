@@ -5,11 +5,11 @@ import unittest
 
 class Test(unittest.TestCase):
     # create the main dir and fix it if there is any problem
-    os.system("main.py -c create_dir -sc Check-in-schema.json")
+    os.system("main.py -c create -sc Check-in-schema.json")
 
     def test_get(self):
         # create json file in seats table then get data from it
-        os.system("main.py -c create -sc Check-in-schema.json -t Seats -pk 1.json")
+        create_files("Check-in-schema.json", "Seats", "1.json")
         x = GetCommand("csed25", "Seats", "1.json").execute()
         ans = {'Last_name': '0', 'ReservationId': '0'}
         self.assertEqual(x, ans)
