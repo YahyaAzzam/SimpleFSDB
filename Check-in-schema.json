@@ -28,6 +28,6 @@
             "primary_key"  : "flightId_seatId",
             "Index_keys" : ["ReservationId"],
             "Consistently" : "Strong"
-        } 
+        }
      ] 
 }

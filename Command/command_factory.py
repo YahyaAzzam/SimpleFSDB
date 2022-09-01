@@ -1,11 +1,9 @@
 import sys,os
 sys.path.append(os.path.join(os.getcwd(), "Functions"))
-from CreateCommand import *
-from SetCommand import *
-from GetCommand import *
-from DeleteCommand import *
-
-
+from create_command import *
+from set_command import *
+from get_command import *
+from delete_command import *
 
 class CommandFactory:
     def __init__(self, args):
