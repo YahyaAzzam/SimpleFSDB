@@ -2,14 +2,10 @@ name: Testing the code
 on:
   push:
     branches:
-      - ["G"]
-      - ["y"]
-      - ["main"]
+      - master
   pull_request:
     branches:
-      - ["G"]
-      - ["y"]
-      - ["main"]
+      - master
 
 jobs:
   build:
