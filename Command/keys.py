@@ -6,4 +6,4 @@ class Keys:
     PRIMARY_KEY = "primary_key"
     INDEX_KEYS = "Index_keys"
     CONSISTENCY = "consistency"
-    SCHEMA = "schema"
+    SCHEMA = "C:\\Users\\pc\\OneDrive - Alexandria University\\Documents\\GitHub\\SimpleFSDB\\Check-in-schema.json"

@@ -1,9 +1,9 @@
-from SimpleFSDB.Command.abstract_command import *
+from Command.abstract_command import *
 import json
 import os
-from SimpleFSDB.Command.keys import Keys
-from SimpleFSDB.Command.errors import *
-import SimpleFSDB.s
+from Command.keys import Keys
+from Command.errors import *
+
 
 
 class CreateCommand(AbstractCommand):
@@ -11,8 +11,8 @@ class CreateCommand(AbstractCommand):
         self.data = None
         self.path = None
         self.schema_file = schema_file
-        self.schema_dir = os.path.dirname(SimpleFSDB.s.__file__)
-        self.database_dir = os.path.dirname(SimpleFSDB.s.__file__)
+        self.schema_dir = os.path.dirname(Keys.SCHEMA)
+        self.database_dir = os.path.dirname(Keys.SCHEMA)
         self.validate()
 
     def execute(self):
@@ -34,5 +34,4 @@ class CreateCommand(AbstractCommand):
         file.close()
         if self.data[Keys.DATABASE] is None:
             raise NoDatabaseError()
-        if self.data[Keys.TABLES][0][Keys.NAME] is None:
-            raise NoTableError()
+
