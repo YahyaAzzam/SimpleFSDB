@@ -1,4 +1,6 @@
-class Keys:
+from abc import ABC
+
+class Keys(ABC):
     TABLES = "Tables"
     DATABASE = "database_name"
     NAME = "name"
