@@ -1,5 +1,6 @@
 from main import *
 import unittest
+import shutil
 
 
 
@@ -28,13 +29,41 @@ class Test(unittest.TestCase):
         self.assertEqual(CreateCommand("goda").execute(),output)
 
     def test_create_multiple_times(self):
+        #create and delete database many times
         path=os.path.join(os.getcwd(), "csed25")
-        os.remove(path)
+        shutil.rmtree(path) #delete database
         for i in range(5):
             CreateCommand("Check-in-schema.json").execute()
-            self.assertEqual(os.path.exists(path), True)
+            self.assertTrue(os.path.exists(path))
+            shutil.rmtree(path) #delete database
 
+    def test_create_tables(self):
+        # delete single table from database and then create it
+        output = CreateCommand("Check-in-schema.json").execute()
 
+        # delete Seats table
+        path=os.path.join(os.getcwd(), "csed25", "Seats")
+        shutil.rmtree(path)
+        CreateCommand("Check-in-schema.json").execute()
+        self.assertTrue(os.path.exists(path))
+
+        # delete Reservations table
+        path=os.path.join(os.getcwd(), "csed25", "Reservations")
+        shutil.rmtree(path)
+        CreateCommand("Check-in-schema.json").execute()
+        self.assertTrue(os.path.exists(path))
+
+        # delete Planes table
+        path=os.path.join(os.getcwd(), "csed25", "Planes")
+        shutil.rmtree(path)
+        CreateCommand("Check-in-schema.json").execute()
+        self.assertTrue(os.path.exists(path))
+
+        # delete Flights table
+        path=os.path.join(os.getcwd(), "csed25", "Flights")
+        shutil.rmtree(path)
+        CreateCommand("Check-in-schema.json").execute()
+        self.assertTrue(os.path.exists(path))
 
 
 if __name__ == '__main__':
