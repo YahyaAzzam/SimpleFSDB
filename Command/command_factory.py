@@ -1,5 +1,5 @@
-from Functions.create_command import *
-from Command.errors import *
+from SimpleFSDB.Functions.create_command import *
+from SimpleFSDB.Command.errors import *
 
 # from set_command import *
 # from get_command import *

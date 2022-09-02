@@ -1,9 +1,8 @@
-from Command.abstract_command import *
+from SimpleFSDB.Command.abstract_command import *
 import json
 import os
-from Command.keys import Keys
-from Command.errors import *
-
+from SimpleFSDB.Command.keys import Keys
+from SimpleFSDB.Command.errors import *
 
 
 class CreateCommand(AbstractCommand):
@@ -14,6 +13,10 @@ class CreateCommand(AbstractCommand):
         self.schema_dir = os.path.dirname(Keys.SCHEMA)
         self.database_dir = os.path.dirname(Keys.SCHEMA)
         self.validate()
+        file = open(self.schema_file, 'r')
+        self.data = json.load(file)
+        file.close()
+        self.check_database()
 
     def execute(self):
         self.path = os.path.join(self.database_dir, self.data[Keys.DATABASE])
@@ -29,9 +32,7 @@ class CreateCommand(AbstractCommand):
         path = os.path.join(self.schema_dir, str(self.schema_file))
         if not os.path.exists(path):
             raise WrongParameterError()
-        file = open(self.schema_file, 'r')
-        self.data = json.load(file)
-        file.close()
+
+    def check_database(self):
         if self.data[Keys.DATABASE] is None:
             raise NoDatabaseError()
-

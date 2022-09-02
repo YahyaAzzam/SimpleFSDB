@@ -1,4 +1,6 @@
+import os
 from abc import ABC
+
 
 class Keys(ABC):
     TABLES = "Tables"
@@ -8,4 +10,4 @@ class Keys(ABC):
     PRIMARY_KEY = "primary_key"
     INDEX_KEYS = "Index_keys"
     CONSISTENCY = "consistency"
-    SCHEMA = "C:\\Users\\pc\\OneDrive - Alexandria University\\Documents\\GitHub\\SimpleFSDB\\Check-in-schema.json"
+    SCHEMA = os.getcwdb()
