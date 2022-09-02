@@ -2,14 +2,10 @@ name: Run Python Tests
 on:
   push:
     branches:
-      - ["main"]
-      - ["y"]
-      - ["G"]
+      - G
   pull_request:
     branches:
-      - ["main"]
-      - ["y"]
-      - ["G"]
+      - G
 
 jobs:
   build:
