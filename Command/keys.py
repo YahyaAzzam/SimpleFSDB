@@ -1,4 +1,4 @@
-class Keys():
+class Keys:
     TABLES = "Tables"
     DATABASE = "database_name"
     NAME = "name"

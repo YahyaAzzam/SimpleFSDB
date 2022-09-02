@@ -1,25 +1,38 @@
-from command_factory import *
-from ICommand import ICommand
+from SimpleFSDB.Command.abstract_command import *
 import json
 import os
-from keys import Keys
+from SimpleFSDB.Command.keys import Keys
+from SimpleFSDB.Command.errors import *
+import SimpleFSDB.s
 
-class CreateCommand(ICommand):
-    def __init__(self, schema):
-        self.schema = schema
+
+class CreateCommand(AbstractCommand):
+    def __init__(self, schema_file):
+        self.data = None
+        self.path = None
+        self.schema_file = schema_file
+        self.schema_dir = os.path.dirname(SimpleFSDB.s.__file__)
+        self.database_dir = os.path.dirname(SimpleFSDB.s.__file__)
+        self.validate()
 
     def execute(self):
-        if self.schema is None or self.schema == "" or self.schema == " ":
-            return "Schema not found"
-        path = os.path.join(os.getcwd(), str(self.schema))
+        self.path = os.path.join(self.database_dir, self.data[Keys.DATABASE])
+        os.makedirs(self.path, exist_ok=True)
+        for table in self.data[Keys.TABLES]:
+            t_path = os.path.join(self.path, table[Keys.NAME])
+            os.makedirs(t_path, exist_ok=True)
+        return "database created successfully"
+
+    def validate(self):
+        if self.schema_file is None or self.schema_file == "" or self.schema_file == " ":
+            raise NoParameterError()
+        path = os.path.join(self.schema_dir, str(self.schema_file))
         if not os.path.exists(path):
-            return "Schema not found"
-        file = open(self.schema, 'r')
-        data = json.load(file)
+            raise WrongParameterError()
+        file = open(self.schema_file, 'r')
+        self.data = json.load(file)
         file.close()
-        path = os.path.join(os.getcwd(), data[Keys.DATABASE])
-        os.makedirs(path, exist_ok = True)
-        for table in data[Keys.TABLES]:
-            t_path = os.path.join(path, table[Keys.NAME])
-            os.makedirs(t_path, exist_ok = True)
-        return "Database created successfully"
+        if self.data[Keys.DATABASE] is None:
+            raise NoDatabaseError()
+        if self.data[Keys.TABLES][0][Keys.NAME] is None:
+            raise NoTableError()
