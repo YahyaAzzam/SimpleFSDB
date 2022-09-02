@@ -20,4 +20,4 @@ jobs:
         run: |
           python -m pip install --upgrade pip
       - name: Run tests with pytest
-        run: python test_.py
+        run: python test.py
