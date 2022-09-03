@@ -1,37 +1,14 @@
-from CommandsAndAdaptors.input import *
-from CommandsAndAdaptors.command_factory import *
-from CommandsAndAdaptors.parser_adaptor import *
+from commands_and_adaptors.input import *
+from commands_and_adaptors.command_factory import *
+from commands_and_adaptors.parser_adaptor import *
+from commands_and_adaptors.output_message import *
+
 
 try:
-    input_array = ParsedInput.parse(parse_args())
-    command = CommandFactory(input_array).create()
+    input_adaptor = ParsedInput(parse_args())
+    command = CommandFactory(input_adaptor).create()
     output_message = command.execute()
-    status = 0
-except NoCommandError:
-    status = 1
-except WrongCommandError:
-    status = 2
-except NoSchemaError:
-    status = 3
-except WrongSchemaError:
-    status = 4
-except NoDatabaseError:
-    status = 5
-except WrongDatabaseError:
-    status = 6
-except NoTableError:
-    status = 7
-except WrongTableError:
-    status = 8
-except NoPrimaryKeyError:
-    status = 9
-except WrongPrimaryKeyError:
-    status = 10
-except NoParameterError:
-    status = 11
-except WrongParameterError:
-    status = 12
-except NoValueError:
-    status = 13
-except WrongValueError:
-    status = 14
+    output_object = OutputMessage.success(output_message, str(command)[1])
+except Exception as e:
+    error = str(e.__class__)
+    output_object = OutputMessage.fail(error[15:len(error)-2])

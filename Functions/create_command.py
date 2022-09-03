@@ -1,7 +1,7 @@
 import sys
 import json
 import os
-sys.path.append(os.path.join(str(os.getcwd()).replace("\\Functions", ''), "CommandsAndAdaptors"))
+sys.path.append(os.path.join(str(os.getcwd()).replace("functions", ''), "commands_and_adaptors"))
 from abstract_command import *
 from keys import Keys
 from errors import *
@@ -29,11 +29,11 @@ class CreateCommand(AbstractCommand):
 
     def validate(self):
         if self.schema_file is None or self.schema_file == "" or self.schema_file == " ":
-            raise NoSchemaError()
+            raise NoParameterError()
         path = os.path.join(self.schema_dir, str(self.schema_file))
         if not os.path.exists(path):
-            raise WrongSchemaError()
+            raise WrongParameterError()
 
     def check_database(self):
         if self.data[Keys.DATABASE] is None:
-            raise NoDatabaseError()
+            raise NullPointerError()

@@ -1,39 +1,38 @@
 import unittest
 import shutil
-from Functions.create_command import *
+from functions.create_command import *
 
 
 class Test(unittest.TestCase):
-
     def test_wrong_input(self):
         # didn't enter schema name
         try:
             CreateCommand(None).execute()
-        except NoSchemaError:
+        except NoParameterError:
             pass
 
         # enter empty string as schema name
         try:
             CreateCommand("").execute()
-        except NoSchemaError:
+        except NoParameterError:
             pass
 
         # enter space as schema name
         try:
             CreateCommand(" ").execute()
-        except NoSchemaError:
+        except NoParameterError:
             pass
 
         # enter integers as schema name
         try:
             CreateCommand(2131131).execute()
-        except WrongSchemaError:
+        except WrongParameterError:
             pass
 
         # enter wrong file name
         try:
             CreateCommand("goda").execute()
-        except WrongSchemaError:
+        except WrongParameterError:
             pass
 
     def test_create_multiple_times(self):
