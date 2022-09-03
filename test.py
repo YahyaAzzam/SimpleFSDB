@@ -1,6 +1,6 @@
 import unittest
 import shutil
-from functions.create_command import *
+from SimpleFSDB.functions.create_command import *
 
 
 class Test(unittest.TestCase):
