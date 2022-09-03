@@ -1,8 +1,10 @@
-from Command.abstract_command import *
+import sys
 import json
 import os
-from Command.keys import Keys
-from Command.errors import *
+sys.path.append(os.path.join(str(os.getcwd()).replace("\\Functions", ''), "CommandsAndAdaptors"))
+from abstract_command import *
+from keys import Keys
+from errors import *
 
 
 class CreateCommand(AbstractCommand):

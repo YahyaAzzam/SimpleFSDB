@@ -1,7 +1,10 @@
-from Command.input import *
-from Command.command_factory import *
+from CommandsAndAdaptors.input import *
+from CommandsAndAdaptors.command_factory import *
+from CommandsAndAdaptors.parser_adaptor import *
 
-
-command = CommandFactory.create(parse_args())
-if command is not None:
+try:
+    input_array = ParsedInput(parse_args())
+    command = CommandFactory(input_array).create()
     output_message = command.execute()
+except NoParameterError:
+    pass
