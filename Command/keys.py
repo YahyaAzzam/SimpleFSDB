@@ -10,4 +10,4 @@ class Keys(ABC):
     PRIMARY_KEY = "primary_key"
     INDEX_KEYS = "Index_keys"
     CONSISTENCY = "consistency"
-    SCHEMA_PATH = os.path.join(os.getcwd(),"goda")
+    SCHEMA_PATH = " "
