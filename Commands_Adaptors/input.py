@@ -41,7 +41,7 @@ def parse_args():
     )
     parser.add_argument(
         "-v",
-        "--values",
+        "--value",
         type=str,
         help="Values of the parameters as a json object",
     )

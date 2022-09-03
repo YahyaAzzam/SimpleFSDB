@@ -7,14 +7,14 @@ from Functions.create_command import *
 
 class CommandFactory:
     def __init__(self, args):
-        self.command = args.command.lower()
+        self.command = args[0]
         self.validate()
-        self.schema = args.schema
-        self.database = args.database
-        self.table = args.table
-        self.primary_key = args.primary_key
-        self.parameter = args.parameter
-        self.value = args.value
+        self.schema = args[1]
+        self.database = args[2]
+        self.table = args[3]
+        self.primary_key = args[4]
+        self.parameter = args[5]
+        self.value = args[6]
 
     def create(self):
         cmd = self.command
@@ -29,6 +29,6 @@ class CommandFactory:
 
     def validate(self):
         if self.command is None:
-            raise NoParameterError()
+            return 1
         if not (self.command == "set" or self.command == "get" or self.command == "delete" or self.command == "create"):
-            raise WrongParameterError()
+            return 2
