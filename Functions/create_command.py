@@ -1,8 +1,8 @@
-from Command.abstract_command import *
+from SimpleFSDB.Command.abstract_command import *
 import json
 import os
-from Command.keys import Keys
-from Command.errors import *
+from SimpleFSDB.Command.keys import Keys
+from SimpleFSDB.Command.errors import *
 
 
 class CreateCommand(AbstractCommand):
