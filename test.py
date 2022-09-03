@@ -1,6 +1,9 @@
 import unittest
 import shutil
-from functions.create_command import *
+import sys
+import os
+sys.path.append(os.path.join(str(os.getcwd()), "functions"))
+from create_command import *
 
 
 class Test(unittest.TestCase):
