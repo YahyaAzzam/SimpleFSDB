@@ -5,11 +5,6 @@ import shutil
 
 class Test(unittest.TestCase):
 
-    def test_Create_with_cmd(self):
-        # create the main dir and fix it if there is any problem using cmd
-        os.system("main.py -c create -sc Check-in-schema.json")
-        self.assertTrue(os.path.exists(os.path.join(os.getcwd(), "csed25")))
-
     def test_wrong_input(self):
         # didn't enter schema name
         try:
@@ -44,11 +39,11 @@ class Test(unittest.TestCase):
     def test_create_multiple_times(self):
         # create and delete database many times
         path = os.path.join(os.getcwd(), "csed25")
-        shutil.rmtree(path)  # delete database
-        for i in range(5):
-            CreateCommand("Check-in-schema.json").execute()
-            self.assertTrue(os.path.exists(path))
+        if os.path.exists(path):
             shutil.rmtree(path)  # delete database
+        CreateCommand("Check-in-schema.json").execute()
+        self.assertTrue(os.path.exists(path))
+        shutil.rmtree(path)  # delete database
 
     def test_create_tables(self):
         # delete single table from database and then create it
