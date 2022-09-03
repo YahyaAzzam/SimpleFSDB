@@ -1,6 +1,6 @@
 class ParsedInput:
     def __init__(self, args):
-        self.command = args.command.lower()
+        self.command = str(args.command).lower()
         self.schema = args.schema
         self.database = args.database
         self.table = args.table

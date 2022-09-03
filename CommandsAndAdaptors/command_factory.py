@@ -32,6 +32,6 @@ class CommandFactory:
 
     def validate(self):
         if self.command is None:
-            raise NoParameterError()
+            raise NoCommandError()
         if not (self.command == "set" or self.command == "get" or self.command == "delete" or self.command == "create"):
-            raise WrongParameterError()
+            raise WrongCommandError()

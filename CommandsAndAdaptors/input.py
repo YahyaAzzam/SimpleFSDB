@@ -37,12 +37,12 @@ def parse_args():
         "-p",
         "--parameter",
         type=str,
-        help="Parameters desired to be set as a json object",
+        help="Parameter desired to be set",
     )
     parser.add_argument(
         "-v",
-        "--values",
+        "--value",
         type=str,
-        help="Values of the parameters as a json object",
+        help="Value of the parameter",
     )
     return parser.parse_args()

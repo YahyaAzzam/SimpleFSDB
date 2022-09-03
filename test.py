@@ -9,31 +9,31 @@ class Test(unittest.TestCase):
         # didn't enter schema name
         try:
             CreateCommand(None).execute()
-        except NoParameterError:
+        except NoSchemaError:
             pass
 
         # enter empty string as schema name
         try:
             CreateCommand("").execute()
-        except NoParameterError:
+        except NoSchemaError:
             pass
 
         # enter space as schema name
         try:
             CreateCommand(" ").execute()
-        except NoParameterError:
+        except NoSchemaError:
             pass
 
         # enter integers as schema name
         try:
             CreateCommand(2131131).execute()
-        except WrongParameterError:
+        except WrongSchemaError:
             pass
 
         # enter wrong file name
         try:
             CreateCommand("goda").execute()
-        except WrongParameterError:
+        except WrongSchemaError:
             pass
 
     def test_create_multiple_times(self):
