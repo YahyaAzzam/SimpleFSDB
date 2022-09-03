@@ -3,9 +3,13 @@ on:
   push:
     branches:
       - G
+      - y
+      - main
   pull_request:
     branches:
       - G
+      - y
+      - main
 
 jobs:
   build:
