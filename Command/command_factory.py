@@ -1,4 +1,4 @@
-from SimpleFSDB.Functions.create_command import *
+from Functions.create_command import *
 
 # from set_command import *
 # from get_command import *

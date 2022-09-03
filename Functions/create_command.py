@@ -1,8 +1,8 @@
-from SimpleFSDB.Command.abstract_command import *
+from Command.abstract_command import *
 import json
 import os
-from SimpleFSDB.Command.keys import Keys
-from SimpleFSDB.Command.errors import *
+from Command.keys import Keys
+from Command.errors import *
 
 
 class CreateCommand(AbstractCommand):
@@ -10,8 +10,8 @@ class CreateCommand(AbstractCommand):
         self.data = None
         self.path = None
         self.schema_file = schema_file
-        self.schema_dir = os.path.dirname(Keys.SCHEMA)
-        self.database_dir = os.path.dirname(Keys.SCHEMA)
+        self.schema_dir = Keys.SCHEMA_PATH
+        self.database_dir = Keys.SCHEMA_PATH
         self.validate()
         file = open(self.schema_file, 'r')
         self.data = json.load(file)

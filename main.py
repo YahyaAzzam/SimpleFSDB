@@ -1,5 +1,7 @@
 from Command.input import *
 from Command.command_factory import *
 
+
 command = CommandFactory.create(parse_args())
-output_message = command.execute()
+if command is not None:
+    output_message = command.execute()
