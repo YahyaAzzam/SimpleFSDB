@@ -1,5 +1,5 @@
-from SimpleFSDB.Command.input import *
-from SimpleFSDB.Command.command_factory import *
+from Command.input import *
+from Command.command_factory import *
 
 
 command = CommandFactory.create(parse_args())
