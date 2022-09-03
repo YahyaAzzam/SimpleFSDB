@@ -1,7 +1,8 @@
-from Commands_Adaptors.abstract_command import *
+from Command.abstract_command import *
 import json
 import os
-from Commands_Adaptors.keys import Keys
+from Command.keys import Keys
+from Command.errors import *
 
 
 class CreateCommand(AbstractCommand):
@@ -23,15 +24,15 @@ class CreateCommand(AbstractCommand):
         for table in self.data[Keys.TABLES]:
             t_path = os.path.join(self.path, table[Keys.NAME])
             os.makedirs(t_path, exist_ok=True)
-        return 0
+        return "database created successfully"
 
     def validate(self):
         if self.schema_file is None or self.schema_file == "" or self.schema_file == " ":
-            return 3
+            raise NoParameterError()
         path = os.path.join(self.schema_dir, str(self.schema_file))
         if not os.path.exists(path):
-            return 4
+            raise WrongParameterError()
 
     def check_database(self):
         if self.data[Keys.DATABASE] is None:
-            return 5
+            raise NoDatabaseError()

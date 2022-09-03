@@ -1,30 +1,40 @@
+from main import *
 import unittest
 import shutil
-from Functions.create_command import *
 
 
 class Test(unittest.TestCase):
 
     def test_wrong_input(self):
         # didn't enter schema name
-        status = CreateCommand(None).execute()
-        self.assertEqual(status, 3)
+        try:
+            CreateCommand(None).execute()
+        except NoParameterError:
+            pass
 
         # enter empty string as schema name
-        status = CreateCommand("").execute()
-        self.assertEqual(status, 3)
+        try:
+            CreateCommand("").execute()
+        except NoParameterError:
+            pass
 
         # enter space as schema name
-        CreateCommand(" ").execute()
-        self.assertEqual(status, 3)
+        try:
+            CreateCommand(" ").execute()
+        except NoParameterError:
+            pass
 
         # enter integers as schema name
-        CreateCommand(2131131).execute()
-        self.assertEqual(status, 4)
+        try:
+            CreateCommand(2131131).execute()
+        except WrongParameterError:
+            pass
 
         # enter wrong file name
-        CreateCommand("goda").execute()
-        self.assertEqual(status, 4)
+        try:
+            CreateCommand("goda").execute()
+        except WrongParameterError:
+            pass
 
     def test_create_multiple_times(self):
         # create and delete database many times
