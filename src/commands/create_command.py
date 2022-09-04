@@ -3,7 +3,7 @@ import json
 import os
 from abstract_command import *
 from keys import Keys
-sys.path.append(os.path.join(str(os.getcwd()).replace("commands", '').replace("tests", "src"), "output"))
+sys.path.append(os.path.join(str(os.getcwd()).replace("commands", '').replace("tests", '').replace("src", ''), "src", "output"))
 from exceptions import *
 
 
@@ -13,6 +13,7 @@ class CreateCommand(AbstractCommand):
         self.schema_dir = Keys.SCHEMA_PATH
         self.database_dir = Keys.SCHEMA_PATH
         self.validate()
+        self.schema_file = os.path.join(self.schema_dir, schema_file)
         with open(self.schema_file, 'r') as file:
             self.data = json.load(file)
         self.check_database()

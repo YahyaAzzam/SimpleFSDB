@@ -2,7 +2,7 @@ import unittest
 import shutil
 import sys
 import os
-sys.path.append(os.path.join(str(os.getcwd()).replace("tests", "src"), "commands"))
+sys.path.append(os.path.join(str(os.getcwd()).replace("tests", ''), "src", "commands"))
 from create_command import *
 
 
@@ -40,7 +40,7 @@ class Test(unittest.TestCase):
 
     def test_create(self):
         # create and delete database many times
-        path = os.path.join(os.getcwd(), "csed25")
+        path = os.path.join(str(os.getcwd()).replace("tests", ''), "tests", "csed25")
         if os.path.exists(path):
             shutil.rmtree(path)  # delete database
         CreateCommand("Check-in-schema.json").execute()
@@ -52,25 +52,25 @@ class Test(unittest.TestCase):
         CreateCommand("Check-in-schema.json").execute()
 
         # delete Seats table
-        path = os.path.join(os.getcwd(), "csed25", "Seats")
+        path = os.path.join(str(os.getcwd()).replace("tests", ''), "tests", "csed25", "Seats")
         shutil.rmtree(path)
         CreateCommand("Check-in-schema.json").execute()
         self.assertTrue(os.path.exists(path))
 
         # delete Reservations table
-        path = os.path.join(os.getcwd(), "csed25", "Reservations")
+        path = os.path.join(str(os.getcwd()).replace("tests", ''), "tests", "csed25", "Reservations")
         shutil.rmtree(path)
         CreateCommand("Check-in-schema.json").execute()
         self.assertTrue(os.path.exists(path))
 
         # delete Planes table
-        path = os.path.join(os.getcwd(), "csed25", "Planes")
+        path = os.path.join(str(os.getcwd()).replace("tests", ''), "tests", "csed25", "Planes")
         shutil.rmtree(path)
         CreateCommand("Check-in-schema.json").execute()
         self.assertTrue(os.path.exists(path))
 
         # delete Flights table
-        path = os.path.join(os.getcwd(), "csed25", "Flights")
+        path = os.path.join(str(os.getcwd()).replace("tests", ''), "tests", "csed25", "Flights")
         shutil.rmtree(path)
         CreateCommand("Check-in-schema.json").execute()
         self.assertTrue(os.path.exists(path))
