@@ -9,6 +9,7 @@ class OutputMessage(IOutput):
     def success(result,  command_character):
         file = open(path, 'r')
         message = json.load(file)
+        file.close()
         message["result"] = result
         message["status"] = Status.Success.value
         if command_character == 'c':
@@ -19,13 +20,12 @@ class OutputMessage(IOutput):
             message["message"] = "Success to set the data"
         else:
             message["message"] = "Success to delete the data"
-        file = open(path, 'w')
-        json.dump(message, file)
-        file.close()
+        return message
 
     def fail(error_type):
         file = open(path, 'r')
         message = json.load(file)
+        file.close()
         message["result"] = None
         if error_type[0] == 'W':
             message["message"] = "Enter the correct parameters"
@@ -36,6 +36,4 @@ class OutputMessage(IOutput):
         else:
             message["message"] = "Check the empty parameters"
             message["status"] = Status.NullPointerError.value
-        file = open(path, 'w')
-        json.dump(message, file)
-        file.close()
+        return message
