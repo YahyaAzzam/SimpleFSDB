@@ -3,7 +3,7 @@ import shutil
 import sys
 import os
 sys.path.append(os.path.join(str(os.getcwd()).replace("tests", "src"), "command"))
-from create_commands import *
+from create_command import *
 
 
 class Test(unittest.TestCase):
