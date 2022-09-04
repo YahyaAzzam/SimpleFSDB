@@ -1,6 +1,3 @@
-import os
-import sys
-sys.path.append(os.path.join(str(os.getcwd()).replace("commands_and_adaptors", ''), "functions"))
 from create_command import *
 
 # from set_command import *

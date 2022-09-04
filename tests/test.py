@@ -2,7 +2,7 @@ import unittest
 import shutil
 import sys
 import os
-sys.path.append(os.path.join(str(os.getcwd()), "functions"))
+sys.path.append(os.path.join(str(os.getcwd()).replace("tests", "src"), "commands"))
 from create_command import *
 
 
@@ -38,7 +38,7 @@ class Test(unittest.TestCase):
         except WrongParameterError:
             pass
 
-    def test_create_multiple_times(self):
+    def test_create(self):
         # create and delete database many times
         path = os.path.join(os.getcwd(), "csed25")
         if os.path.exists(path):

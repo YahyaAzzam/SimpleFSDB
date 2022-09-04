@@ -1,27 +1,24 @@
 import sys
 import json
 import os
-sys.path.append(os.path.join(str(os.getcwd()).replace("functions", ''), "commands_and_adaptors"))
 from abstract_command import *
 from keys import Keys
-from errors import *
+sys.path.append(os.path.join(str(os.getcwd()).replace("commands", '').replace("tests", "src"), "output"))
+from exceptions import *
 
 
 class CreateCommand(AbstractCommand):
     def __init__(self, schema_file):
-        self.data = None
-        self.path = None
         self.schema_file = schema_file
         self.schema_dir = Keys.SCHEMA_PATH
         self.database_dir = Keys.SCHEMA_PATH
         self.validate()
-        file = open(self.schema_file, 'r')
-        self.data = json.load(file)
-        file.close()
+        with open(self.schema_file, 'r') as file:
+            self.data = json.load(file)
         self.check_database()
+        self.path = os.path.join(self.database_dir, self.data[Keys.DATABASE])
 
     def execute(self):
-        self.path = os.path.join(self.database_dir, self.data[Keys.DATABASE])
         os.makedirs(self.path, exist_ok=True)
         for table in self.data[Keys.TABLES]:
             t_path = os.path.join(self.path, table[Keys.NAME])
@@ -36,4 +33,4 @@ class CreateCommand(AbstractCommand):
 
     def check_database(self):
         if self.data[Keys.DATABASE] is None:
-            raise NullPointerError("No database detected")
+            raise WrongParameterError("No database detected")

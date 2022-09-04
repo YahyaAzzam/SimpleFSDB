@@ -3,9 +3,9 @@ from abc import abstractmethod
 
 class AbstractCommand:
     @abstractmethod
-    def execute(self):
+    def validate(self):
         pass
 
-    @staticmethod
-    def validate(self):
+    @abstractmethod
+    def execute(self):
         pass

@@ -10,4 +10,4 @@ class Keys(ABC):
     PRIMARY_KEY = "primary_key"
     INDEX_KEYS = "Index_keys"
     CONSISTENCY = "consistency"
-    SCHEMA_PATH = str(os.getcwd()).replace("\\CommandsAndAdaptors", '')
+    SCHEMA_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''), 'tests')

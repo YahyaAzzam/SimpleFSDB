@@ -11,9 +11,3 @@ class WrongParameterError(Exception):
     def __init__(self, message):
         self.status_code = Status.WrongParameterError.name
         super().__init__(message)
-
-
-class NullPointerError(Exception):
-    def __init__(self, message):
-        self.status_code = Status.NullPointerError.name
-        super().__init__(message)
