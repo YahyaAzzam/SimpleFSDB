@@ -2,8 +2,8 @@ import unittest
 import shutil
 import sys
 import os
-sys.path.append(os.path.join(str(os.getcwd()).replace("tests", "src"), "commands"))
-from create_command import *
+sys.path.append(os.path.join(str(os.getcwd()).replace("tests", "src"), "command"))
+from create_commands import *
 
 
 class Test(unittest.TestCase):
