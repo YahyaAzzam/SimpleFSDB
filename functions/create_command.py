@@ -29,11 +29,11 @@ class CreateCommand(AbstractCommand):
 
     def validate(self):
         if self.schema_file is None or self.schema_file == "" or self.schema_file == " ":
-            raise NoParameterError()
+            raise NoParameterError("Schema parameter not entered")
         path = os.path.join(self.schema_dir, str(self.schema_file))
         if not os.path.exists(path):
-            raise WrongParameterError()
+            raise WrongParameterError("Schema doesn't exist")
 
     def check_database(self):
         if self.data[Keys.DATABASE] is None:
-            raise NullPointerError()
+            raise NullPointerError("No database detected")

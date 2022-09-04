@@ -1,10 +1,19 @@
+from status import *
+
+
 class NoParameterError(Exception):
-    pass
+    def __init__(self, message):
+        self.status_code = Status.NoParameterError.name
+        super().__init__(message)
 
 
 class WrongParameterError(Exception):
-    pass
+    def __init__(self, message):
+        self.status_code = Status.WrongParameterError.name
+        super().__init__(message)
 
 
 class NullPointerError(Exception):
-    pass
+    def __init__(self, message):
+        self.status_code = Status.NullPointerError.name
+        super().__init__(message)
