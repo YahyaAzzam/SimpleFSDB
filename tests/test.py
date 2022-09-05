@@ -2,7 +2,7 @@ import unittest
 import shutil
 import sys
 import os
-sys.path.append(os.path.join(str(os.getcwd()).replace("tdests", ''), "src"))
+sys.path.append(os.path.join(str(os.getcwd()).replace("tests", ''), "src"))
 from main import *
 
 
