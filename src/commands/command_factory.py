@@ -8,6 +8,7 @@ from create_command import *
 class CommandFactory:
     def __init__(self, input_adaptor):
         self.input_adaptor = input_adaptor
+        self.available_commands = {"create", "set", "get", "delete"}
         self.validate()
         
     def create(self):
@@ -24,5 +25,5 @@ class CommandFactory:
     def validate(self):
         if self.input_adaptor.command == "none" or self.input_adaptor.command is None:
             raise NoParameterError("No command was entered")
-        if not (self.input_adaptor.command == "set" or self.input_adaptor.command == "get" or self.input_adaptor.command == "delete" or self.input_adaptor.command == "create"):
+        if self.input_adaptor.command not in self.available_commands:
             raise WrongParameterError("Wrong command entered")
