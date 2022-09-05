@@ -1,4 +1,4 @@
-from status import *
+from output.status import *
 
 
 class NoParameterError(Exception):

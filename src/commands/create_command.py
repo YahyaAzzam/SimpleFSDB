@@ -1,10 +1,7 @@
-import sys
-import json
-import os
-from abstract_command import *
-from keys import Keys
-sys.path.append(os.path.join(str(os.getcwd()).replace("commands", '').replace("tests", '').replace("src", ''), "src", "output"))
-from exceptions import *
+import json, os
+from commands.abstract_command import *
+from commands.keys import Keys
+from output.exceptions import *
 
 
 class CreateCommand(AbstractCommand):

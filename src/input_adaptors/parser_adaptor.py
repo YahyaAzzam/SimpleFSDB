@@ -1,8 +1,5 @@
-import os
-from iadaptor import IInputAdaptor
-import sys
-sys.path.append(os.path.join(os.getcwd().replace("tests", '').replace("src", '').replace("input_adaptors", ''), "src", "output"))
-from exceptions import *
+from input_adaptors.iadaptor import IInputAdaptor
+from output.exceptions import *
 
 
 class ParsedInput(IInputAdaptor):

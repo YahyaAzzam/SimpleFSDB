@@ -1,7 +1,4 @@
-import os
-import sys
-sys.path.append(os.path.join(os.getcwd().replace("commands", ''), "commands"))
-from create_command import *
+from commands.create_command import *
 
 # from set_command import *
 # from get_command import *

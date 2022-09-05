@@ -1,12 +1,7 @@
-import sys
-import os
-sys.path.append(os.path.join(os.getcwd().replace("tests", ''), "src", "input_adaptors"))
-sys.path.append(os.path.join(os.getcwd().replace("tests", ''), "src", "commands"))
-sys.path.append(os.path.join(os.getcwd().replace("tests", ''), "src", "output"))
-from input import *
-from command_factory import *
-from parser_adaptor import *
-from output_message import *
+from input_adaptors.input import *
+from commands.command_factory import *
+from input_adaptors.parser_adaptor import *
+from output.output_message import *
 
 
 try:
