@@ -1,7 +1,4 @@
-import os
 from status import *
-
-path = os.path.join(str(os.getcwd()).replace("commands_and_adaptors", ''), "message.json")
 
 
 class OutputMessage:
