@@ -1,0 +1,8 @@
+from output.status import *
+
+
+class OutputMessage:
+    def __init__(self, command_name=None, result=None, exception=None):
+        self.result = result
+        self.status = Status.Success if exception is None else exception.status_code
+        self.message = command_name + " is a success" if exception is None else str(exception)
