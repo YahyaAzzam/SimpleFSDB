@@ -74,6 +74,7 @@ class Test(unittest.TestCase):
         shutil.rmtree(path)
         CreateCommand("Check-in-schema.json").execute()
         self.assertTrue(os.path.exists(path))
+        shutil.rmtree(os.path.join(os.getcwd(), "csed25"))
 
 
 if __name__ == '__main__':

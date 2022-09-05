@@ -23,7 +23,5 @@ class CommandFactory:
 #            return DeleteCommand(self.input_adaptor.database, self.input_adaptor.table, self.input_adaptor.primary_key)
 
     def validate(self):
-        if self.input_adaptor.command == "none" or self.input_adaptor.command is None:
-            raise NoParameterError("No command was entered")
         if self.input_adaptor.command not in self.available_commands:
             raise WrongParameterError("Wrong command entered")
