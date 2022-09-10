@@ -1,4 +1,5 @@
-import json, os
+import json
+import os
 from commands.abstract_command import *
 from commands.keys import Keys
 from output.exceptions import *
@@ -21,7 +22,6 @@ class CreateCommand(AbstractCommand):
             self.create_table_schema(t_path, table)
             self.create_indices(t_path, table)
 
-
     @staticmethod
     def validate(schema_file, schema_dir):
         if schema_file is None or schema_file == "" or schema_file == " ":
@@ -36,18 +36,15 @@ class CreateCommand(AbstractCommand):
 
     @staticmethod
     def create_table_schema(t_path, table):
-        file = open(os.path.join(t_path,table[Keys.NAME]+"_schema.json"),'w')
-        json.dump(table, file)
-        file.close()
+        with open(os.path.join(t_path, "{}_schema.json".format(table[Keys.NAME])), 'w') as file:
+            json.dump(table, file)
 
     @staticmethod
     def create_indices(t_path, table):
         json_object = {"indices": []}
         for index in table[Keys.INDEX_KEYS]:
-            dic = {}
-            dic["name"] = index
-            dic["values"] = []
+            dic = {"name": index, "values": []}
             json_object["indices"].append(dic)
-        file = open(os.path.join(t_path,table[Keys.NAME]+"_indices.json"),'w')
+        file = open(os.path.join(t_path, "{}_indices.json".format(table[Keys.NAME])), 'w')
         json.dump(json_object, file)
         file.close()
