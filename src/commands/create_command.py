@@ -1,8 +1,8 @@
 import json
 import os
 from commands.abstract_command import *
-from commands.keys import Keys
-from output.exceptions import *
+from input_adaptors.tables import *
+from input_adaptors.tables import *
 
 
 class CreateCommand(AbstractCommand):
@@ -17,10 +17,8 @@ class CreateCommand(AbstractCommand):
     def execute(self):
         os.makedirs(self.path, exist_ok=True)
         for table in self.data[Keys.TABLES]:
-            t_path = os.path.join(self.path, table[Keys.NAME])
-            os.makedirs(t_path, exist_ok=True)
-            self.create_table_schema(t_path, table)
-            self.create_indices(t_path, table)
+            table_object = Tables(table)
+            table_object.create_table(self.path)
 
     @staticmethod
     def validate(schema_file, schema_dir):
@@ -33,18 +31,3 @@ class CreateCommand(AbstractCommand):
     def check_database(self):
         if self.data[Keys.DATABASE] is None:
             raise WrongParameterError("No database detected")
-
-    @staticmethod
-    def create_table_schema(t_path, table):
-        with open(os.path.join(t_path, "{}_schema.json".format(table[Keys.NAME])), 'w') as file:
-            json.dump(table, file)
-
-    @staticmethod
-    def create_indices(t_path, table):
-        json_object = {"indices": []}
-        for index in table[Keys.INDEX_KEYS]:
-            dic = {"name": index, "values": []}
-            json_object["indices"].append(dic)
-        file = open(os.path.join(t_path, "{}_indices.json".format(table[Keys.NAME])), 'w')
-        json.dump(json_object, file)
-        file.close()

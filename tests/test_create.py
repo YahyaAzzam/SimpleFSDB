@@ -2,6 +2,7 @@ import unittest
 import shutil
 import sys
 import os
+
 sys.path.append(os.path.join(str(os.getcwd()).replace("tests", ''), "src"))
 from main import *
 
@@ -12,7 +13,7 @@ class Test(unittest.TestCase):
     file = open(path, 'r')
     data = json.load(file)
     file.close()
-    
+
     def test_wrong_input(self):
         # didn't enter schema name
         try:
@@ -67,22 +68,24 @@ class Test(unittest.TestCase):
         if os.path.exists(path):
             shutil.rmtree(path)
 
-
     def test_create_tables_indices_file(self):
-        #check creating two json files in each table
+        # check creating two json files in each table
         CreateCommand(self.schema_name).execute()
 
         for table in self.data[Keys.TABLES]:
-            #check table_schema
-            path = os.path.join(Keys.DATABASE_PATH, self.data[Keys.DATABASE], table[Keys.NAME], table[Keys.NAME]+"_schema.json")
+            # check table_schema
+            path = os.path.join(Keys.DATABASE_PATH, self.data[Keys.DATABASE], table[Keys.NAME],
+                                table[Keys.NAME] + "_schema.json")
             self.assertTrue(os.path.exists(path))
-            #check table_indices
-            path = os.path.join(Keys.DATABASE_PATH, self.data[Keys.DATABASE], table[Keys.NAME], table[Keys.NAME]+"_indices.json")
-            self.assertTrue(os.path.exists(path))
-        #delete database
+            # check table_indices
+            # path = os.path.join(Keys.DATABASE_PATH, self.data[Keys.DATABASE], table[Keys.NAME],
+            #                     table[Keys.NAME] + "_indices.json")
+            # self.assertTrue(os.path.exists(path))
+        # delete database
         path = os.path.join(Keys.DATABASE_PATH, self.data[Keys.DATABASE])
         if os.path.exists(path):
             shutil.rmtree(path)
+
 
 if __name__ == '__main__':
     unittest.main()
