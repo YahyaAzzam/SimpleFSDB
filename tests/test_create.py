@@ -74,13 +74,11 @@ class Test(unittest.TestCase):
 
         for table in self.data[Keys.TABLES]:
             # check table_schema
-            path = os.path.join(Keys.DATABASE_PATH, self.data[Keys.DATABASE], table[Keys.NAME],
-                                table[Keys.NAME] + "_schema.json")
-            self.assertTrue(os.path.exists(path))
+            path = os.path.join(Keys.DATABASE_PATH, self.data[Keys.DATABASE], table[Keys.NAME])
+            self.assertTrue(os.path.exists(os.path.join(path, table[Keys.NAME] + "_schema.json")))
             # check table_indices
-            path = os.path.join(Keys.DATABASE_PATH, self.data[Keys.DATABASE], table[Keys.NAME],
-                                table[Keys.INDEX_KEYS])
-            self.assertTrue(os.path.exists(path))
+            for index in self.data[Keys.TABLES][Keys.INDEX_KEYS]:
+                self.assertTrue(os.path.exists(path, index))
         # delete database
         path = os.path.join(Keys.DATABASE_PATH, self.data[Keys.DATABASE])
         if os.path.exists(path):
