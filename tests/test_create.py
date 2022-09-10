@@ -78,9 +78,9 @@ class Test(unittest.TestCase):
                                 table[Keys.NAME] + "_schema.json")
             self.assertTrue(os.path.exists(path))
             # check table_indices
-            # path = os.path.join(Keys.DATABASE_PATH, self.data[Keys.DATABASE], table[Keys.NAME],
-            #                     table[Keys.NAME] + "_indices.json")
-            # self.assertTrue(os.path.exists(path))
+            path = os.path.join(Keys.DATABASE_PATH, self.data[Keys.DATABASE], table[Keys.NAME],
+                                table[Keys.INDEX_KEYS])
+            self.assertTrue(os.path.exists(path))
         # delete database
         path = os.path.join(Keys.DATABASE_PATH, self.data[Keys.DATABASE])
         if os.path.exists(path):
