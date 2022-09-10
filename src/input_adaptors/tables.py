@@ -16,7 +16,7 @@ class Tables:
         self.validate(self)
         path = os.path.join(path, self.name)
         os.makedirs(path, exist_ok=True)
-        with open(os.path.join(path, "{}_schema".format(self.name)), 'w') as file:
+        with open(os.path.join(path, "{}_schema.json".format(self.name)), 'w') as file:
             json.dump(self.table_object, file)
         for index in self.index:
             index = Index(index)
