@@ -1,18 +1,18 @@
 import os
 from output.exceptions import *
+from commands.keys import Keys
 
 
 class Index:
-    def __init__(self, names, columns):
-        self.names = names
-        self.validate(self, columns)
+    def __init__(self, name, table_map):
+        self.name = name
+        self.table_map = table_map
+        self.__validate__(self)
 
     @staticmethod
-    def validate(self, columns):
-        for name in self.names:
-            if name not in columns:
-                raise WrongParameterError("Index {} not found".format(name))
+    def __validate__(self):
+        if self.name not in self.table_map[Keys.COLUMNS]:
+            raise WrongParameterError("Index {} not found".format(self.name))
 
-    def write(self, path):
-        for name in self.names:
-            os.makedirs(os.path.join(path, name), exist_ok=True)
+    def serialize(self, path):
+        os.makedirs(os.path.join(path, self.name), exist_ok=True)

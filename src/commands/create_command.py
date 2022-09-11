@@ -1,7 +1,7 @@
 import json
 import os
 from commands.abstract_command import *
-from model.tables import *
+from model.table import *
 
 
 class CreateCommand(AbstractCommand):
