@@ -1,7 +1,7 @@
 import json
 import os
 from commands.abstract_command import *
-from model.table import *
+from model.table_metadata import *
 
 
 class CreateCommand(AbstractCommand):
@@ -16,8 +16,8 @@ class CreateCommand(AbstractCommand):
     def execute(self):
         os.makedirs(self.path, exist_ok=True)
         for table in self.data[Keys.TABLES]:
-            table = TableMetaData(table)
-            table.serialize(self.path)
+            table_metadata = TableMetaData(table, self.path)
+            table_metadata.serialize()
 
     @staticmethod
     def validate(schema_file, schema_dir):

@@ -4,15 +4,16 @@ from commands.keys import Keys
 
 
 class Index:
-    def __init__(self, name, table_map):
+    def __init__(self, name, table_metadata, path):
         self.name = name
-        self.table_map = table_map
+        self.table_metadata = table_metadata
+        self.path = os.path.join(path, self.name)
         self.__validate__(self)
 
     @staticmethod
     def __validate__(self):
-        if self.name not in self.table_map[Keys.COLUMNS]:
+        if self.name not in self.table_metadata[Keys.COLUMNS]:
             raise WrongParameterError("Index {} not found".format(self.name))
 
-    def serialize(self, path):
-        os.makedirs(os.path.join(path, self.name), exist_ok=True)
+    def create(self):
+        os.makedirs(self.path, exist_ok=True)
