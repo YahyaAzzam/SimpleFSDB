@@ -16,7 +16,7 @@ class CreateCommand(AbstractCommand):
     def execute(self):
         os.makedirs(self.path, exist_ok=True)
         for table in self.data[Keys.TABLES]:
-            table_metadata = TableMetaData(table, self.path)
+            table_metadata = TableMetaData(table, self.path, self.data[Keys.NAME])
             table_metadata.serialize()
 
     @staticmethod

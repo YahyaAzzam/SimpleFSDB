@@ -1,18 +1,18 @@
 import os
 from output.exceptions import *
-from commands.keys import Keys
 
 
 class Index:
-    def __init__(self, name, table_metadata, path):
+    def __init__(self, name, table_columns, table_name, path):
+        self.__validate__(name, table_columns)
+        self.table_name = table_name
         self.name = name
-        self.table_metadata = table_metadata
+        self.table_columns = table_columns
         self.path = os.path.join(path, self.name)
-        self.__validate__(self)
 
     @staticmethod
-    def __validate__(self):
-        if self.name not in self.table_metadata[Keys.COLUMNS]:
+    def __validate__(name, table_columns):
+        if name not in table_columns:
             raise WrongParameterError("Index {} not found".format(self.name))
 
     def create(self):
