@@ -1,18 +1,17 @@
-import os
-from model.table_metadata import TableMetaData
+from model.table_metadata import *
 
 
 class Table:
-
     def __init__(self, database_name, table_map, path):
         self.table_metadata = TableMetaData(database_name, table_map, path)
 
     def serialize(self):
+
         self.__create_table__()
         self.__create_indices__()
 
     # Will be implemented later in the project
-    def write(self):
+    def set(self):
         pass
 
     def delete(self):

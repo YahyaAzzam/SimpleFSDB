@@ -1,8 +1,6 @@
-import json
-import os
 from model.index import *
 from commands.keys import Keys
-from output.exceptions import *
+
 
 
 class TableMetaData:
@@ -14,7 +12,6 @@ class TableMetaData:
         self.indices = table_map[Keys.INDEX_KEYS]
         self.database_name = database_name
         self.path = os.path.join(path, self.name)
-        self.serialize()
 
     def serialize(self):
         self.__create_table_schema__()
