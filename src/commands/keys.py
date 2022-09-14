@@ -11,4 +11,4 @@ class Keys(ABC):
     INDEX_KEYS = "Index_keys"
     CONSISTENCY = "consistency"
     SCHEMA_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''), 'tests')
-    DATABASE_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", '').replace("SimpleFSDB", ''), 'SimpleFSDB', 'tests')
+    DATABASE_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", '').replace("/SimpleFSDB", '').replace("\\SimpleFSDB", ''), 'SimpleFSDB', 'tests')
