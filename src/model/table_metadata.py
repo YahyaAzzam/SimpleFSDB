@@ -2,6 +2,7 @@ import json
 import os
 from model.index import *
 from commands.keys import Keys
+from output.exceptions import *
 
 
 class TableMetaData:
