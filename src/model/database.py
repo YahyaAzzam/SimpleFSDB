@@ -30,5 +30,5 @@ class Database:
 
     def __create_tables__(self):
         for table in self.database_object[Keys.TABLES]:
-            table_object = Table(table, self.database_object[Keys.DATABASE], self.path)
+            table_object = Table(self.database_object[Keys.DATABASE], table, self.path)
             table_object.serialize()

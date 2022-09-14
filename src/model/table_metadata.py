@@ -5,7 +5,7 @@ from commands.keys import Keys
 
 
 class TableMetaData:
-    def __init__(self, table_map, path, database_name):
+    def __init__(self, database_name, table_map, path):
         self.__validate__(table_map)
         self.name = table_map[Keys.NAME]
         self.primary_key = table_map[Keys.PRIMARY_KEY]

@@ -5,7 +5,7 @@ from model.table_metadata import TableMetaData
 class Table:
 
     def __init__(self, database_name, table_map, path):
-        self.table_metadata = TableMetaData(table_map, path, database_name)
+        self.table_metadata = TableMetaData(database_name, table_map, path)
 
     def serialize(self):
         self.__create_table__()
