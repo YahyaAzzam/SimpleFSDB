@@ -35,5 +35,5 @@ class TableMetaData:
     @staticmethod
     def __get_table_map__(database_schema, name):
         for table_map in database_schema[Keys.TABLES]:
-            if table[Keys.NAME] == name:
+            if table_map[Keys.NAME] == name:
                 return table_map
