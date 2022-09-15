@@ -13,8 +13,7 @@ class CreateCommand(AbstractCommand):
 
     @staticmethod
     def __validate__(schema_path):
-        schema_name = schema_path.replace(Keys.SCHEMA_PATH, '').replace("\\", '').replace("/", '')
-        if len(schema_name) == 0 or schema_name.isspace():
+        if len(schema_path) == 0 or schema_path.isspace():
             raise NoParameterError("schema_path parameter not entered")
         if not os.path.exists(schema_path):
             raise WrongParameterError("Schema doesn't exist")
