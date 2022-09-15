@@ -10,6 +10,7 @@ class TableMetaData:
         self.columns = table_map[Keys.COLUMNS]
         self.database_name = database_schema[Keys.DATABASE]
         self.path = os.path.join(path, self.table_name)
+        self.index_names = table_map[Keys.INDEX_KEYS]
         self.indices = []
         for index in table_map[Keys.INDEX_KEYS]:
             self.indices.append(Index(index, self.path, table_map))
@@ -24,7 +25,7 @@ class TableMetaData:
             raise WrongParameterError("Primary_key not found")
 
     def __create_table_schema__(self):
-        self.table_object = {Keys.DATABASE: self.database_name, Keys.NAME: self.table_name, Keys.PRIMARY_KEY: self.primary_key, Keys.COLUMNS: self.columns, Keys.INDEX_KEYS: self.indices}
+        self.table_object = {Keys.DATABASE: self.database_name, Keys.NAME: self.table_name, Keys.PRIMARY_KEY: self.primary_key, Keys.COLUMNS: self.columns, Keys.INDEX_KEYS: self.index_names}
         with open(os.path.join(self.path, "{}_schema.json".format(self.table_name)), 'w') as file:
             json.dump(self.table_object, file)
 
