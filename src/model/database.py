@@ -2,25 +2,25 @@ from model.table import *
 
 
 class Database:
+    DATABASE_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''), 'tests')
+    
     def __init__(self, schema_data):
         Database.__validate__(schema_data)
+        self.database_name = schema_data[Keys.DATABASE]
         self.schema_data = schema_data
-        self.path = os.path.join(Keys.DATABASE_PATH, self.schema_data[Keys.DATABASE])
+        self.path = os.path.join(self.DATABASE_PATH, self.schema_data[Keys.DATABASE])
         self.tables = []
-        for table in self.schema_data[Keys.TABLES]:
-            self.tables.append(Table(self.schema_data, table[Keys.NAME], self.path))
+        for table in schema_data[Keys.TABLES]:
+            self.tables.append(Table(self, table))
 
     def serialize(self):
-        self.__create_database__()
+        os.makedirs(self.path, exist_ok=True)
         self.__serialize_tables__()
 
     @staticmethod
     def __validate__(schema_data):
         if len(schema_data[Keys.DATABASE]) == 0 or schema_data[Keys.DATABASE].isspace():
             raise WrongParameterError("No database detected")
-
-    def __create_database__(self):
-        os.makedirs(self.path, exist_ok=True)
 
     def __serialize_tables__(self):
         for table in self.tables:

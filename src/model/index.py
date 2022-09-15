@@ -2,19 +2,19 @@ import os
 import json
 import pathlib
 from output.exceptions import *
-from commands.keys import *
+from commands.schema_keys import *
 
 
 class Index:
-    def __init__(self, name, path, table):
-        Index.__validate__(name, table[Keys.COLUMNS])
-        self.name = name
-        self.path = os.path.join(path, self.name)
+    def __init__(self, index_name, table):
+        Index.__validate_index__(index_name, table[Keys.COLUMNS])
+        self.name = index_name
+        self.path = os.path.join(table.path, self.name)
 
     @staticmethod
-    def __validate__(name, table_columns):
-        if name not in table_columns:
-            raise WrongParameterError("Index {} not found".format(name))
+    def __validate_index__(index_name, table_columns):
+        if index_name not in table_columns:
+            raise WrongParameterError("Index {} not found".format(index_name))
 
     @staticmethod
     def __validate_value_name__(value_name, path):

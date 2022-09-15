@@ -5,8 +5,7 @@ from model.database import *
 class CreateCommand(AbstractCommand):
     def __init__(self, schema_path):
         CreateCommand.__validate__(schema_path)
-        self.schema_path = schema_path
-        self.schema_data = self.__get_database_schema__()
+        self.schema_data = self.__get_database_schema__(schema_path)
 
     def execute(self):
         database = Database(self.schema_data)
@@ -20,6 +19,7 @@ class CreateCommand(AbstractCommand):
         if not os.path.exists(schema_path):
             raise WrongParameterError("Schema doesn't exist")
 
-    def __get_database_schema__(self):
-        with open(self.schema_path, 'r') as file:
+    @staticmethod
+    def __get_database_schema__(schema_path):
+        with open(schema_path, 'r') as file:
             return json.load(file)
