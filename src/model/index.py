@@ -6,10 +6,10 @@ from commands.schema_keys import *
 
 
 class Index:
-    def __init__(self, index_name, table):
-        Index.__validate_index__(index_name, table[Keys.COLUMNS])
+    def __init__(self, index_name, table_metadata):
+        Index.__validate_index__(index_name, table_metadata.columns)
         self.name = index_name
-        self.path = os.path.join(table.path, self.name)
+        self.path = os.path.join(table_metadata.path, self.name)
 
     @staticmethod
     def __validate_index__(index_name, table_columns):

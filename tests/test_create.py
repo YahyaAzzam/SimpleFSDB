@@ -17,16 +17,22 @@ class Test(unittest.TestCase):
     file.close()
 
     def test_wrong_input(self):
-        # didn't enter schema name
+        # didn't enter schema path
         try:
-            CreateCommand(os.path.join(self.SCHEMA_PATH, "")).execute()
+            CreateCommand(None).execute()
         except NoParameterError:
             pass
 
-        # enter empty string as schema name
+        # enter empty string as schema path
         try:
-            CreateCommand(os.path.join(self.SCHEMA_PATH, "")).execute()
+            CreateCommand("").execute()
         except NoParameterError:
+            pass
+
+        # enter space as schema path
+        try:
+            CreateCommand(" ").execute()
+        except WrongParameterError:
             pass
 
         # enter space as schema name
