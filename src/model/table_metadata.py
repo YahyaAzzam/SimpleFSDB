@@ -1,5 +1,4 @@
 from model.index import *
-from commands.keys import Keys
 
 
 class TableMetaData:
@@ -14,6 +13,7 @@ class TableMetaData:
 
     def serialize(self):
         self.__create_table_schema__()
+        self.__create_indices__()
 
     @staticmethod
     def __validate__(table_map):
@@ -21,7 +21,11 @@ class TableMetaData:
             raise WrongParameterError("Primary_key not found")
 
     def __create_table_schema__(self):
-        table_schema = {Keys.DATABASE: self.database_name, Keys.NAME: self.name, Keys.PRIMARY_KEY: self.primary_key,
-                        Keys.COLUMNS: self.columns, Keys.INDEX_KEYS: self.indices}
+        self.table_object = {Keys.DATABASE: self.database_name, Keys.NAME: self.name, Keys.PRIMARY_KEY: self.primary_key, Keys.COLUMNS: self.columns, Keys.INDEX_KEYS: self.indices}
         with open(os.path.join(self.path, "{}_schema.json".format(self.name)), 'w') as file:
-            json.dump(table_schema, file)
+            json.dump(self.table_object, file)
+
+    def __create_indices__(self):
+        for index in self.indices:
+            index_object = Index(index, self.path, self.table_object)
+            index_object.serialize()

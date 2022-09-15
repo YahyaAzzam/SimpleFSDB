@@ -6,9 +6,8 @@ class Table:
         self.table_metadata = TableMetaData(database_name, table_map, path)
 
     def serialize(self):
-
-        self.__create_table__()
-        self.__create_indices__()
+        os.makedirs(self.table_metadata.path, exist_ok=True)
+        self.table_metadata.serialize()
 
     # Will be implemented later in the project
     def set(self):
@@ -22,13 +21,3 @@ class Table:
 
     def get_by_primary_key(self):
         pass
-
-    # Continue implemented (private) functions
-    def __create_table__(self):
-        os.makedirs(self.table_metadata.path, exist_ok=True)
-        self.table_metadata.serialize()
-
-    def __create_indices__(self):
-        for index in self.table_metadata.indices:
-            index = Index(index, self.table_metadata.columns, self.table_metadata.name, self.table_metadata.path)
-            index.create()

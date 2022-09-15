@@ -1,24 +1,25 @@
-import os
 from commands.abstract_command import *
 from model.database import *
 
 
 class CreateCommand(AbstractCommand):
-    def __init__(self, schema_name):
-        self.validate(schema_name, Keys.SCHEMA_PATH)
-        self.schema_name = schema_name
+    def __init__(self, schema_path):
+        self.__validate__(schema_path)
+        self.schema_path = schema_path
+        self.database_object = self.__get_database_schema__()
 
     def execute(self):
-        self.__create_database__()
+        database = Database(self.database_object)
+        database.serialize()
 
     @staticmethod
-    def validate(schema_name, schema_dir):
-        if schema_name is None or schema_name == "" or schema_name == " ":
-            raise NoParameterError("Schema parameter not entered")
-        path = os.path.join(schema_dir, str(schema_name))
-        if not os.path.exists(path):
+    def __validate__(schema_path):
+        schema_name = schema_path.replace(Keys.SCHEMA_PATH, '').replace("\\", '').replace("/", '')
+        if len(schema_name) == 0 or schema_name.isspace():
+            raise NoParameterError("schema_path parameter not entered")
+        if not os.path.exists(schema_path):
             raise WrongParameterError("Schema doesn't exist")
 
-    def __create_database__(self):
-        database = Database(self.schema_name)
-        database.serialize()
+    def __get_database_schema__(self):
+        with open(self.schema_path, 'r') as file:
+            return json.load(file)
