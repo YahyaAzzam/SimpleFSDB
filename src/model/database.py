@@ -1,7 +1,6 @@
 from model.table import *
 
 
-
 class Database:
 
     def __init__(self, schema_name):
