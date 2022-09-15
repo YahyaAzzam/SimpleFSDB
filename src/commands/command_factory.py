@@ -9,7 +9,7 @@ from commands.create_command import *
 class CommandFactory:
     def __init__(self, input_adaptor):
         available_commands = {"create", "set", "get", "delete"}
-        self.validate(input_adaptor, available_commands)
+        CommandFactory.validate(input_adaptor, available_commands)
         self.input_adaptor = input_adaptor
 
     def create(self):
