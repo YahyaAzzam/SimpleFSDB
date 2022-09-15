@@ -3,12 +3,15 @@ from model.table_metadata import *
 
 class Table:
     def __init__(self, database, table):
-        self.path = os.path.join(database.path, table[Keys.NAME])
-        self.table_metadata = TableMetaData(table, self)
+        self.__path__ = os.path.join(database.get_path(), table[Keys.NAME])
+        self.__table_metadata__ = TableMetaData(table, self)
 
     def serialize(self):
-        os.makedirs(self.path, exist_ok=True)
-        self.table_metadata.serialize()
+        os.makedirs(self.__path__, exist_ok=True)
+        self.__table_metadata__.serialize()
+
+    def get_path(self):
+        return self.__path__
 
     # Will be implemented later in the project
     def set(self):

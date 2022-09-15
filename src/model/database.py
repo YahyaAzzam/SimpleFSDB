@@ -6,15 +6,18 @@ class Database:
     
     def __init__(self, schema_data):
         Database.__validate__(schema_data)
-        self.database_name = schema_data[Keys.DATABASE]
+        self.__database_name__ = schema_data[Keys.DATABASE]
         self.schema_data = schema_data
-        self.path = os.path.join(self.DATABASE_PATH, self.schema_data[Keys.DATABASE])
+        self.__path__ = os.path.join(self.DATABASE_PATH, self.schema_data[Keys.DATABASE])
         self.tables = []
         for table in schema_data[Keys.TABLES]:
             self.tables.append(Table(self, table))
 
+    def get_path(self):
+        return self.__path__
+
     def serialize(self):
-        os.makedirs(self.path, exist_ok=True)
+        os.makedirs(self.__path__, exist_ok=True)
         self.__serialize_tables__()
 
     @staticmethod

@@ -9,7 +9,10 @@ class Index:
     def __init__(self, index_name, table_metadata):
         Index.__validate_index__(index_name, table_metadata.columns)
         self.name = index_name
-        self.path = os.path.join(table_metadata.path, self.name)
+        self.__path__ = os.path.join(table_metadata.get_path(), self.name)
+
+    def get_path(self):
+        return self.__path__
 
     @staticmethod
     def __validate_index__(index_name, table_columns):
@@ -34,7 +37,7 @@ class Index:
             raise NoParameterError("primary_key parameter not entered")
 
     def serialize(self):
-        os.makedirs(self.path, exist_ok=True)
+        os.makedirs(self.__path__, exist_ok=True)
 
     def get_primary_keys(self, value_name):
         Index.__validate_value_name__(value_name, self.path)
