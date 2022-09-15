@@ -3,7 +3,7 @@ from model.index import *
 
 class TableMetaData:
     def __init__(self, table_schema, table):
-        TableMetaData.__validate__(table)
+        TableMetaData.__validate__(table_schema)
         self.table_schema = table_schema
         self.table_name = table_schema[Keys.NAME]
         self.primary_key = table_schema[Keys.PRIMARY_KEY]
@@ -18,8 +18,8 @@ class TableMetaData:
         self.__serialize_indices__()
 
     @staticmethod
-    def __validate__(table):
-        if table[Keys.PRIMARY_KEY] is None or table[Keys.PRIMARY_KEY] not in table[Keys.COLUMNS]:
+    def __validate__(table_schema):
+        if table_schema[Keys.PRIMARY_KEY] is None or table_schema[Keys.PRIMARY_KEY] not in table_schema[Keys.COLUMNS]:
             raise WrongParameterError("Primary_key not found")
 
     def __create_table_schema__(self):

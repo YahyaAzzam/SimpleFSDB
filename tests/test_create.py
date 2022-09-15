@@ -10,6 +10,7 @@ from main import *
 class Test(unittest.TestCase):
     schema_name = "Check-in-schema.json"
     SCHEMA_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''), 'tests')
+    DATABASE_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''), 'tests')
     schema_path = os.path.join(SCHEMA_PATH, schema_name)
     file = open(schema_path, 'r')
     data = json.load(file)
@@ -48,7 +49,7 @@ class Test(unittest.TestCase):
 
     def test_create(self):
         # create and delete database many times
-        path = os.path.join(Keys.DATABASE_PATH, self.data[Keys.DATABASE])
+        path = os.path.join(self.DATABASE_PATH, self.data[Keys.DATABASE])
         if os.path.exists(path):
             shutil.rmtree(path)  # delete database
         CreateCommand(os.path.join(self.SCHEMA_PATH, "Check-in-schema.json")).execute()
@@ -61,11 +62,11 @@ class Test(unittest.TestCase):
 
         # delete each table in the database and recreate it
         for table in self.data[Keys.TABLES]:
-            path = os.path.join(Keys.DATABASE_PATH, self.data[Keys.DATABASE], table[Keys.NAME])
+            path = os.path.join(self.DATABASE_PATH, self.data[Keys.DATABASE], table[Keys.NAME])
             shutil.rmtree(path)
             CreateCommand(os.path.join(self.SCHEMA_PATH, "Check-in-schema.json")).execute()
             self.assertTrue(os.path.exists(path))
-        path = os.path.join(Keys.DATABASE_PATH, self.data[Keys.DATABASE])
+        path = os.path.join(self.DATABASE_PATH, self.data[Keys.DATABASE])
         if os.path.exists(path):
             shutil.rmtree(path)
 
@@ -75,7 +76,7 @@ class Test(unittest.TestCase):
 
         for table in self.data[Keys.TABLES]:
             # check table_schema
-            path = os.path.join(Keys.DATABASE_PATH, self.data[Keys.DATABASE], table[Keys.NAME])
+            path = os.path.join(self.DATABASE_PATH, self.data[Keys.DATABASE], table[Keys.NAME])
             self.assertTrue(os.path.exists(os.path.join(path, table[Keys.NAME] + "_schema.json")))
             # check table_indices
             with open(os.path.join(path, table[Keys.NAME] + "_schema.json")) as file:
@@ -83,7 +84,7 @@ class Test(unittest.TestCase):
             for index in table[Keys.INDEX_KEYS]:
                 self.assertTrue(os.path.exists(os.path.join(path, index)))
         # delete database
-        path = os.path.join(Keys.DATABASE_PATH, self.data[Keys.DATABASE])
+        path = os.path.join(self.DATABASE_PATH, self.data[Keys.DATABASE])
         if os.path.exists(path):
             shutil.rmtree(path)
 
