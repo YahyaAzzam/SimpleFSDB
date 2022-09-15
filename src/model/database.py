@@ -2,27 +2,27 @@ from model.table import *
 
 
 class Database:
-    def __init__(self, obj):
-        self.__validate__(obj)
-        self.object = obj
-        self.path = os.path.join(Keys.DATABASE_PATH, self.object[Keys.DATABASE])
-        self.tables_objects = []
-        for table in self.object[Keys.TABLES]:
-            table_object = Table(self.object[Keys.DATABASE], table, self.path)
-            self.tables_objects.append(table_object)
+    def __init__(self, schema_data):
+        Database.__validate__(schema_data)
+        self.schema_data = schema_data
+        self.path = os.path.join(Keys.DATABASE_PATH, self.schema_data[Keys.DATABASE])
+        self.tables= []
+        for table in self.schema_data[Keys.TABLES]:
+            table_object = Table(self.schema_data[Keys.DATABASE], table, self.path)
+            self.tables.append(table_object)
 
     def serialize(self):
         self.__create_database__()
-        self.__create_tables__()
+        self.__serialize_tables__()
 
     @staticmethod
-    def __validate__(obj):
-        if len(obj[Keys.DATABASE]) == 0 or obj[Keys.DATABASE].isspace():
+    def __validate__(schema_data):
+        if len(schema_data[Keys.DATABASE]) == 0 or schema_data[Keys.DATABASE].isspace():
             raise WrongParameterError("No database detected")
 
     def __create_database__(self):
         os.makedirs(self.path, exist_ok=True)
 
-    def __create_tables__(self):
-        for table_object in self.tables_objects:
-            table_object.serialize()
+    def __serialize_tables__(self):
+        for table in self.tables:
+            table.serialize()

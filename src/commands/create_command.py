@@ -4,12 +4,12 @@ from model.database import *
 
 class CreateCommand(AbstractCommand):
     def __init__(self, schema_path):
-        self.__validate__(schema_path)
+        CreateCommand.__validate__(schema_path)
         self.schema_path = schema_path
-        self.database_object = self.__get_database_schema__()
+        self.schema_data = self.__get_database_schema__()
 
     def execute(self):
-        database = Database(self.database_object)
+        database = Database(self.schema_data)
         database.serialize()
 
     @staticmethod

@@ -7,7 +7,7 @@ from commands.keys import *
 
 class Index:
     def __init__(self, name, path, table):
-        self.__validate__(name, table[Keys.COLUMNS])
+        Index.__validate__(name, table[Keys.COLUMNS])
         self.name = name
         self.path = os.path.join(path, self.name)
 
@@ -37,19 +37,19 @@ class Index:
         os.makedirs(self.path, exist_ok=True)
 
     def get_primary_keys(self, value_name):
-        self.__validate_value_name__(value_name, self.path)
+        Index.__validate_value_name__(value_name, self.path)
         with open(os.path.join(self.path, "{}.json".format(value_name)), 'r') as file:
             return json.load(file)
 
     def __update_value__(self, path, value_name, primary_keys):
-        self.__validate_value_name__(value_name, path)
-        self.__validate_primary_keys__(primary_keys)
+        Index.__validate_value_name__(value_name, path)
+        Index.__validate_primary_keys__(primary_keys)
         with open(os.path.join(path, "{}.json".format(value_name)), 'w') as file:
             json.dump(primary_keys, file)
 
     def add_value(self, value_name, primary_key):
-        self.__validate_value_name__(value_name, self.path)
-        self.__validate_primary_key__(primary_key)
+        Index.__validate_value_name__(value_name, self.path)
+        Index.__validate_primary_key__(primary_key)
         path = os.path.join(self.path, "{}.json".format(value_name))
         if os.path.exists(path):
             value = self.get_primary_keys(value_name)
@@ -59,8 +59,8 @@ class Index:
             self.__update_value__(self.path, value_name, {"p_k": primary_key})
 
     def remove_value(self, value_name, primary_key):
-        self.__validate_value_name__(value_name, self.path)
-        self.__validate_primary_key__(primary_key)
+        Index.__validate_value_name__(value_name, self.path)
+        Index.__validate_primary_key__(primary_key)
         value = self.get_primary_keys(value_name)
         if primary_key in value["p_k"]:
             value["p_k"].remove(primary_key)
