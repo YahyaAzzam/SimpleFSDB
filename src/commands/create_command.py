@@ -13,7 +13,7 @@ class CreateCommand(AbstractCommand):
 
     @staticmethod
     def __validate__(schema_path):
-        if len(schema_path) == 0 or schema_path.isspace():
+        if schema_path is None or len(schema_path) == 0:
             raise NoParameterError("schema_path parameter not entered")
         if not os.path.isfile(schema_path):
             raise WrongParameterError("Schema doesn't exist")

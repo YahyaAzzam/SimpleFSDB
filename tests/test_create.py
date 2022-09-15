@@ -32,7 +32,7 @@ class Test(unittest.TestCase):
         # enter space as schema name
         try:
             CreateCommand(os.path.join(self.SCHEMA_PATH, " ")).execute()
-        except NoParameterError:
+        except WrongParameterError:
             pass
 
         # enter integers as schema name
