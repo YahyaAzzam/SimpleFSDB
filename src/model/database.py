@@ -6,10 +6,9 @@ class Database:
         Database.__validate__(schema_data)
         self.schema_data = schema_data
         self.path = os.path.join(Keys.DATABASE_PATH, self.schema_data[Keys.DATABASE])
-        self.tables= []
+        self.tables = []
         for table in self.schema_data[Keys.TABLES]:
-            table_object = Table(self.schema_data[Keys.DATABASE], table, self.path)
-            self.tables.append(table_object)
+            self.tables.append(Table(self.schema_data, table[Keys.NAME], self.path))
 
     def serialize(self):
         self.__create_database__()

@@ -41,7 +41,8 @@ class Index:
         with open(os.path.join(self.path, "{}.json".format(value_name)), 'r') as file:
             return json.load(file)
 
-    def __update_value__(self, path, value_name, primary_keys):
+    @staticmethod
+    def __update_value__(path, value_name, primary_keys):
         Index.__validate_value_name__(value_name, path)
         Index.__validate_primary_keys__(primary_keys)
         with open(os.path.join(path, "{}.json".format(value_name)), 'w') as file:
