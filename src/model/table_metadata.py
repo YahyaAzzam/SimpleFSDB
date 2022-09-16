@@ -4,7 +4,7 @@ from model.index import *
 class TableMetaData:
     def __init__(self, table_schema, table):
         TableMetaData.__validate__(table_schema)
-        self.__table_schema__ = table_schema
+        self.table_schema = table_schema
         self.table_name = table_schema[Keys.NAME]
         self.primary_key = table_schema[Keys.PRIMARY_KEY]
         self.columns = table_schema[Keys.COLUMNS]
@@ -17,7 +17,7 @@ class TableMetaData:
         return self.__path__
 
     def serialize(self):
-        self.__create_table_schema__()
+        TableMetaData.__create_table_schema__(self.table_schema, self.__path__)
         self.__serialize_indices__()
 
     @staticmethod
@@ -25,9 +25,10 @@ class TableMetaData:
         if table_schema[Keys.PRIMARY_KEY] is None or table_schema[Keys.PRIMARY_KEY] not in table_schema[Keys.COLUMNS]:
             raise WrongParameterError("Primary_key not found")
 
-    def __create_table_schema__(self):
-        with open(os.path.join(self.__path__, "{}_schema.json".format(self.table_name)), 'w') as file:
-            json.dump(self.__table_schema__, file)
+    @staticmethod
+    def __create_table_schema__(table_schema, path):
+        with open(os.path.join(path, "{}_schema.json".format(table_schema[Keys.NAME])), 'w') as file:
+            json.dump(table_schema, file)
 
     def __serialize_indices__(self):
         for index in self.indices:
