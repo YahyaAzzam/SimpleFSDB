@@ -4,14 +4,13 @@ from model.index import *
 class TableMetaData:
     def __init__(self, table_schema, table):
         TableMetaData.__validate__(table_schema)
-        self.table_name = table_schema[Keys.NAME]
+        self.name = table_schema[Keys.NAME]
         self.primary_key = table_schema[Keys.PRIMARY_KEY]
         self.columns = table_schema[Keys.COLUMNS]
         self.__path__ = table.get_path()
         self.indices = []
         for index in table_schema[Keys.INDEX_KEYS]:
             self.indices.append(Index(index, self))
-        self.__dict__ = table_schema
 
     def get_path(self):
         return self.__path__
