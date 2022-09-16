@@ -11,9 +11,9 @@ def parse_args():
     )
     parser.add_argument(
         "-sc",
-        "--schema",
+        "--schema_path",
         type=str,
-        help="The schema of the database, which is a json object",
+        help="The path of the schema of the database, where the schema is a json object",
     )
     parser.add_argument(
         "-db",
