@@ -11,6 +11,7 @@ class TableMetaData:
         self.indices = []
         for index in table_schema[Keys.INDEX_KEYS]:
             self.indices.append(Index(index, self))
+        self.__dict__ = table_schema
 
     def get_path(self):
         return self.__path__
