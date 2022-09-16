@@ -7,8 +7,7 @@ class Database:
     def __init__(self, schema_data):
         Database.__validate__(schema_data)
         self.__database_name__ = schema_data[Keys.DATABASE]
-        self.schema_data = schema_data
-        self.__path__ = os.path.join(self.DATABASE_PATH, self.schema_data[Keys.DATABASE])
+        self.__path__ = os.path.join(self.DATABASE_PATH, schema_data[Keys.DATABASE])
         self.tables = []
         for table in schema_data[Keys.TABLES]:
             self.tables.append(Table(self, table))
