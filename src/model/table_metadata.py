@@ -4,7 +4,6 @@ from model.index import *
 class TableMetaData:
     def __init__(self, table_schema, table):
         TableMetaData.__validate__(table_schema)
-        self.table_schema = table_schema
         self.table_name = table_schema[Keys.NAME]
         self.primary_key = table_schema[Keys.PRIMARY_KEY]
         self.columns = table_schema[Keys.COLUMNS]
@@ -17,7 +16,7 @@ class TableMetaData:
         return self.__path__
 
     def serialize(self):
-        TableMetaData.__create_table_schema__(self.table_schema, self.__path__)
+        TableMetaData.__create_table_schema__(self.__dict__, self.__path__)
         self.__serialize_indices__()
 
     @staticmethod
