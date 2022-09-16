@@ -15,6 +15,7 @@ class Database:
     def get_path(self):
         return self.__path__
 
+
     def serialize(self):
         os.makedirs(self.__path__, exist_ok=True)
         self.__serialize_tables__()
