@@ -6,6 +6,7 @@ from model.table_metadata import *
 class Table:
     def __init__(self, database, table):
         self.__path__ = os.path.join(database.get_path(), table[Keys.NAME])
+        self.table_schema = table
         self.__table_metadata__ = TableMetaData(self)
 
     def serialize(self):
