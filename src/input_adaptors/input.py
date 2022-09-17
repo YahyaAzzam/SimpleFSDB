@@ -34,15 +34,9 @@ def parse_args():
         help="Primary key is a unique key",
     )
     parser.add_argument(
-        "-p",
-        "--parameter",
-        type=str,
-        help="Parameter desired to be set",
-    )
-    parser.add_argument(
         "-v",
-        "--value",
+        "--values",
         type=str,
-        help="Value of the parameter",
+        help="Values desired to be set or found",
     )
     return parser.parse_args()

@@ -5,28 +5,28 @@
             "name" : "Reservations",
             "columns" : ["ReservationId", "First_name", "Last_name", "Passport_Id", "Gender", "Age", "Flight_Id", "Luggage_allowance", "Seat"],
             "primary_key"  : "ReservationId",
-            "Index_keys" : ["First_name", "Last_name", "Seat"],
+            "index_keys" : ["First_name", "Last_name", "Seat"],
             "Consistently" : "Eventual"
         },
         {
             "name" : "Flights",
             "columns" : ["FlightId", "PlaneId", "Seats_reserved", "Take_off", "Destination", "Stops", "Departure_time", "Departure_date", "Arrival_time", "Arrival_date"],
             "primary_key"  : "FlightId",
-            "Index_keys" : ["PlaneId", "Seats_reserved"],
+            "index_keys" : ["PlaneId", "Seats_reserved"],
             "Consistently" : "Eventual"
         },
         {
             "name" : "Planes",
             "columns" : ["PlaneId" ,"Plane_manufacture", "Seats_number", "Rows_number", "Seats_distribution"],
             "primary_key"  : "PlaneId",
-            "Index_keys" : ["Seats_number", "Rows_number", "Seats_distribution"],
+            "index_keys" : ["Seats_number", "Rows_number", "Seats_distribution"],
             "Consistently" : "Eventual"
         },
 	{
             "name" : "Seats",
             "columns" : ["FlightId_SeatId" ,"Last_name", "ReservationId"],
             "primary_key"  : "FlightId_SeatId",
-            "Index_keys" : ["Last_name"],
+            "index_keys" : ["Last_name"],
             "Consistently" : "Strong"
         }
      ] 
