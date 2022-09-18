@@ -27,22 +27,25 @@ class Table:
         pass
 
     def get(self, values):
-        best_search = Table.__get_efficient__(values)
-        found_objects = []
-        if best_search == self.__table_metadata__.primary_key:
-            found_objects.append(self.get_by_primary_key(values[best_search]))
-        elif best_search in self.__table_metadata__.get_indices_names(self.__table_metadata__.index_keys):
-            primary_keys = self.__table_metadata__.get_index_primary_keys(best_search, values[best_search])
-            for primary_key in primary_keys:
-                found_objects.append(self.get_by_primary_key(primary_key))
-        else:
-            found_objects.append(self.get_all_rows())
+        best_search = Table.__get_efficient_primary_keys__(values)
+        found_objects = self.get_rows(best_search)
         return self.__compare_found__(found_objects, values)
 
-    @staticmethod
-    def __get_efficient__(values):
-        item = values
-        return item
+    def __get_efficient_primary_keys__(self, values):
+        index_names = self.__table_metadata__.get_indices_names(self.__table_metadata__.index_keys)
+        primary_keys = []
+        for item in values.items():
+            if item[0] == self.__table_metadata__.primary_key:
+                primary_keys.append(item[1])
+                break
+            if item[0] in index_names:
+                index_keys = self.__table_metadata__.get_index_primary_keys(str(item[0]), str(item[1]))
+                primary_keys = index_keys if len(primary_keys) == 0 or len(primary_keys) > len(index_keys) else primary_keys
+        if len(primary_keys) == 0:
+            for primary_key in os.listdir(self.__path__):
+                if ".json" in str(primary_key) and "schema" not in str(primary_key):
+                    primary_keys.append(self.get_by_primary_key(str(primary_key).replace(".json", '')))
+        return primary_keys
 
     def get_by_primary_key(self, primary_key):
         path = os.path.join(self.__path__, "{}.json".format(primary_key))
@@ -52,16 +55,14 @@ class Table:
     @staticmethod
     def __compare_found__(found_objects, values):
         for object_to_compare in found_objects:
-            finished_this = False
-            for value_to_compare in values.items and finished_this:
+            for value_to_compare in values.items:
                 if value_to_compare[1] != object_to_compare[value_to_compare[0]]:
                     found_objects.remove(object_to_compare)
-                    finished_this = True
+                    break
         return found_objects
 
-    def get_all_rows(self):
+    def get_rows(self, primary_keys):
         rows = []
-        for primary_key in os.listdir(self.__path__):
-            if ".json" in str(primary_key) and "schema" not in str(primary_key):
-                rows.append(self.get_by_primary_key(str(primary_key).replace(".json", '')))
+        for primary_key in primary_keys:
+            rows.append(self.get_by_primary_key(str(primary_key).replace("json", '')))
         return rows

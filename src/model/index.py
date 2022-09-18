@@ -29,12 +29,12 @@ class Index:
 
     def get_primary_keys(self, value_name):
         Index.__validate_value_name__(value_name)
+        primary_keys = []
         path = os.path.join(self.__path__, "{}.json".format(value_name))
         if os.path.exists(path):
             with open(path, 'r') as file:
-                return json.load(file)
-        else:
-            return []
+                primary_keys = (json.load(file).items[1])
+        return primary_keys
 
     @staticmethod
     def __update_value__(path, value_name, primary_keys):
