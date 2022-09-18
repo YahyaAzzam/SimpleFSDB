@@ -2,7 +2,7 @@ from commands.create_command import *
 
 
 # from set_command import *
-# from get_command import *
+from commands.get_command import *
 # from delete_command import *
 
 
