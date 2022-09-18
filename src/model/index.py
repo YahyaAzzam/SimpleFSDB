@@ -42,15 +42,15 @@ class Index:
             json.dump(primary_keys, file)
 
     def add_value(self, value_name, primary_key):
-            value = self.get_primary_keys(value_name)
-            value.append(primary_key)
-            self.__update_value__(self.path, value_name, value)
+        value = self.get_primary_keys(value_name)
+        value.append(primary_key)
+        self.__update_value__(self.__path__, value_name, value)
 
     def remove_value(self, value_name, primary_key):
         value = self.get_primary_keys(value_name)
         if primary_key in value:
             value.remove(primary_key)
         if not value:
-            pathlib.Path(os.path.join(self.path, "{}.json".format(value_name))).unlink()
+            pathlib.Path(os.path.join(self.__path__, "{}.json".format(value_name))).unlink()
         else:
-            self.__update_value__(self.path, value_name, value)
+            self.__update_value__(self.__path__, value_name, value)

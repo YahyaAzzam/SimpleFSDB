@@ -5,11 +5,13 @@ from model.database import *
 class CreateCommand(AbstractCommand):
     def __init__(self, schema_path):
         CreateCommand.__validate__(schema_path)
-        self.schema_data = self.__get_database_schema__(schema_path)
+        self.schema_path = schema_path
+        self.schema_data = CreateCommand.__get_database_schema__(schema_path)
 
     def execute(self):
         database = Database(self.schema_data)
         database.serialize()
+        database.update_databases_schemas(self.schema_path)
 
     @staticmethod
     def __validate__(schema_path):

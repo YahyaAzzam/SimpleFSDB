@@ -27,7 +27,7 @@ class TableMetaData:
     @staticmethod
     def __create_table_schema__(table_schema, path):
         indices = table_schema[Keys.INDEX_KEYS]
-        table_schema.update({Keys.INDEX_KEYS: TableMetaData.__get_indices_names__(table_schema[Keys.INDEX_KEYS])})
+        table_schema.update({Keys.INDEX_KEYS: TableMetaData.get_indices_names(table_schema[Keys.INDEX_KEYS])})
         with open(os.path.join(path, "{}_schema.json".format(table_schema[Keys.NAME])), 'w') as file:
             json.dump(table_schema, file)
         table_schema.update({Keys.INDEX_KEYS: indices})
@@ -37,7 +37,7 @@ class TableMetaData:
             index.serialize()
 
     @staticmethod
-    def __get_indices_names__(index_keys):
+    def get_indices_names(index_keys):
         indices_names = []
         for index in index_keys:
             indices_names.append(index.name)
