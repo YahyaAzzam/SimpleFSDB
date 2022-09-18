@@ -27,7 +27,7 @@ class Table:
         pass
 
     def get(self, values):
-        best_search = Table.__get_efficient_primary_keys__(values)
+        best_search = self.__get_efficient_primary_keys__(values)
         found_objects = self.get_rows(best_search)
         return self.__compare_found__(found_objects, values)
 
@@ -49,6 +49,8 @@ class Table:
 
     def get_by_primary_key(self, primary_key):
         path = os.path.join(self.__path__, "{}.json".format(primary_key))
+        if not os.path.exists(path):
+            raise WrongParameterError("Primary key not found")
         with open(path, 'r') as file:
             return json.load(file)
 
@@ -62,6 +64,8 @@ class Table:
         return found_objects
 
     def get_rows(self, primary_keys):
+        if primary_keys is None or len(primary_keys) == 0:
+            raise WrongParameterError("No attributes found")
         rows = []
         for primary_key in primary_keys:
             rows.append(self.get_by_primary_key(str(primary_key).replace("json", '')))
