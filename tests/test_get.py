@@ -25,11 +25,11 @@ class Test(unittest.TestCase):
             pass
         try:  # No table entered
             GetCommand("csed", " ", {"ReservationId": "552535"})
-        except WrongParameterError:
+        except NoParameterError:
             pass
         try:  # No values entered
             GetCommand("csed", "Reservations", None)
-        except WrongParameterError:
+        except NoParameterError:
             pass
         try:  # Wrong database name
             GetCommand("csed", "Reservations", {"ReservationId": "552535"})
