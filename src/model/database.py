@@ -33,10 +33,15 @@ class Database:
 
     @staticmethod
     def get_schema(database_name):
-        with open(os.path.join(Database.DATABASE_PATH, "databases_schemas.json")) as file:
-            schema = json.load(file)
-            if schema[database_name] is not None:
-                return schema
+        path = os.path.join(Database.DATABASE_PATH, database_name)
+        if os.path.exists(path):
+            database = {}
+            database[Keys.DATABASE] = database_name
+            database[Keys.TABLES] = []
+            for table in os.listdir(path):
+                with open(os.path.join(path, table, "{}_schema.json".format(table))) as file:
+                    database[Keys.TABLES].append(json.load(file))
+            return database
         raise WrongParameterError("Wrong database entered")
 
     def get_table(self, table_name):
