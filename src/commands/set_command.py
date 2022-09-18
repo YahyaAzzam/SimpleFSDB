@@ -4,23 +4,27 @@ from model.database import *
 
 class SetCommand(AbstractCommand):
     def __init__(self, database, table, value, overwrite = False):
-        self.validate(database, table, value)
-        self.table = Database(Database.get_schema_data(database)).get_table(table)
-        self.value = eval(value)
-        self.validate_value(self.table, self.value, overwrite)
+        SetCommand.validate(str(database), str(table), value, overwrite)
+        self.table = Database(Database.get_schema_data(str(database))).get_table(str(table))
+        self.value = eval(str(value))
+        SetCommand.validate_value(self.table, self.value, overwrite)
         self.overwrite = overwrite
 
     def execute(self):
         self.table.set(self.value, self.overwrite)
 
     @staticmethod
-    def validate(database, table, value):
-        if database is None or len(database) == 0:
+    def validate(database, table, value, overwrite):
+        if len(database) == 0 or database == "None":
             raise NoParameterError("database parameter not entered")
-        if table is None or len(table) == 0:
+        if len(table) == 0 or table == "None":
             raise NoParameterError("table parameter not entered")
-        if value is None or len(value) == 0:
+        if value == None :
             raise NoParameterError("value parameter not entered")
+        if not isinstance(overwrite, bool):
+            raise WrongParameterError("overwrite should be boolean value")
+        if not isinstance(value, dict):
+            raise WrongParameterError("value should be json")
 
     @staticmethod
     def validate_value(table, value, overwrite):

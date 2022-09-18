@@ -47,8 +47,8 @@ class Database:
     def get_schema_data(database_name):
         with open(os.path.join(Database.DATABASE_PATH, "databases_schemas.json")) as file:
             schema = json.load(file)
-            if schema[database_name] is not None:
-                with open(schema[database_name], 'r') as file:
-                    return json.load(file)
-            else:
-                raise WrongParameterError("Wrong database entered")
+        if database_name in schema:
+            with open(schema[database_name], 'r') as file:
+                return json.load(file)
+        else:
+            raise WrongParameterError("Wrong database entered")
