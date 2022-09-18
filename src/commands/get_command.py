@@ -13,7 +13,7 @@ class GetCommand(AbstractCommand):
         self.values = json.loads(values)
 
     def execute(self):
-        database = Database(Database.get_schema(self.database))
+        database = Database.get_database_by_name(self.database)
         table = database.get_table(self.table)
         return table.get(self.values)
 

@@ -1,11 +1,11 @@
 import json
+import os.path
 
 from model.table import *
 
 
 class Database:
     DATABASE_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''), 'tests')
-    SCHEMA_PATH = os.path.join(os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''), 'tests'), "schemas.json")
     
     def __init__(self, schema_data):
         Database.__validate__(schema_data)
@@ -33,7 +33,7 @@ class Database:
 
     @staticmethod
     def get_schema(database_name):
-        with open(Database.SCHEMA_PATH) as file:
+        with open(os.path.join(Database.DATABASE_PATH, "databases_schemas.json")) as file:
             schema = json.load(file)
             if schema[database_name] is not None:
                 return schema[database_name]
@@ -44,3 +44,17 @@ class Database:
             if table.get_name() == table_name:
                 return table
         raise WrongParameterError("Wrong table entered")
+
+    def update_databases_schemas(self, schema_path):
+        path = os.path.join(self.DATABASE_PATH, "databases_schemas.json")
+        schemas = {}
+        if os.path.exists(path):
+            with open(path, 'r') as file:
+                schemas = json.load(file)
+        schemas[self.__database_name__] = schema_path
+        with open(path, 'w') as file:
+            json.dump(schemas, file)
+
+    @staticmethod
+    def get_database_by_name(database_name):
+        return Database(Database.get_schema(database_name))

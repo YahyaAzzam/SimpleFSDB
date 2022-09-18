@@ -16,11 +16,10 @@ class CommandFactory:
         cmd = str(self.input_adaptor.command).lower()
         if cmd == "create":
             return CreateCommand(self.input_adaptor.schema_path)
-
     #        elif cmd == "set":
     #            return SetCommand(self.input_adaptor.database, self.input_adaptor.table, self.input_adaptor.primary_key, self.input_adaptor.parameter, self.input_adaptor.value)
-    #        elif cmd == "get":
-    #            return GetCommand(self.input_adaptor.database, self.input_adaptor.table, self.input_adaptor.values)
+        elif cmd == "get":
+            return GetCommand(self.input_adaptor.database, self.input_adaptor.table, self.input_adaptor.values)
     #        elif cmd == "delete":
     #            return DeleteCommand(self.input_adaptor.database, self.input_adaptor.table, self.input_adaptor.primary_key)
 
