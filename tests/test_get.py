@@ -32,15 +32,15 @@ class Test(unittest.TestCase):
         except NoParameterError:
             pass
         try:  # Wrong database name
-            GetCommand("csed", "Reservations", {"ReservationId": "552535"})
+            GetCommand("csed", "Reservations", "{\"ReservationId\": \"552535\"}")
         except WrongParameterError:
             pass
         try:  # Wrong table name
-            GetCommand("csed25", "Reservation", {"ReservationId": "552535"})
+            GetCommand("csed25", "Reservation", "{\"ReservationId\": \"552535\"}")
         except WrongParameterError:
             pass
         try:  # Wrong database name
-            GetCommand("csed25", "Reservations", {"ReservationId": "552535"})
+            GetCommand("csed25", "Reservations", "{\"ReservationId\": \"552535\"}")
         except WrongParameterError:
             pass
 
