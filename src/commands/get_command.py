@@ -14,8 +14,7 @@ class GetCommand(AbstractCommand):
 
     def execute(self):
         database = Database.get_database_by_name(self.database)
-        table = database.get_table(self.table)
-        return table.get(self.values)
+        return database.get(self.table, self.values)
 
     @staticmethod
     def validate(database, table, values):

@@ -20,27 +20,27 @@ class Test(unittest.TestCase):
             shutil.rmtree(self.DATABASE_PATH)  # delete database
         CreateCommand(self.SCHEMA_PATH).execute()
         try:  # No database entered
-            GetCommand("", "Reservations", {"ReservationId": "552535"})
+            GetCommand("", "Reservations", {"ReservationId": "552535"}).execute()
         except NoParameterError:
             pass
         try:  # No table entered
-            GetCommand("csed", " ", {"ReservationId": "552535"})
+            GetCommand("csed", " ", {"ReservationId": "552535"}).execute()
         except NoParameterError:
             pass
         try:  # No values entered
-            GetCommand("csed", "Reservations", None)
+            GetCommand("csed", "Reservations", None).execute()
         except NoParameterError:
             pass
         try:  # Wrong database name
-            GetCommand("csed", "Reservations", "{\"ReservationId\": \"552535\"}")
+            GetCommand("csed", "Reservations", "{\"ReservationId\": \"552535\"}").execute()
         except WrongParameterError:
             pass
         try:  # Wrong table name
-            GetCommand("csed25", "Reservation", "{\"ReservationId\": \"552535\"}")
+            GetCommand("csed25", "Reservation", "{\"ReservationId\": \"552535\"}").execute()
         except WrongParameterError:
             pass
         try:  # Wrong database name
-            GetCommand("csed25", "Reservations", "{\"ReservationId\": \"552535\"}")
+            GetCommand("csed25", "Reservations", "{\"ReservationId\": \"552535\"}").execute()
         except WrongParameterError:
             pass
 

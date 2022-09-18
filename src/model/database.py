@@ -58,3 +58,7 @@ class Database:
     @staticmethod
     def get_database_by_name(database_name):
         return Database(Database.get_schema(database_name))
+
+    def get(self, table_name, values):
+        table = self.get_table(table_name)
+        return table.get(values)
