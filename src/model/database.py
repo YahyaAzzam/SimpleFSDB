@@ -36,7 +36,7 @@ class Database:
         with open(os.path.join(Database.DATABASE_PATH, "databases_schemas.json")) as file:
             schema = json.load(file)
             if schema[database_name] is not None:
-                return schema[database_name]
+                return schema
         raise WrongParameterError("Wrong database entered")
 
     def get_table(self, table_name):
