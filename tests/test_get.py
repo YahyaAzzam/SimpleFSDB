@@ -11,8 +11,7 @@ class Test(unittest.TestCase):
     schema_name = "Check-in-schema.json"
     SCHEMA_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''), 'tests', "Check-in-schema.json")
     DATABASE_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''), 'tests', "csed25")
-    schema_path = os.path.join(SCHEMA_PATH, schema_name)
-    file = open(schema_path, 'r')
+    file = open(SCHEMA_PATH, 'r')
     data = json.load(file)
     file.close()
 
