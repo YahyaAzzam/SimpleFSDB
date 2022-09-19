@@ -5,12 +5,12 @@ from model.database import *
 class SetCommand(AbstractCommand):
     def __init__(self, database, table, values):
         SetCommand.validate(str(database), str(table), values)
-        self.database_name = database
-        self.table_name = table
+        self.database_name = str(database)
+        self.table_name = str(table)
         self.values = eval(str(values))
 
     def execute(self):
-        database = Database.get_database_by_name(self.database_name)
+        database = Database(database_name = self.database_name)
         database.set(self.table_name, self.values)
 
     @staticmethod

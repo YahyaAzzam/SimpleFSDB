@@ -106,28 +106,28 @@ class Test(unittest.TestCase):
 
     def test_set(self):
         # test set file in different tables
-        database = Database(Database.load_database("csed25"))
+        database = Database(database_name = "csed25")
         for table in database.tables:
-            table_mate_data = TableMetaData(table)
+            table_mate_data = TableMetaData(database.tables[table])
             value = {}
             value[table_mate_data.primary_key] = "1"
             value[table_mate_data.columns[1]] = "goda"
-            SetCommand("csed25", table.get_name(), value).execute()
+            SetCommand("csed25", database.tables[table].get_name(), value).execute()
 
             #check create the file in the table
             self.assertTrue(os.path.exists(os.path.join(table_mate_data.get_path(),"1.json")))
 
             #check blocking reset file
             try:
-                SetCommand("csed25", table.get_name(), value).execute()
+                SetCommand("csed25", database.tables[table].get_name(), value).execute()
             except WrongParameterError:
                 pass
 
             #check reset file with new value
-            if table.get_name() == "Seats":
+            if database.tables[table].get_name() == "Seats":
                 value[table_mate_data.columns[1]] = "mahmoud"
-                SetCommand("csed25", table.get_name(), value).execute()
-                self.assertEqual(table.get_by_primary_key(1),value)
+                SetCommand("csed25", database.tables[table].get_name(), value).execute()
+                self.assertEqual(database.tables[table].get_by_primary_key(1),value)
 
         # end the test and delete the database
         path = database.get_path().replace("csed25", '')

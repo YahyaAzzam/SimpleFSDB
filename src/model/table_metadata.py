@@ -2,16 +2,22 @@ from model.index import *
 
 
 class TableMetaData:
-    def __init__(self, table):
-        TableMetaData.__validate__(table.table_schema)
-        self.name = table.table_schema[Keys.NAME]
-        self.primary_key = table.table_schema[Keys.PRIMARY_KEY]
-        self.columns = table.table_schema[Keys.COLUMNS]
-        self.overwrite = table.table_schema[Keys.OVERWRITE]
+    def __init__(self, table, table_name = None):
         self.__path__ = table.get_path()
-        self.index_keys = []
-        for index in table.table_schema[Keys.INDEX_KEYS]:
-            self.index_keys.append(Index(index, self))
+        if table.table_schema is not None:
+            TableMetaData.__validate__(table.table_schema)
+            table_schema = table.table_schema
+        elif table_name is not None:
+            table_schema = self.load_table_schema(table_name)
+        else:
+            raise NoParameterError("Table not found")
+        self.name = table_schema[Keys.NAME]
+        self.primary_key = table_schema[Keys.PRIMARY_KEY]
+        self.columns = table_schema[Keys.COLUMNS]
+        self.overwrite = table_schema[Keys.OVERWRITE]
+        self.index_keys = {}
+        for index in table_schema[Keys.INDEX_KEYS]:
+            self.index_keys[index] = Index(index, self)
 
     def get_path(self):
         return self.__path__
@@ -35,11 +41,15 @@ class TableMetaData:
 
     def __serialize_indices__(self):
         for index in self.index_keys:
-            index.serialize()
+            self.index_keys[index].serialize()
 
     @staticmethod
     def get_indices_names(index_keys):
         indices_names = []
         for index in index_keys:
-            indices_names.append(index.name)
+            indices_names.append(index)
         return indices_names
+
+    def load_table_schema(self, table_name):
+        with open(os.path.join(self.__path__, "{}_schema.json".format(table_name)), 'r') as file:
+            return json.load(file)
