@@ -7,6 +7,7 @@ class TableMetaData:
         self.name = table.table_schema[Keys.NAME]
         self.primary_key = table.table_schema[Keys.PRIMARY_KEY]
         self.columns = table.table_schema[Keys.COLUMNS]
+        self.overwrite = table.table_schema[Keys.OVERWRITE]
         self.__path__ = table.get_path()
         self.index_keys = []
         for index in table.table_schema[Keys.INDEX_KEYS]:

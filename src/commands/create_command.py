@@ -11,7 +11,6 @@ class CreateCommand(AbstractCommand):
     def execute(self):
         database = Database(self.schema_data)
         database.serialize()
-        database.update_databases_schemas(self.schema_path)
 
     @staticmethod
     def __validate__(schema_path):

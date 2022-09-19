@@ -106,7 +106,7 @@ class Test(unittest.TestCase):
 
     def test_set(self):
         # test set file in different tables
-        database = Database(Database.get_schema_data("csed25"))
+        database = Database(Database.load_database("csed25"))
         for table in database.tables:
             table_mate_data = TableMetaData(table)
             value = {}
@@ -117,19 +117,20 @@ class Test(unittest.TestCase):
             #check create the file in the table
             self.assertTrue(os.path.exists(os.path.join(table_mate_data.get_path(),"1.json")))
 
-            #check reset file without passing overwrite
+            #check blocking reset file
             try:
                 SetCommand("csed25", table.get_name(), value).execute()
             except WrongParameterError:
                 pass
 
             #check reset file with new value
-            value[table_mate_data.columns[1]] = "mahmoud"
-            SetCommand("csed25", table.get_name(), value, True).execute()
-            self.assertEqual(table.get_by_primary_key(1),value)
+            if table.get_name() == "Seats":
+                value[table_mate_data.columns[1]] = "mahmoud"
+                SetCommand("csed25", table.get_name(), value).execute()
+                self.assertEqual(table.get_by_primary_key(1),value)
 
         # end the test and delete the database
-        path = database.get_path()
+        path = database.get_path().replace("csed25", '')
         if os.path.exists(path):
            shutil.rmtree(path)
 

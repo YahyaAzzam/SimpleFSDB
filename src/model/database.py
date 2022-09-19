@@ -33,22 +33,24 @@ class Database:
                 return table
         raise WrongParameterError("Wrong table entered")
 
-    def update_databases_schemas(self, schema_path):
-        path = os.path.join(self.DATABASE_PATH, "databases_schemas.json")
-        schemas = {}
-        if os.path.exists(path):
-            with open(path, 'r') as file:
-                schemas = json.load(file)
-        schemas[self.__database_name__] = schema_path
-        with open(path, 'w') as file:
-            json.dump(schemas, file)
+    @staticmethod
+    def get_database_by_name(database_name):
+        return Database(Database.load_database(database_name))
 
     @staticmethod
-    def get_schema_data(database_name):
-        with open(os.path.join(Database.DATABASE_PATH, "databases_schemas.json")) as file:
-            schema = json.load(file)
-        if database_name in schema:
-            with open(schema[database_name], 'r') as file:
-                return json.load(file)
-        else:
-            raise WrongParameterError("Wrong database entered")
+    def load_database(database_name):
+        path = os.path.join(Database.DATABASE_PATH, database_name)
+        if os.path.exists(path):
+            database = {}
+            database[Keys.DATABASE] = database_name
+            database[Keys.TABLES] = []
+            for table in os.listdir(path):
+                with open(os.path.join(path, table, "{}_schema.json".format(table))) as file:
+                    database[Keys.TABLES].append(json.load(file))
+            return database
+        raise WrongParameterError("Wrong database entered")
+
+    def set(self, table_name, values):
+        table = self.get_table(table_name)
+        return table.set(values)
+
