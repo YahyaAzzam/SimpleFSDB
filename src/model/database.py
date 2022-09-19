@@ -14,8 +14,8 @@ class Database:
         self.__path__ = os.path.join(self.DATABASE_PATH, schema_data[Keys.DATABASE])
         self.__database_name__ = schema_data[Keys.DATABASE]
         self.tables = {}
-        for table in schema_data[Keys.TABLES]:
-            self.tables[table[Keys.NAME]] = Table(self, table)
+        for table_schema in schema_data[Keys.TABLES]:
+            self.tables[table_schema[Keys.NAME]] = Table(self, table_schema)
 
     def __initialize_by_database_name__(self, database_name):
         self.__path__ = os.path.join(Database.DATABASE_PATH, database_name)
@@ -23,8 +23,8 @@ class Database:
             raise WrongParameterError("Wrong database entered")
         self.__database_name__ = database_name
         self.tables = {}
-        for table in os.listdir(self.__path__):
-            self.tables[str(table)] = Table(self, table_name=str(table))
+        for table_name in os.listdir(self.__path__):
+            self.tables[table_name] = Table(self, table_name = table_name)
 
     def get_path(self):
         return self.__path__
@@ -35,19 +35,19 @@ class Database:
 
     @staticmethod
     def __validate__(schema_data, database_name):
-        if schema_data is None or len(schema_data[Keys.DATABASE]) == 0 or schema_data[Keys.DATABASE].isspace():
+        if schema_data is None or schema_data[Keys.DATABASE].isspace():
             if database_name is None or str(database_name).isspace():
                 raise WrongParameterError("No database detected")
 
     def __serialize_tables__(self):
-        for table in self.tables:
-            self.tables[table].serialize()
+        for table_name in self.tables:
+            self.tables[table_name].serialize()
 
     def get_table(self, table_name):
         if table_name not in self.tables:
             raise WrongParameterError("Wrong table entered")
         return self.tables[table_name]
 
-    def set(self, table_name, values):
+    def set(self, table_name, data):
         table = self.get_table(table_name)
-        return table.set(values)
+        return table.set(data)

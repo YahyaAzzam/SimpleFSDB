@@ -29,38 +29,42 @@ class Table:
         return self.__path__
 
     # Will be implemented later in the project
-    def set(self, values):
-        Table.validate_set_values(self.__table_metadata__, values)
-        primary_key = values[self.__table_metadata__.primary_key]
+    def set(self, data):
+        Table.validate_set_data(self.__table_metadata__, data)
+        primary_key = data[self.__table_metadata__.primary_key]
         if os.path.exists(os.path.join(self.__path__, "{}.json".format(primary_key))):
-            unwanted_values = self.get_by_primary_key(primary_key)
-            Table.clean_index(unwanted_values, self.__table_metadata__.index_keys, primary_key)
-        Table.add_to_index(values, self.__table_metadata__.index_keys, primary_key)
-        with open(os.path.join(self.__path__, "{}.json".format(primary_key)), 'w') as file:
-            json.dump(values, file)
+            unwanted_data = self.get_by_primary_key(primary_key)
+            Table.delete_index(unwanted_data, self.__table_metadata__.index_keys, primary_key)
+        Table.add_to_index(data, self.__table_metadata__.index_keys, primary_key)
+        Table.__serialize_row__(data, primary_key, self.__path__)
 
     @staticmethod
-    def clean_index(values, indices, primary_key):
+    def __serialize_row__(data, primary_key, path):
+        with open(os.path.join(path, "{}.json".format(primary_key)), 'w') as file:
+            json.dump(data, file)
+
+    @staticmethod
+    def delete_index(data, indices, primary_key):
             for index in indices:
-                if index in values:
-                    indices[index].remove_value(values[index], primary_key)
+                if index in data:
+                    indices[index].remove_value(data[index], primary_key)
 
     @staticmethod
-    def add_to_index(values, indices, primary_key):
+    def add_to_index(data, indices, primary_key):
             for index in indices:
-                if index in values:
-                    indices[index].add_value(values[index], primary_key)
+                if index in data:
+                    indices[index].add_value(data[index], primary_key)
 
     @staticmethod
-    def validate_set_values(table, values):
+    def validate_set_data(table, data):
         primary_key = table.primary_key
-        if primary_key not in values:
+        if primary_key not in data:
              raise WrongParameterError("primary_key is missing")
         table_columns = table.columns
-        for input in values:
+        for input in data:
             if input not in table_columns:
-                raise WrongParameterError("Wrong values")
-        path = os.path.join(table.get_path(), "{}.json".format(values[primary_key]))
+                raise WrongParameterError("Wrong data")
+        path = os.path.join(table.get_path(), "{}.json".format(data[primary_key]))
         if os.path.exists(path) and not eval(table.overwrite):
                 raise WrongParameterError("can't set this file")
 

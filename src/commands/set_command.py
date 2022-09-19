@@ -3,23 +3,25 @@ from model.database import *
 
 
 class SetCommand(AbstractCommand):
-    def __init__(self, database, table, values):
-        SetCommand.validate(str(database), str(table), values)
-        self.database_name = str(database)
-        self.table_name = str(table)
-        self.values = eval(str(values))
+    def __init__(self, database_name, table_name, data):
+        SetCommand.validate(database_name, table_name, data)
+        self.database_name = database_name
+        self.table_name = table_name
+        self.data = eval(data)
 
     def execute(self):
         database = Database(database_name = self.database_name)
-        database.set(self.table_name, self.values)
+        database.set(self.table_name, self.data)
 
     @staticmethod
-    def validate(database, table, values):
-        if len(database) == 0 or database == "None":
-            raise NoParameterError("database parameter not entered")
-        if len(table) == 0 or table == "None":
-            raise NoParameterError("table parameter not entered")
-        if values == None :
-            raise NoParameterError("values parameter not entered")
-        if not isinstance(values, dict):
-            raise WrongParameterError("values should be json")
+    def validate(database_name, table_name, data):
+        if database_name == None or len(database_name) == 0:
+            raise NoParameterError("database_name parameter not entered")
+        if table_name == None or len(table_name) == 0:
+            raise NoParameterError("table_name parameter not entered")
+        if data == None or len(data) == 0:
+            raise NoParameterError("data parameter not entered")
+        try:
+            eval(data)
+        except:
+            raise WrongParameterError("data should be json")

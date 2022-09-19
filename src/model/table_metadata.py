@@ -16,8 +16,8 @@ class TableMetaData:
         self.columns = table_schema[Keys.COLUMNS]
         self.overwrite = table_schema[Keys.OVERWRITE]
         self.index_keys = {}
-        for index in table_schema[Keys.INDEX_KEYS]:
-            self.index_keys[index] = Index(index, self)
+        for index_name in table_schema[Keys.INDEX_KEYS]:
+            self.index_keys[index_name] = Index(index_name, self)
 
     def get_path(self):
         return self.__path__
@@ -40,14 +40,14 @@ class TableMetaData:
         table_schema.update({Keys.INDEX_KEYS: indices})
 
     def __serialize_indices__(self):
-        for index in self.index_keys:
-            self.index_keys[index].serialize()
+        for index_name in self.index_keys:
+            self.index_keys[index_name].serialize()
 
     @staticmethod
     def get_indices_names(index_keys):
         indices_names = []
-        for index in index_keys:
-            indices_names.append(index)
+        for index_name in index_keys:
+            indices_names.append(index_name)
         return indices_names
 
     def load_table_schema(self, table_name):
