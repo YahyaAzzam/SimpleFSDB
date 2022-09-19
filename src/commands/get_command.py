@@ -6,21 +6,21 @@ from model.database import *
 
 class GetCommand(AbstractCommand):
 
-    def __init__(self, database, table, values):
-        GetCommand.validate(database, table, values)
+    def __init__(self, database, table, query):
+        GetCommand.validate(database, table)
         self.database = database
         self.table = table
-        self.values = json.loads(values)
+        if query is None or query == "" or query == " ":
+            query = {}
+        self.query = json.loads(query)
 
     def execute(self):
-        database = Database.get_database_by_name(self.database)
-        return database.get(self.table, self.values)
+        database = Database(database_name=self.database)
+        return database.get(self.table, self.query)
 
     @staticmethod
-    def validate(database, table, values):
+    def validate(database, table):
         if database is None or database == "" or database == " ":
             raise NoParameterError("Database parameter not entered")
         if table is None or table == "" or table == " ":
             raise NoParameterError("Table parameter not entered")
-        if values is None or values == "" or values == " ":
-            raise NoParameterError("Values parameter not entered")

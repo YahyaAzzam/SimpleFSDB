@@ -1,0 +1,2 @@
+z = ""
+print(z.isspace())

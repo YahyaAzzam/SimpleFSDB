@@ -19,7 +19,7 @@ class CommandFactory:
     #        elif cmd == "set":
     #            return SetCommand(self.input_adaptor.database, self.input_adaptor.table, self.input_adaptor.primary_key, self.input_adaptor.parameter, self.input_adaptor.value)
         elif cmd == "get":
-            return GetCommand(self.input_adaptor.database, self.input_adaptor.table, self.input_adaptor.values)
+            return GetCommand(self.input_adaptor.database, self.input_adaptor.table, self.input_adaptor.query)
     #        elif cmd == "delete":
     #            return DeleteCommand(self.input_adaptor.database, self.input_adaptor.table, self.input_adaptor.primary_key)
 

@@ -5,15 +5,15 @@ from model.table import *
 
 
 class Database:
-    DATABASE_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''), 'tests')
-    
-    def __init__(self, schema_data):
-        Database.__validate__(schema_data)
-        self.__database_name__ = schema_data[Keys.DATABASE]
-        self.__path__ = os.path.join(self.DATABASE_PATH, schema_data[Keys.DATABASE])
-        self.tables = []
-        for table in schema_data[Keys.TABLES]:
-            self.tables.append(Table(self, table))
+    DATABASE_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''),
+                                 'tests')
+
+    def __init__(self, schema_data=None, database_name=None):
+        Database.__validate__(schema_data, database_name)
+        if schema_data is not None:
+            self.__initialize_by_schema_data__(schema_data)
+        else:
+            self.__initialize_by_database_name(database_name)
 
     def get_path(self):
         return self.__path__
@@ -23,26 +23,30 @@ class Database:
         self.__serialize_tables__()
 
     @staticmethod
-    def __validate__(schema_data):
-        if len(schema_data[Keys.DATABASE]) == 0 or schema_data[Keys.DATABASE].isspace():
+    def __validate__(schema_data, database_name):
+        if (len(schema_data[Keys.DATABASE]) == 0 or schema_data[Keys.DATABASE].isspace()) and (database_name is None or str(database_name).isspace()):
             raise WrongParameterError("No database detected")
 
     def __serialize_tables__(self):
         for table in self.tables:
             table.serialize()
 
-    @staticmethod
-    def get_schema(database_name):
-        path = os.path.join(Database.DATABASE_PATH, database_name)
-        if os.path.exists(path):
-            database = {}
-            database[Keys.DATABASE] = database_name
-            database[Keys.TABLES] = []
+    def __initialize_by_schema_data__(self, schema_data):
+        self.__path__ = os.path.join(self.DATABASE_PATH, schema_data[Keys.DATABASE])
+        self.__database_name__ = schema_data[Keys.DATABASE]
+        self.tables = []
+        for table in schema_data[Keys.TABLES]:
+            self.tables.append(Table(self, table))
+
+    def __initialize_by_database_name(self, database_name):
+        self.__path__ = os.path.join(Database.DATABASE_PATH, database_name)
+        if os.path.exists(self.__path__):
+            self.__database_name__ = database_name
+            self.tables = []
             for table in os.listdir(path):
-                with open(os.path.join(path, table, "{}_schema.json".format(table))) as file:
-                    database[Keys.TABLES].append(json.load(file))
-            return database
-        raise WrongParameterError("Wrong database entered")
+                self.tables.append(Table(self, table_name=str(table)))
+        else:
+            raise WrongParameterError("Wrong database entered")
 
     def get_table(self, table_name):
         for table in self.tables:
@@ -50,20 +54,6 @@ class Database:
                 return table
         raise WrongParameterError("Wrong table entered")
 
-    def update_databases_schemas(self, schema_path):
-        path = os.path.join(self.DATABASE_PATH, "databases_schemas.json")
-        schemas = {}
-        if os.path.exists(path):
-            with open(path, 'r') as file:
-                schemas = json.load(file)
-        schemas[self.__database_name__] = schema_path
-        with open(path, 'w') as file:
-            json.dump(schemas, file)
-
-    @staticmethod
-    def get_database_by_name(database_name):
-        return Database(Database.get_schema(database_name))
-
-    def get(self, table_name, values):
+    def get(self, table_name, query):
         table = self.get_table(table_name)
-        return table.get(values)
+        return table.get(query)

@@ -10,7 +10,6 @@ class CreateCommand(AbstractCommand):
 
     def execute(self):
         database = Database(self.schema_data)
-        database.update_databases_schemas(self.schema_path)
         database.serialize()
 
     @staticmethod

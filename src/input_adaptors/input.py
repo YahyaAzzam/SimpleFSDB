@@ -34,9 +34,9 @@ def parse_args():
         help="Primary key is a unique key",
     )
     parser.add_argument(
-        "-v",
-        "--values",
+        "-q",
+        "--query",
         type=str,
-        help="Values desired to be set or found",
+        help="Query desired to be set or found",
     )
     return parser.parse_args()
