@@ -1,2 +1,0 @@
-z = ""
-print(z.isspace())
