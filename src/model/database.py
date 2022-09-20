@@ -15,7 +15,7 @@ class Database:
         self.__database_name__ = schema_data[Keys.DATABASE]
         self.tables = {}
         for table_schema in schema_data[Keys.TABLES]:
-            self.tables[table_schema[Keys.NAME]] = Table(self, table_schema)
+            self.tables[table_schema[Keys.NAME]] = Table(self, table_schema[Keys.NAME], table_schema)
 
     def __initialize_by_database_name__(self, database_name):
         self.__path__ = os.path.join(Database.DATABASE_PATH, database_name)

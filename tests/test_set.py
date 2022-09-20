@@ -58,7 +58,7 @@ class Test(unittest.TestCase):
         # enter space as table name
         try:
             SetCommand("csed25", " ", str({"FlightId_SeatId":"1","Last_name":"goda"})).execute()
-        except WrongParameterError:
+        except NoParameterError:
             pass
 
         # enter integers as table name

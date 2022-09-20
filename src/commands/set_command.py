@@ -17,7 +17,7 @@ class SetCommand(AbstractCommand):
     def validate(database_name, table_name, data):
         if database_name == None or len(database_name) == 0:
             raise NoParameterError("database_name parameter not entered")
-        if table_name == None or len(table_name) == 0:
+        if table_name == None or len(table_name) == 0 or table_name.isspace():
             raise NoParameterError("table_name parameter not entered")
         if data == None or len(data) == 0:
             raise NoParameterError("data parameter not entered")

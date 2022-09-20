@@ -2,21 +2,12 @@ from model.table_metadata import *
 
 
 class Table:
-    def __init__(self, database, table_schema = None, table_name = None):
-        if table_schema is None and table_name is None:
-            raise NoParameterError("No table detected")
-        self.__initialize_Table__(database, table_schema, table_name)
-
-    def __initialize_Table__(self, database, table_schema, table_name):
-        if table_schema is not None:
-            self.__path__ = os.path.join(database.get_path(), table_schema[Keys.NAME])
-            self.table_schema = table_schema
-            self.__table_metadata__ = TableMetaData(self)
-        else:
-            self.__path__ = os.path.join(database.get_path(), table_name)
-            self.table_schema = None
-            self.__table_metadata__ = TableMetaData(self, table_name = table_name)
-            self.table_schema = self.__table_metadata__.load_table_schema(table_name)
+    def __init__(self, database,  table_name, table_schema = None):
+        self.__path__ = os.path.join(database.get_path(), table_name)
+        if table_schema is None:
+            table_schema = TableMetaData.load_table_schema(self.__path__, table_name)
+        self.table_schema = table_schema
+        self.__table_metadata__ = TableMetaData(self)
 
     def serialize(self):
         os.makedirs(self.__path__, exist_ok=True)
@@ -36,10 +27,10 @@ class Table:
             unwanted_data = self.get_by_primary_key(primary_key)
             Table.delete_index(unwanted_data, self.__table_metadata__.index_keys, primary_key)
         Table.add_to_index(data, self.__table_metadata__.index_keys, primary_key)
-        Table.__serialize_row__(data, primary_key, self.__path__)
+        Table.__create_row__(data, primary_key, self.__path__)
 
     @staticmethod
-    def __serialize_row__(data, primary_key, path):
+    def __create_row__(data, primary_key, path):
         with open(os.path.join(path, "{}.json".format(primary_key)), 'w') as file:
             json.dump(data, file)
 

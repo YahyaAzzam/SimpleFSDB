@@ -3,20 +3,14 @@ from model.index import *
 
 class TableMetaData:
     def __init__(self, table, table_name = None):
+        TableMetaData.__validate__(table.table_schema)
         self.__path__ = table.get_path()
-        if table.table_schema is not None:
-            TableMetaData.__validate__(table.table_schema)
-            table_schema = table.table_schema
-        elif table_name is not None:
-            table_schema = self.load_table_schema(table_name)
-        else:
-            raise NoParameterError("Table not found")
-        self.name = table_schema[Keys.NAME]
-        self.primary_key = table_schema[Keys.PRIMARY_KEY]
-        self.columns = table_schema[Keys.COLUMNS]
-        self.overwrite = table_schema[Keys.OVERWRITE]
+        self.name = table.table_schema[Keys.NAME]
+        self.primary_key = table.table_schema[Keys.PRIMARY_KEY]
+        self.columns = table.table_schema[Keys.COLUMNS]
+        self.overwrite = table.table_schema[Keys.OVERWRITE]
         self.index_keys = {}
-        for index_name in table_schema[Keys.INDEX_KEYS]:
+        for index_name in table.table_schema[Keys.INDEX_KEYS]:
             self.index_keys[index_name] = Index(index_name, self)
 
     def get_path(self):
@@ -49,7 +43,7 @@ class TableMetaData:
         for index_name in index_keys:
             indices_names.append(index_name)
         return indices_names
-
-    def load_table_schema(self, table_name):
-        with open(os.path.join(self.__path__, "{}_schema.json".format(table_name)), 'r') as file:
+    @staticmethod
+    def load_table_schema(path, table_name):
+        with open(os.path.join(path, "{}_schema.json".format(table_name)), 'r') as file:
             return json.load(file)
