@@ -37,6 +37,6 @@ def parse_args():
         "-q",
         "--query",
         type=str,
-        help="Query desired to be set or found",
+        help="Query desired to be found",
     )
     return parser.parse_args()

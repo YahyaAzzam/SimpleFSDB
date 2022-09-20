@@ -2,20 +2,13 @@ from model.index import *
 
 
 class TableMetaData:
-    def __init__(self, table, table_name=None):
+    def __init__(self, table):
         self.__path__ = table.get_path()
-        if table.table_schema is not None:
-            TableMetaData.__validate__(table.table_schema)
-            table_schema = table.table_schema
-        elif table_name is not None:
-            table_schema = self.get_table_schema(table_name)
-        else:
-            raise NoParameterError("No table detected")
-        self.name = table_schema[Keys.NAME]
-        self.primary_key = table_schema[Keys.PRIMARY_KEY]
-        self.columns = table_schema[Keys.COLUMNS]
+        self.name = table.table_schema[Keys.NAME]
+        self.primary_key = table.table_schema[Keys.PRIMARY_KEY]
+        self.columns = table.table_schema[Keys.COLUMNS]
         self.index_keys = []
-        for index in table_schema[Keys.INDEX_KEYS]:
+        for index in table.table_schema[Keys.INDEX_KEYS]:
             self.index_keys.append(Index(index, self))
 
     def get_path(self):
@@ -54,6 +47,7 @@ class TableMetaData:
                 return index.get_primary_keys(index_value)
         raise WrongParameterError("Wrong index name entered")
 
-    def get_table_schema(self, table_name):
-        with open(os.path.join(self.__path__, "{}_schema.json".format(table_name)), 'r') as file:
+    @staticmethod
+    def get_table_schema(path, table_name):
+        with open(os.path.join(path, "{}_schema.json".format(table_name)), 'r') as file:
             return json.loads(file)

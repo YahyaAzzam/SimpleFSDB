@@ -4,28 +4,16 @@ from model.table_metadata import *
 
 
 class Table:
-    def __init__(self, database, table=None, table_name=None):
-        if table is not None:
-            self.__initialize_by_table_schema__(database, table)
-        elif table_name is not None:
-            self.__initialize_by_table_name__(database, table_name)
-        else:
-            raise NoParameterError("No table detected")
+    def __init__(self, database, table_name, table=None):
+        if table is None:
+            table = TableMetaData.get_table_schema(database.get_path(), table_name)
+        self.__path__ = os.path.join(database.get_path(), table[Keys.NAME])
+        self.table_schema = table
+        self.__table_metadata__ = TableMetaData(self)
 
     def serialize(self):
         os.makedirs(self.__path__, exist_ok=True)
         self.__table_metadata__.serialize()
-
-    def __initialize_by_table_schema__(self, database, table_schema):
-        self.__path__ = os.path.join(database.get_path(), table_schema[Keys.NAME])
-        self.table_schema = table_schema
-        self.__table_metadata__ = TableMetaData(self)
-
-    def __initialize_by_table_name__(self, database, table_name):
-        self.__path__ = os.path.join(database.get_path(), table_name)
-        self.table_schema = None
-        self.__table_metadata__ = TableMetaData(self, table_name=table_name)
-        self.table_schema = self.__table_metadata__.get_table_schema()
 
     def get_name(self):
         return self.__table_metadata__.name
@@ -43,7 +31,7 @@ class Table:
     def get(self, query):
         best_search = self.__get_efficient_primary_keys__(query)
         found_objects = self.get_rows(best_search)
-        return self.__compare_found__(found_objects, query)
+        return self.__filter_by_query__(found_objects, query)
 
     def __get_efficient_primary_keys__(self, query):
         index_names = self.__table_metadata__.get_indices_names()
@@ -70,8 +58,8 @@ class Table:
             return json.load(file)
 
     @staticmethod
-    def __compare_found__(found_objects, query):
-        if query is not None or query != "" or not str(query).isspace:
+    def __filter_by_query__(found_objects, query):
+        if query and not str(query).isspace:
             for object_to_compare in found_objects:
                 for value_to_compare in query.items:
                     if value_to_compare[1] != object_to_compare[value_to_compare[0]]:

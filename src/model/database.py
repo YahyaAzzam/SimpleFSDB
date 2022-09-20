@@ -1,6 +1,3 @@
-import json
-import os.path
-
 from model.table import *
 
 
@@ -34,19 +31,18 @@ class Database:
     def __initialize_by_schema_data__(self, schema_data):
         self.__path__ = os.path.join(self.DATABASE_PATH, schema_data[Keys.DATABASE])
         self.__database_name__ = schema_data[Keys.DATABASE]
-        self.tables = []
+        self.tables = {}
         for table in schema_data[Keys.TABLES]:
-            self.tables.append(Table(self, table))
+            self.tables.__setattr__(str(table[Keys.NAME]), Table(self, str(table[Keys.NAME]), table))
 
     def __initialize_by_database_name(self, database_name):
         self.__path__ = os.path.join(Database.DATABASE_PATH, database_name)
-        if os.path.exists(self.__path__):
-            self.__database_name__ = database_name
-            self.tables = []
-            for table in os.listdir(path):
-                self.tables.append(Table(self, table_name=str(table)))
-        else:
+        if not os.path.exists(self.__path__):
             raise WrongParameterError("Wrong database entered")
+        self.__database_name__ = database_name
+        self.tables = {}
+        for table in os.listdir(path):
+            self.tables.__setattr__(str(table), Table(self, str(table)))
 
     def get_table(self, table_name):
         for table in self.tables:

@@ -10,7 +10,7 @@ class GetCommand(AbstractCommand):
         GetCommand.validate(database, table)
         self.database = database
         self.table = table
-        if query is None or query == "" or query == " ":
+        if not query or str(query.isspace()):
             query = {}
         self.query = json.loads(query)
 
