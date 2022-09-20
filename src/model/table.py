@@ -36,7 +36,7 @@ class Table:
     def __get_efficient_primary_keys__(self, query):
         index_names = self.__table_metadata__.get_indices_names()
         primary_keys = []
-        if query is not None or query != "" or not str(query).isspace:
+        if query and not str(query).isspace:
             if self.__table_metadata__.primary_key in query.values:
                 primary_keys.append(query[self.__table_metadata__.primary_key])
             else:
