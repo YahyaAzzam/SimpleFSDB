@@ -73,37 +73,6 @@ class Test(unittest.TestCase):
         except WrongParameterError:
             pass
 
-    def test_wrong_input_file(self):
-        # didn't enter file name
-        try:
-            SetCommand("csed25", "Seats", None).execute()
-        except NoParameterError:
-            pass
-
-        # enter empty string as file name
-        try:
-            SetCommand("csed25", "Seats", "").execute()
-        except NoParameterError:
-            pass
-
-        # enter space as file name
-        try:
-            SetCommand("csed25", "Seats", " ").execute()
-        except WrongParameterError:
-            pass
-
-        # enter integers as file name
-        try:
-            SetCommand("csed25", "Seats", "123451").execute()
-        except WrongParameterError:
-            pass
-
-        # enter wrong file name
-        try:
-            SetCommand("csed25", "Seats", "goda").execute()
-        except WrongParameterError:
-            pass
-
     def test_set(self):
         # test set file in different tables
         database = Database(database_name = "csed25")
@@ -124,16 +93,32 @@ class Test(unittest.TestCase):
                 pass
 
             #check reset file with new value
-            if database.tables[table].get_name() == "Seats":
+            if database.tables[table].__table_metadata__.overwrite == "True":
                 value[table_mate_data.columns[1]] = "mahmoud"
                 SetCommand("csed25", database.tables[table].get_name(), str(value)).execute()
                 self.assertEqual(database.tables[table].get_by_primary_key(1),value)
+
+                #set all the files in table to be none
+                #first_way
+                SetCommand("csed25", database.tables[table].get_name(), None).execute()
+                self.assertEqual(database.tables[table].get_by_primary_key(1),{})
+                #second_way
+                SetCommand("csed25", database.tables[table].get_name(), "None").execute()
+                self.assertEqual(database.tables[table].get_by_primary_key(1),{})
+                #third_way
+                SetCommand("csed25", database.tables[table].get_name()).execute()
+                self.assertEqual(database.tables[table].get_by_primary_key(1),{})
+                #fourth_way
+                SetCommand("csed25", database.tables[table].get_name(), "").execute()
+                self.assertEqual(database.tables[table].get_by_primary_key(1),{})
+                #fifth_way
+                SetCommand("csed25", database.tables[table].get_name(), " ").execute()
+                self.assertEqual(database.tables[table].get_by_primary_key(1),{})
 
         # end the test and delete the database
         path = database.get_path().replace("csed25", '')
         if os.path.exists(path):
            shutil.rmtree(path)
-
 
 if __name__ == '__main__':
     unittest.main()

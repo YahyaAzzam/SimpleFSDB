@@ -2,7 +2,7 @@ from model.index import *
 
 
 class TableMetaData:
-    def __init__(self, table, table_name = None):
+    def __init__(self, table):
         TableMetaData.__validate__(table.table_schema)
         self.__path__ = table.get_path()
         self.name = table.table_schema[Keys.NAME]
