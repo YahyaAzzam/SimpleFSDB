@@ -5,9 +5,9 @@ from model.table_metadata import *
 
 class Table:
     def __init__(self, database, table_name, table=None):
+        self.__path__ = os.path.join(database.get_path(), table_name)
         if table is None:
-            table = TableMetaData.get_table_schema(database.get_path(), table_name)
-        self.__path__ = os.path.join(database.get_path(), table[Keys.NAME])
+            table = TableMetaData.get_table_schema(self.__path__, table_name)
         self.table_schema = table
         self.__table_metadata__ = TableMetaData(self)
 
@@ -29,25 +29,39 @@ class Table:
         pass
 
     def get(self, query):
-        best_search = self.__get_efficient_primary_keys__(query)
-        found_objects = self.get_rows(best_search)
+        efficient_index = self.__get_efficient_index__(query)
+        efficient_keys = self.__get_efficient_primary_keys__(efficient_index)
+        found_objects = self.get_rows(efficient_keys)
         return self.__filter_by_query__(found_objects, query)
 
-    def __get_efficient_primary_keys__(self, query):
+    def __get_efficient_index__(self, query):
         index_names = self.__table_metadata__.get_indices_names()
+        index = {}
+        keys_number = None
+        if not query or str(query).isspace:
+            return None
+        if self.__table_metadata__.primary_key in query.keys():
+            index = {self.__table_metadata__.primary_key: query[self.__table_metadata__.primary_key]}
+        else:
+            for item in query.keys():
+                if item in index_names:
+                    number_of_keys = len(self.__table_metadata__.get_index_primary_keys(item, query[item]))
+                    if keys_number is None or number_of_keys < keys_number:
+                        keys_number = number_of_keys
+                        index.update({item: query[item]})
+        return index
+
+    def __get_efficient_primary_keys__(self, index):
         primary_keys = []
-        if query and not str(query).isspace:
-            if self.__table_metadata__.primary_key in query.values:
-                primary_keys.append(query[self.__table_metadata__.primary_key])
-            else:
-                for item in query.items():
-                    if item[0] in index_names:
-                        index_keys = self.__table_metadata__.get_index_primary_keys(str(item[0]), str(item[1]))
-                        primary_keys = index_keys if len(primary_keys) == 0 or len(primary_keys) > len(index_keys) else primary_keys
-        if len(primary_keys) == 0:
+        if index is None:
             for primary_key in os.listdir(self.__path__):
                 if ".json" in str(primary_key) and "schema" not in str(primary_key):
                     primary_keys.append(self.get_by_primary_key(str(primary_key).replace(".json", '')))
+        elif self.__table_metadata__.primary_key in index.keys():
+            primary_keys.append(index[self.__table_metadata__.primary_key])
+        else:
+            index = index.items()
+            primary_keys = self.__table_metadata__.get_index_primary_keys(index[0], index[1])
         return primary_keys
 
     def get_by_primary_key(self, primary_key):
