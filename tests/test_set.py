@@ -10,7 +10,7 @@ from main import *
 class Test(unittest.TestCase):
     SCHEMA_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''), 'tests')
     CreateCommand(os.path.join(SCHEMA_PATH, "Check-in-schema.json")).execute()
-
+    SetCommand("csed25", None, None).execute()
     def test_wrong_input_database(self):
         # didn't enter database name
         try:
@@ -43,22 +43,16 @@ class Test(unittest.TestCase):
             pass
 
     def test_wrong_input_table(self):
-        # didn't enter table name
-        try:
-            SetCommand("csed25", None, str({"FlightId_SeatId":"1","Last_name":"goda"})).execute()
-        except NoParameterError:
-            pass
-
         # enter empty string as table name
         try:
             SetCommand("csed25", "", str({"FlightId_SeatId":"1","Last_name":"goda"})).execute()
-        except NoParameterError:
+        except WrongParameterError:
             pass
 
         # enter space as table name
         try:
             SetCommand("csed25", " ", str({"FlightId_SeatId":"1","Last_name":"goda"})).execute()
-        except NoParameterError:
+        except WrongParameterError:
             pass
 
         # enter integers as table name
@@ -84,7 +78,7 @@ class Test(unittest.TestCase):
             SetCommand("csed25", database.tables[table].get_name(), str(value)).execute()
 
             #check create the file in the table
-            self.assertTrue(os.path.exists(os.path.join(table_mate_data.get_path(),"1.json")))
+            self.assertTrue(os.path.exists(os.path.join(table_mate_data.get_path(), "1.json")))
 
             #check blocking reset file
             try:
@@ -96,25 +90,28 @@ class Test(unittest.TestCase):
             if database.tables[table].__table_metadata__.overwrite == "True":
                 value[table_mate_data.columns[1]] = "mahmoud"
                 SetCommand("csed25", database.tables[table].get_name(), str(value)).execute()
-                self.assertEqual(database.tables[table].get_by_primary_key(1),value)
+                self.assertEqual(database.tables[table].get_by_primary_key(1), value)
 
                 #set all the files in table to be none
                 #first_way
                 SetCommand("csed25", database.tables[table].get_name(), None).execute()
-                self.assertEqual(database.tables[table].get_by_primary_key(1),{})
+                self.assertEqual(database.tables[table].get_by_primary_key(1), {})
                 #second_way
                 SetCommand("csed25", database.tables[table].get_name(), "None").execute()
-                self.assertEqual(database.tables[table].get_by_primary_key(1),{})
+                self.assertEqual(database.tables[table].get_by_primary_key(1), {})
                 #third_way
                 SetCommand("csed25", database.tables[table].get_name()).execute()
-                self.assertEqual(database.tables[table].get_by_primary_key(1),{})
+                self.assertEqual(database.tables[table].get_by_primary_key(1), {})
                 #fourth_way
                 SetCommand("csed25", database.tables[table].get_name(), "").execute()
-                self.assertEqual(database.tables[table].get_by_primary_key(1),{})
+                self.assertEqual(database.tables[table].get_by_primary_key(1), {})
                 #fifth_way
                 SetCommand("csed25", database.tables[table].get_name(), " ").execute()
-                self.assertEqual(database.tables[table].get_by_primary_key(1),{})
+                self.assertEqual(database.tables[table].get_by_primary_key(1), {})
 
+                #set all the tables in the database with the same value
+                SetCommand("csed25",data = str({"Last_name":"GODA"})).execute()
+                self.assertEqual(database.tables[table].get_by_primary_key(1), {"Last_name":"GODA"})
         # end the test and delete the database
         path = database.get_path().replace("csed25", '')
         if os.path.exists(path):

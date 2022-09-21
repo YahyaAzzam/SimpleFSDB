@@ -66,8 +66,8 @@ class Table:
                 Table.delete_index(unwanted_data, self.__table_metadata__.index_keys, file.replace(".json",""))
                 Table.add_to_index(data, self.__table_metadata__.index_keys, file.replace(".json",""))
                 Table.__create_row__(data, file.replace(".json",""), self.__path__)
-        else:
-            raise WrongParameterError("can't set this table")
+        #:
+         #   raise WrongParameterError("can't set this table")
 
     def delete(self):
         pass
