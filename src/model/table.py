@@ -30,38 +30,32 @@ class Table:
 
     def get(self, query):
         efficient_index = self.__get_efficient_index__(query)
-        efficient_keys = self.__get_efficient_primary_keys__(efficient_index)
-        found_objects = self.get_rows(efficient_keys)
+        if efficient_index is None:
+            efficient_keys = self.__get_all_primary_keys__()
+        else:
+            efficient_keys = efficient_index.get_primary_keys(query[efficient_index.name])
+        found_objects = self.__get_rows__(efficient_keys)
         return self.__filter_by_query__(found_objects, query)
 
     def __get_efficient_index__(self, query):
-        index_names = self.__table_metadata__.get_indices_names()
-        index = {}
-        keys_number = None
         if not query or str(query).isspace:
             return None
         if self.__table_metadata__.primary_key in query.keys():
-            index = {self.__table_metadata__.primary_key: query[self.__table_metadata__.primary_key]}
-        else:
-            for item in query.keys():
-                if item in index_names:
-                    number_of_keys = len(self.__table_metadata__.get_index_primary_keys(item, query[item]))
-                    if keys_number is None or number_of_keys < keys_number:
-                        keys_number = number_of_keys
-                        index.update({item: query[item]})
-        return index
+            return Index(self.__table_metadata__.primary_key, self.__table_metadata__)
+        index_names = set(self.__table_metadata__.get_indices_names())
+        most_efficient = None
+        for item in query.keys():
+            if item in index_names:
+                current_index = self.__table_metadata__.get_index(item)
+                if most_efficient is None or current_index.compare(most_efficient) == -1:
+                    most_efficient = current_index
+        return most_efficient
 
-    def __get_efficient_primary_keys__(self, index):
+    def __get_all_primary_keys__(self):
         primary_keys = []
-        if index is None:
-            for primary_key in os.listdir(self.__path__):
-                if ".json" in str(primary_key) and "schema" not in str(primary_key):
-                    primary_keys.append(self.get_by_primary_key(str(primary_key).replace(".json", '')))
-        elif self.__table_metadata__.primary_key in index.keys():
-            primary_keys.append(index[self.__table_metadata__.primary_key])
-        else:
-            index = index.items()
-            primary_keys = self.__table_metadata__.get_index_primary_keys(index[0], index[1])
+        for primary_key in os.listdir(self.__path__):
+            if ".json" in str(primary_key) and "schema" not in str(primary_key):
+                primary_keys.append(self.get_by_primary_key(str(primary_key).replace(".json", '')))
         return primary_keys
 
     def get_by_primary_key(self, primary_key):
@@ -81,7 +75,7 @@ class Table:
                         break
         return found_objects
 
-    def get_rows(self, primary_keys):
+    def __get_rows__(self, primary_keys):
         if primary_keys is None or len(primary_keys) == 0:
             raise WrongParameterError("No attributes found")
         rows = []

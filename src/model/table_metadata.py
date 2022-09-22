@@ -41,6 +41,12 @@ class TableMetaData:
             indices_names.append(index.name)
         return indices_names
 
+    def get_index(self, index_name):
+        for index in self.index_keys:
+            if index.name == index_name:
+                return index
+        raise WrongParameterError("Index name not found")
+
     def get_index_primary_keys(self, index_name, index_value):
         for index in self.index_keys:
             if index.name == index_name:
