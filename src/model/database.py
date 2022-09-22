@@ -49,10 +49,5 @@ class Database:
         return self.tables[table_name]
 
     def set(self, table_name, data):
-        if table_name is not None:
-            table = self.get_table(table_name)
-            table.set(data)
-        else:
-            for table_name in self.tables:
-                table = self.get_table(table_name)
-                table.set(data)
+        table = self.get_table(table_name)
+        table.set(data)

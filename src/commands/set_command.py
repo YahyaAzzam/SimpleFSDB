@@ -3,7 +3,7 @@ from model.database import *
 
 
 class SetCommand(AbstractCommand):
-    def __init__(self, database_name, table_name = None, data = None):
+    def __init__(self, database_name, table_name, data):
         self.data = SetCommand.validate(database_name, data)
         self.database_name = database_name
         self.table_name = table_name
@@ -16,9 +16,11 @@ class SetCommand(AbstractCommand):
     def validate(database_name, data):
         if database_name == None or len(database_name) == 0:
             raise NoParameterError("database_name parameter not entered")
+        if database_name == None or len(database_name) == 0:
+            raise NoParameterError("table_name parameter not entered")
         try:
             if data == "None":
-                return {}
+                raise NoParameterError("data parameter not entered")
             return eval(data)
         except:
-            return {}
+            raise NoParameterError("data parameter not entered")

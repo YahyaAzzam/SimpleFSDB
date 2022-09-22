@@ -20,56 +20,53 @@ class Table:
         return self.__path__
 
     # Will be implemented later in the project
-    def __set_file__(self, data):
-        primary_key = data[self.__table_metadata__.primary_key]
-        if os.path.exists(os.path.join(self.__path__, "{}.json".format(primary_key))):
-            if eval(self.__table_metadata__.overwrite):
-                unwanted_data = self.get_by_primary_key(primary_key)
-                Table.delete_index(unwanted_data, self.__table_metadata__.index_keys, primary_key)
-            else:
-                raise WrongParameterError("can't set this file")
-        Table.add_to_index(data, self.__table_metadata__.index_keys, primary_key)
-        Table.__create_row__(data, primary_key, self.__path__)
-
-    def set(self, data):
+    def __serialize_row__(self, data):
         primary_key = self.__table_metadata__.primary_key
-        if primary_key not in data:
-            self.__set_all__(data)
-        else:
-            self.__set_file__(data)
+        can_overwrite = eval(self.__table_metadata__.overwrite)
+        path = self.get_row_path(data[primary_key])
+        mode = 'w' if can_overwrite else 'x'
+        with open(path, mode) as file:
+            json.dump(data, file)
+        return os.path.basename(path).replace(".json","")
 
     @staticmethod
-    def __create_row__(data, primary_key, path):
-        with open(os.path.join(path, "{}.json".format(primary_key)), 'w') as file:
-            json.dump(data,file)
+    def generate_num():
+        pass
+
+    def get_row_path(self, primary_key):
+        if primary_key is None:
+            primary_key = Table.generate_num()
+        return os.path.join(self.__path__, "{}.json".format(primary_key))
+
+    def set(self, data):
+        primary_key = data[self.__table_metadata__.primary_key]
+        existing_row = None
+        if primary_key is not None:
+            existing_row = self.get_by_primary_key(primary_key)
+        try:
+            self.delete(existing_row)
+            primary_key = self.__serialize_row__(data)
+            Table.add_to_index(data, self.__table_metadata__.index_keys, primary_key)
+        except:
+            raise WrongParameterError("data exists")
 
     @staticmethod
     def delete_index(data, indices, primary_key):
-            for index in indices:
-                if index in data:
-                    indices[index].remove_value(data[index], primary_key)
+        for index in indices:
+            if index in data:
+                indices[index].remove_value(data[index], primary_key)
 
     @staticmethod
     def add_to_index(data, indices, primary_key):
-            for index in indices:
-                if index in data:
-                    indices[index].add_value(data[index], primary_key)
+        for index in indices:
+            if index in data:
+                indices[index].add_value(data[index], primary_key)
 
-    def __set_all__(self, data):
-        if eval(self.__table_metadata__.overwrite):
-            for file in os.listdir(self.__path__):
-                if file == "{}_schema.json".format(self.__table_metadata__.name):
-                    continue
-                if file in TableMetaData.get_indices_names(self.__table_metadata__.index_keys):
-                    continue
-                unwanted_data = self.get_by_primary_key(file.replace(".json",""))
-                Table.delete_index(unwanted_data, self.__table_metadata__.index_keys, file.replace(".json",""))
-                Table.add_to_index(data, self.__table_metadata__.index_keys, file.replace(".json",""))
-                Table.__create_row__(data, file.replace(".json",""), self.__path__)
-        #:
-         #   raise WrongParameterError("can't set this table")
-
-    def delete(self):
+    def delete(self, data):
+        if data is None:
+            return
+        primary_key = data[self.__table_metadata__.primary_key]
+        Table.delete_index(data, self.__table_metadata__.index_keys, primary_key)
         pass
 
     def get(self):
@@ -77,5 +74,6 @@ class Table:
 
     def get_by_primary_key(self, primary_key):
         path = os.path.join(self.__path__, "{}.json".format(primary_key))
-        with open(path, 'r') as file:
-            return json.load(file)
+        if os.path.exists(path):
+            with open(path, 'r') as file:
+                return json.load(file)
