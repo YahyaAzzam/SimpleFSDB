@@ -1,4 +1,5 @@
 from model.table_metadata import *
+import time
 
 
 class Table:
@@ -18,35 +19,43 @@ class Table:
 
     def get_path(self):
         return self.__path__
+        
+    def get_primary_key(self):
+        return self.__table_metadata__.primary_key
 
     # Will be implemented later in the project
     def __serialize_row__(self, data):
-        primary_key = self.__table_metadata__.primary_key
+        primary_key = self.get_primary_key()
         can_overwrite = eval(self.__table_metadata__.overwrite)
-        path = self.get_row_path(data[primary_key])
+        path = Table.__get_row_path__(self.__path__, data.get(primary_key))
         mode = 'w' if can_overwrite else 'x'
+        data[self.get_primary_key()] = os.path.basename(path).replace(".json","")
         with open(path, mode) as file:
             json.dump(data, file)
-        return os.path.basename(path).replace(".json","")
+        return data
 
     @staticmethod
-    def generate_num():
-        pass
+    def generate_num(path):
+        while os.path.exists(path):
+            primary_key = int((time.time()*1000)%1e7)
+            path = Table.__get_row_path__(path, primary_key)
+        return primary_key
 
-    def get_row_path(self, primary_key):
+    @staticmethod
+    def __get_row_path__(path, primary_key):
         if primary_key is None:
-            primary_key = Table.generate_num()
-        return os.path.join(self.__path__, "{}.json".format(primary_key))
+            primary_key = Table.generate_num(path)
+        return os.path.join(path, "{}.json".format(primary_key))
 
     def set(self, data):
-        primary_key = data[self.__table_metadata__.primary_key]
+        primary_key = data.get(self.get_primary_key())
         existing_row = None
         if primary_key is not None:
             existing_row = self.get_by_primary_key(primary_key)
         try:
             self.delete(existing_row)
-            primary_key = self.__serialize_row__(data)
-            Table.add_to_index(data, self.__table_metadata__.index_keys, primary_key)
+            data = self.__serialize_row__(data)
+            Table.add_to_index(data, self.__table_metadata__.index_keys, data[self.get_primary_key()])
         except:
             raise WrongParameterError("data exists")
 
@@ -63,10 +72,9 @@ class Table:
                 indices[index].add_value(data[index], primary_key)
 
     def delete(self, data):
-        if data is None:
-            return
-        primary_key = data[self.__table_metadata__.primary_key]
-        Table.delete_index(data, self.__table_metadata__.index_keys, primary_key)
+        if data is not None:
+            primary_key = data[self.get_primary_key()]
+            Table.delete_index(data, self.__table_metadata__.index_keys, primary_key)
         pass
 
     def get(self):
