@@ -1,5 +1,3 @@
-import os
-
 from model.table_metadata import *
 
 
@@ -13,6 +11,7 @@ class Table:
 
     def serialize(self):
         os.makedirs(self.__path__, exist_ok=True)
+        os.makedirs(os.path.join(self.__path__, "data"), exist_ok=True)
         self.__table_metadata__.serialize()
 
     def get_name(self):
@@ -41,25 +40,26 @@ class Table:
         if not query or str(query).isspace:
             return None
         if self.__table_metadata__.primary_key in query.keys():
-            return Index(self.__table_metadata__.primary_key, self.__table_metadata__)
+            return PrimaryKeyIndex(self.__table_metadata__.primary_key, self.__table_metadata__)
         index_names = set(self.__table_metadata__.get_indices_names())
         most_efficient = None
         for item in query.keys():
             if item in index_names:
                 current_index = self.__table_metadata__.get_index(item)
-                if most_efficient is None or current_index.compare(most_efficient) == -1:
+                if not most_efficient or current_index.compare(most_efficient) == -1:
                     most_efficient = current_index
         return most_efficient
 
     def __get_all_primary_keys__(self):
         primary_keys = []
-        for primary_key in os.listdir(self.__path__):
-            if ".json" in str(primary_key) and "schema" not in str(primary_key):
-                primary_keys.append(self.get_by_primary_key(str(primary_key).replace(".json", '')))
+        for primary_key_path in os.listdir(os.path.join(self.__path__, "data")):
+            primary_key = self.__get_primary_key_from_path__(primary_key_path)
+            if primary_key:
+                primary_keys.append(primary_key)
         return primary_keys
 
     def get_by_primary_key(self, primary_key):
-        path = os.path.join(self.__path__, "{}.json".format(primary_key))
+        path = self.__get_primary_key_path__(primary_key)
         if not os.path.exists(path):
             return None
         with open(path, 'r') as file:
@@ -67,13 +67,13 @@ class Table:
 
     @staticmethod
     def __filter_by_query__(found_objects, query):
-        if query and not str(query).isspace:
-            for object_to_compare in found_objects:
-                for value_to_compare in query.items:
-                    if value_to_compare[1] != object_to_compare[value_to_compare[0]]:
-                        found_objects.remove(object_to_compare)
-                        break
-        return found_objects
+        if not query or str(query).isspace():
+            return found_objects
+        filtered_objects = []
+        for object_to_compare in found_objects:
+            if Table.compare(object_to_compare, query):
+                filtered_objects.append(object_to_compare)
+        return filtered_objects
 
     def __get_rows__(self, primary_keys):
         if primary_keys is None or len(primary_keys) == 0:
@@ -82,3 +82,19 @@ class Table:
         for primary_key in primary_keys:
             rows.append(self.get_by_primary_key(str(primary_key).replace("json", '')))
         return rows
+
+    def __get_primary_key_path__(self, primary_key):
+        path = os.path.join(self.__path__, "data", "{}.json".format(primary_key))
+        if os.path.isfile(primary_key):
+            return path
+        return None
+
+    def __get_primary_key_from_path__(self, path):
+        return str(path).replace(self.__path__, '').replace(".json", '').replace("data", '')
+
+    @staticmethod
+    def compare(object_1, object_2):
+        for attribute in object_2.items():
+            if not object_1 or attribute[1] != object_1[attribute[0]]:
+                return False
+        return True

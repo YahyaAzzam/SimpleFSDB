@@ -1,4 +1,4 @@
-from model.index import *
+from model.primary_key_index import *
 
 
 class TableMetaData:
@@ -45,7 +45,7 @@ class TableMetaData:
         for index in self.index_keys:
             if index.name == index_name:
                 return index
-        raise WrongParameterError("Index name not found")
+        return None
 
     def get_index_primary_keys(self, index_name, index_value):
         for index in self.index_keys:

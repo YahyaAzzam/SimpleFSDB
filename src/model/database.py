@@ -2,8 +2,7 @@ from model.table import *
 
 
 class Database:
-    DATABASE_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''),
-                                 'tests')
+    DATABASE_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''),'tests')
 
     def __init__(self, schema_data=None, database_name=None):
         Database.__validate__(schema_data, database_name)
@@ -45,9 +44,8 @@ class Database:
             self.tables.__setattr__(str(table), Table(self, str(table)))
 
     def get_table(self, table_name):
-        for table in self.tables:
-            if table.get_name() == table_name:
-                return table
+        if table_name in self.tables.keys():
+            return self.tables[table_name]
         raise WrongParameterError("Wrong table entered")
 
     def get(self, table_name, query):

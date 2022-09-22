@@ -31,11 +31,9 @@ class Index:
         Index.__validate_value_name__(value_name)
         primary_keys = []
         path = os.path.join(self.__path__, "{}.json".format(value_name))
-        if os.path.isfile(self.__path__):
-            primary_keys.append(self.name)
-        elif os.path.exists(path):
+        if os.path.exists(path):
             with open(path, 'r') as file:
-                primary_keys = json.load(file).items[1]
+                primary_keys = json.load(file)
         return primary_keys
 
     @staticmethod
