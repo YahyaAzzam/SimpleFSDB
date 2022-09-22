@@ -35,8 +35,8 @@ class Database:
 
     @staticmethod
     def __validate__(schema_data, database_name):
-        if schema_data is None or schema_data[Keys.DATABASE].isspace():
-            if database_name is None or str(database_name).isspace():
+        if ((schema_data is None or schema_data[Keys.DATABASE].isspace()) and
+            (database_name is None or str(database_name).isspace())):
                 raise WrongParameterError("No database detected")
 
     def __serialize_tables__(self):
