@@ -39,15 +39,13 @@ class Table:
     def __get_efficient_index__(self, query):
         if not query or str(query).isspace:
             return None
-        most_efficient = None
         efficient_value = None
         for item in query.keys():
             current_index = self.__table_metadata__.get_index(item)
             current_value = current_index.get_index_value(query[item])
-            if current_index and (not most_efficient or current_value.compare(efficient_value)):
-                most_efficient = current_index
+            if current_index and (not efficient_value or current_value.compare(efficient_value)) > 0:
                 efficient_value = current_value
-        return most_efficient
+        return efficient_value.get_index()
 
     def __get_all_primary_keys__(self):
         primary_keys = []
