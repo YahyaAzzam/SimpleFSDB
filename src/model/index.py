@@ -9,6 +9,7 @@ class Index:
     def __init__(self, index_name, table_metadata):
         Index.__validate_index__(index_name, table_metadata.columns)
         self.name = index_name
+        self.value_name = None
         self.__path__ = os.path.join(table_metadata.get_path(), self.name)
 
     def get_path(self):
@@ -27,11 +28,11 @@ class Index:
     def serialize(self):
         os.makedirs(self.__path__, exist_ok=True)
 
-    def get_primary_keys(self, value_name):
-        Index.__validate_value_name__(value_name)
+    def get_primary_keys(self, value_name=None):
+        self.value_name = value_name if value_name else self.value_name
         primary_keys = []
-        path = os.path.join(self.__path__, "{}.json".format(value_name))
-        if os.path.exists(path):
+        path = os.path.join(self.__path__, "{}.json".format(self.value_name))
+        if os.path.isfile(path):
             with open(path, 'r') as file:
                 primary_keys = json.load(file)
         return primary_keys
@@ -54,9 +55,10 @@ class Index:
             primary_keys.remove(primary_key)
         self.__update_value__(value_name, primary_keys)
 
-    def compare(self, index):
-        if len(self.get_primary_keys(self.name)) > len(index.get_primary_keys(index.name)):
+    def compare(self, index, value_name=None):
+        self.value_name = value_name if value_name else self.value_name
+        if len(self.get_primary_keys(self.value_name)) > len(index.get_primary_keys(index.value_name)):
             return 1
-        elif len(self.get_primary_keys(self.name)) < len(index.get_primary_keys(index.name)):
+        elif len(self.get_primary_keys(self.value_name)) < len(index.get_primary_keys(index.value_name)):
             return -1
         return 0

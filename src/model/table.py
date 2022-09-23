@@ -32,20 +32,17 @@ class Table:
         if efficient_index is None:
             efficient_keys = self.__get_all_primary_keys__()
         else:
-            efficient_keys = efficient_index.get_primary_keys(query[efficient_index.name])
+            efficient_keys = efficient_index.get_primary_keys()
         found_objects = self.__get_rows__(efficient_keys)
         return self.__filter_by_query__(found_objects, query)
 
     def __get_efficient_index__(self, query):
         if not query or str(query).isspace:
             return None
-        if self.__table_metadata__.primary_key in query.keys():
-            return PrimaryKeyIndex(self.__table_metadata__.primary_key, self.__table_metadata__)
-        index_names = set(self.__table_metadata__.get_indices_names())
         most_efficient = None
         for item in query.keys():
             current_index = self.__table_metadata__.get_index(item)
-            if current_index and (not most_efficient or current_index.compare(most_efficient) == -1):
+            if current_index and (not most_efficient or current_index.compare(most_efficient, query[item]) == -1):
                 most_efficient = current_index
         return most_efficient
 
@@ -53,8 +50,7 @@ class Table:
         primary_keys = []
         for primary_key_path in os.listdir(self.__get_data_path__()):
             primary_key = self.__get_primary_key_from_path__(primary_key_path)
-            if primary_key:
-                primary_keys.append(primary_key)
+            primary_keys.append(primary_key)
         return primary_keys
 
     def get_by_primary_key(self, primary_key):

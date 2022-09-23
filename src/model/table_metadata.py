@@ -7,7 +7,7 @@ class TableMetaData:
         self.name = table.table_schema[Keys.NAME]
         self.primary_key = table.table_schema[Keys.PRIMARY_KEY]
         self.columns = table.table_schema[Keys.COLUMNS]
-        self.index_keys = []
+        self.index_keys = [PrimaryKeyIndex(self.primary_key, self)]
         for index in table.table_schema[Keys.INDEX_KEYS]:
             self.index_keys.append(Index(index, self))
 
