@@ -10,6 +10,7 @@ from main import *
 class Test(unittest.TestCase):
     SCHEMA_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''), 'tests')
     CreateCommand(os.path.join(SCHEMA_PATH, "Check-in-schema.json")).execute()
+
     def test_wrong_input_database(self):
         # didn't enter database name
         try:
