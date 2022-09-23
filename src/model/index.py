@@ -36,24 +36,23 @@ class Index:
                 primary_keys = json.load(file)
         return primary_keys
 
-    @staticmethod
-    def __update_value__(path, value_name, primary_keys):
-        with open(os.path.join(path, "{}.json".format(value_name)), 'w') as file:
-            json.dump(primary_keys, file)
-
-    def add_value(self, value_name, primary_key):
-        value = self.get_primary_keys(value_name)
-        value.append(primary_key)
-        self.__update_value__(self.__path__, value_name, value)
-
-    def remove_value(self, value_name, primary_key):
-        value = self.get_primary_keys(value_name)
-        if primary_key in value:
-            value.remove(primary_key)
-        if not value:
+    def __update_value__(self, value_name, primary_keys):
+        if not primary_keys:
             pathlib.Path(os.path.join(self.__path__, "{}.json".format(value_name))).unlink()
         else:
-            self.__update_value__(self.__path__, value_name, value)
+            with open(os.path.join(self.__path__, "{}.json".format(value_name)), 'w') as file:
+                json.dump(primary_keys, file)
+
+    def add_value(self, value_name, primary_key):
+        primary_keys = self.get_primary_keys(value_name)
+        primary_keys.append(primary_key)
+        self.__update_value__(value_name, primary_keys)
+
+    def remove_value(self, value_name, primary_key):
+        primary_keys = self.get_primary_keys(value_name)
+        if primary_key in primary_keys:
+            primary_keys.remove(primary_key)
+        self.__update_value__(value_name, primary_keys)
 
     def compare(self, index):
         if len(self.get_primary_keys(self.name)) > len(index.get_primary_keys(index.name)):

@@ -44,15 +44,14 @@ class Table:
         index_names = set(self.__table_metadata__.get_indices_names())
         most_efficient = None
         for item in query.keys():
-            if item in index_names:
-                current_index = self.__table_metadata__.get_index(item)
-                if not most_efficient or current_index.compare(most_efficient) == -1:
-                    most_efficient = current_index
+            current_index = self.__table_metadata__.get_index(item)
+            if current_index and (not most_efficient or current_index.compare(most_efficient) == -1):
+                most_efficient = current_index
         return most_efficient
 
     def __get_all_primary_keys__(self):
         primary_keys = []
-        for primary_key_path in os.listdir(os.path.join(self.__path__, "data")):
+        for primary_key_path in os.listdir(self.__get_data_path__()):
             primary_key = self.__get_primary_key_from_path__(primary_key_path)
             if primary_key:
                 primary_keys.append(primary_key)
@@ -80,11 +79,11 @@ class Table:
             raise WrongParameterError("No attributes found")
         rows = []
         for primary_key in primary_keys:
-            rows.append(self.get_by_primary_key(str(primary_key).replace("json", '')))
+            rows.append(self.get_by_primary_key(str(primary_key)))
         return rows
 
     def __get_primary_key_path__(self, primary_key):
-        path = os.path.join(self.__path__, "data", "{}.json".format(primary_key))
+        path = os.path.join(self.__get_data_path__(), "{}.json".format(primary_key))
         if os.path.isfile(primary_key):
             return path
         return None
@@ -98,3 +97,6 @@ class Table:
             if not object_1 or attribute[1] != object_1[attribute[0]]:
                 return False
         return True
+
+    def __get_data_path__(self):
+        return os.path.join(self.__path__, "data")
