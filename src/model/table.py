@@ -40,9 +40,9 @@ class Table:
         if not query or str(query).isspace:
             return None
         efficient_value = None
-        for item in query.keys():
-            current_index = self.__table_metadata__.get_index(item)
-            current_value = current_index.get_index_value(query[item])
+        for index_name in query.keys():
+            current_index = self.__table_metadata__.get_index(index_name)
+            current_value = current_index.get_index_value(query[index_name])
             if current_index and (not efficient_value or current_value.compare(efficient_value)) > 0:
                 efficient_value = current_value
         return efficient_value.get_index()
