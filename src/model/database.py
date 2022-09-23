@@ -51,3 +51,7 @@ class Database:
     def set(self, table_name, data):
         table = self.get_table(table_name)
         table.set(data)
+
+    def clear(self):
+        for table_name in self.tables:
+            self.tables[table_name].clear()

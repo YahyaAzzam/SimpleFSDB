@@ -35,7 +35,7 @@ class Table:
         return data
 
     @staticmethod
-    def generate_num(path):
+    def __generate_num__(path):
         while os.path.exists(path):
             primary_key = int((time.time()*1000)%1e7)
             path = Table.__get_row_path__(path, primary_key)
@@ -44,7 +44,7 @@ class Table:
     @staticmethod
     def __get_row_path__(path, primary_key):
         if primary_key is None:
-            primary_key = Table.generate_num(path)
+            primary_key = Table.__generate_num__(path)
         return os.path.join(path, "{}.json".format(primary_key))
 
     def set(self, data):
@@ -53,29 +53,32 @@ class Table:
         if primary_key is not None:
             existing_row = self.get_by_primary_key(primary_key)
         try:
-            self.delete(existing_row)
             data = self.__serialize_row__(data)
-            Table.add_to_index(data, self.__table_metadata__.index_keys, data[self.get_primary_key()])
-        except:
-            raise WrongParameterError("data exists")
+            self.delete_index(existing_row)
+            self.add_to_index(data, data[self.get_primary_key()])
+        except Exception:
+            raise OverwriteError("data exists")
 
-    @staticmethod
-    def delete_index(data, indices, primary_key):
+    def delete_index(self, data):
+        if data is None:
+            return
+        indices = self.__table_metadata__.index_keys
+        primary_key = data[self.get_primary_key()]
         for index in indices:
             if index in data:
                 indices[index].remove_value(data[index], primary_key)
 
-    @staticmethod
-    def add_to_index(data, indices, primary_key):
+    def add_to_index(self, data, primary_key):
+        indices = self.__table_metadata__.index_keys
         for index in indices:
             if index in data:
                 indices[index].add_value(data[index], primary_key)
 
-    def delete(self, data):
-        if data is not None:
-            primary_key = data[self.get_primary_key()]
-            Table.delete_index(data, self.__table_metadata__.index_keys, primary_key)
-        pass
+    def delete(self, primary_key):
+            data = self.get_by_primary_key(primary_key)
+            self.delete_index(data)
+            path = Table.__get_row_path__(self.__path__, primary_key)
+            pathlib.Path(path).unlink()
 
     def get(self):
         pass
@@ -85,3 +88,9 @@ class Table:
         if os.path.exists(path):
             with open(path, 'r') as file:
                 return json.load(file)
+
+    def clear(self):
+        for row in os.listdir(self.__path__):
+            if ((row!= "{}_schema.json".format(self.__table_metadata__.name))and
+               (row not in TableMetaData.get_indices_names(self.__table_metadata__.index_keys))):
+                    self.delete(row.replace(".json",""))

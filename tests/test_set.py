@@ -10,7 +10,6 @@ from main import *
 class Test(unittest.TestCase):
     SCHEMA_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''), 'tests')
     CreateCommand(os.path.join(SCHEMA_PATH, "Check-in-schema.json")).execute()
-
     def test_wrong_input_database(self):
         # didn't enter database name
         try:
@@ -77,6 +76,7 @@ class Test(unittest.TestCase):
     def test_set(self):
         # test set file in different tables
         database = Database(database_name = "csed25")
+
         for table in database.tables:
             table_mate_data = TableMetaData(database.tables[table])
             value = {}
@@ -88,10 +88,9 @@ class Test(unittest.TestCase):
             self.assertTrue(os.path.exists(os.path.join(table_mate_data.get_path(), "1.json")))
 
             #check blocking reset file
-            try:
-                SetCommand("csed25", database.tables[table].get_name(), str(value)).execute()
-            except WrongParameterError:
-                pass
+            if table_mate_data.overwrite == "False":
+                with self.assertRaises(OverwriteError):
+                    SetCommand("csed25", database.tables[table].get_name(), str(value)).execute()
 
             #create file without passing the primary_key
             try:
@@ -104,6 +103,7 @@ class Test(unittest.TestCase):
                 value[table_mate_data.columns[1]] = "mahmoud"
                 SetCommand("csed25", database.tables[table].get_name(), str(value)).execute()
                 self.assertEqual(database.tables[table].get_by_primary_key(1), value)
+
         # end the test and delete the database
         # delete database
         path = database.get_path().replace("csed25","")
