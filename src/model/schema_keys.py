@@ -8,4 +8,4 @@ class Keys(ABC):
     COLUMNS = "columns"
     PRIMARY_KEY = "primary_key"
     INDEX_KEYS = "index_keys"
-    CONSISTENCY = "Consistency"
+    CONSISTENCY = "consistency"

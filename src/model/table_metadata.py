@@ -1,14 +1,13 @@
-from model.index import *
+from model.primary_key_index import *
 
 
 class TableMetaData:
     def __init__(self, table):
-        TableMetaData.__validate__(table.table_schema)
+        self.__path__ = table.get_path()
         self.name = table.table_schema[Keys.NAME]
         self.primary_key = table.table_schema[Keys.PRIMARY_KEY]
         self.columns = table.table_schema[Keys.COLUMNS]
-        self.__path__ = table.get_path()
-        self.index_keys = []
+        self.index_keys = [PrimaryKeyIndex(self.primary_key, self)]
         for index in table.table_schema[Keys.INDEX_KEYS]:
             self.index_keys.append(Index(index, self))
 
@@ -27,7 +26,7 @@ class TableMetaData:
     @staticmethod
     def __create_table_schema__(table_schema, path):
         indices = table_schema[Keys.INDEX_KEYS]
-        table_schema.update({Keys.INDEX_KEYS: TableMetaData.__get_indices_names__(table_schema[Keys.INDEX_KEYS])})
+        table_schema.update({Keys.INDEX_KEYS: TableMetaData.get_indices_names(table_schema[Keys.INDEX_KEYS])})
         with open(os.path.join(path, "{}_schema.json".format(table_schema[Keys.NAME])), 'w') as file:
             json.dump(table_schema, file)
         table_schema.update({Keys.INDEX_KEYS: indices})
@@ -36,9 +35,25 @@ class TableMetaData:
         for index in self.index_keys:
             index.serialize()
 
-    @staticmethod
-    def __get_indices_names__(index_keys):
+    def get_indices_names(self):
         indices_names = []
-        for index in index_keys:
+        for index in self.index_keys:
             indices_names.append(index.name)
         return indices_names
+
+    def get_index(self, index_name):
+        for index in self.index_keys:
+            if index.name == index_name:
+                return index
+        return None
+
+    def get_index_primary_keys(self, index_name, index_value):
+        for index in self.index_keys:
+            if index.name == index_name:
+                return index.get_primary_keys(index_value)
+        raise WrongParameterError("Wrong index name entered")
+
+    @staticmethod
+    def get_table_schema(path, table_name):
+        with open(os.path.join(path, "{}_schema.json".format(table_name)), 'r') as file:
+            return json.loads(file)
