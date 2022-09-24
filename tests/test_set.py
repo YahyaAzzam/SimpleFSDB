@@ -86,7 +86,7 @@ class Test(unittest.TestCase):
             SetCommand("csed25", database.tables[table].get_name(), str(value)).execute()
 
             #check create the file in the table
-            self.assertTrue(os.path.exists(os.path.join(table_mate_data.get_path(), "1.json")))
+            self.assertTrue(os.path.exists(os.path.join(database.tables[table].__get_data_path__(), "1.json")))
 
             #check blocking reset file
             if table_mate_data.overwrite == "False":
@@ -96,14 +96,14 @@ class Test(unittest.TestCase):
             #create file without passing the primary_key
             try:
                 SetCommand("csed25", database.tables[table].get_name(), str({"Last_name":"goda"})).execute()
-            except:
+            except Exception:
                 self.assertTrue(False)
 
             #check reset file with new value
             if table_mate_data.overwrite == "True":
                 value[table_mate_data.columns[1]] = "mahmoud"
                 SetCommand("csed25", database.tables[table].get_name(), str(value)).execute()
-                self.assertEqual(database.tables[table].get_by_primary_key(1), value)
+                self.assertEqual(database.tables[table].get_by_primary_key(1).data, value)
 
         # end the test and delete the database
         # delete database

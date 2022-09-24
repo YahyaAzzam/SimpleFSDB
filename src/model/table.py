@@ -1,5 +1,5 @@
 from model.table_metadata import *
-import uuid
+from model.row import *
 
 
 class Table:
@@ -11,7 +11,7 @@ class Table:
         self.__table_metadata__ = TableMetaData(self)
 
     def serialize(self):
-        os.makedirs(self.__path__, exist_ok=True)
+        os.makedirs(self.__get_data_path__(), exist_ok=True)
         self.__table_metadata__.serialize()
 
     def get_name(self):
@@ -19,32 +19,21 @@ class Table:
 
     def get_path(self):
         return self.__path__
+
+    def __get_data_path__(self):
+        return os.path.join(self.__path__, "data")
         
     def get_primary_key(self):
         return self.__table_metadata__.primary_key
 
-    # Will be implemented later in the project
-    def __serialize_row__(self, data):
-        primary_key = self. __get_row_primary_key__(data.get(self.get_primary_key()))
-        can_overwrite = eval(self.__table_metadata__.overwrite)
-        path = self.__get_row_path__(primary_key)
-        mode = 'w' if  can_overwrite else 'x'
-        data[self.get_primary_key()] = primary_key
-        with open(path, mode) as file:
-            json.dump(data, file)
-        return data
+    def __get_primary_key_from_path__(self, path):
+        return str(path).replace(self.__path__, '').replace(".json", '').replace("data", '')
 
-    def  __get_row_primary_key__(self, primary_key):
-        if primary_key is not None:
-            return primary_key
-        path = self.__path__
-        while primary_key is None and os.path.exists(path):
-            primary_key = uuid.uuid1().node
-            path = self.__get_row_path__(primary_key)
-        return primary_key
+    def overwrite(self):
+        return self.__table_metadata__.overwrite
 
-    def __get_row_path__(self, primary_key):
-        return os.path.join(self.__path__, "{}.json".format(primary_key))
+    def get_indices(self):
+        return self.__table_metadata__.index_keys
 
     def set(self, data):
         primary_key = data.get(self.get_primary_key())
@@ -52,45 +41,89 @@ class Table:
         if primary_key is not None:
             existing_row = self.get_by_primary_key(primary_key)
         try:
-            data = self.__serialize_row__(data)
-            self.delete_index(existing_row)
-            self.add_to_index(data, data[self.get_primary_key()])
+            row = Row(self, data)
+            row.serialize()
+            existing_row.delete_index() if existing_row else None
         except Exception:
             raise OverwriteError("data exists")
 
-    def delete_index(self, data):
-        if data is None:
-            return
-        indices = self.__table_metadata__.index_keys
-        primary_key = data[self.get_primary_key()]
-        for index in indices:
-            if index in data:
-                indices[index].remove_value(data[index], primary_key)
-
-    def add_to_index(self, data, primary_key):
-        indices = self.__table_metadata__.index_keys
-        for index in indices:
-            if index in data:
-                indices[index].add_value(data[index], primary_key)
-
     def delete(self, data):
-            primary_key = data.get(self.get_primary_key())
-            if primary_key is not None:
-                self.delete_index(data)
-                path = self.__get_row_path__(primary_key)
-                pathlib.Path(path).unlink()
+        primary_key = data.get(self.get_primary_key())
+        if primary_key is not None:
+            Row(self, data).delete()
+        else:
+            rows = self.get(data)
+            for row in rows:
+                row.delete()
 
-    def get(self):
-        pass
+    def get(self, query):
+        efficient_index = self.__get_efficient_index__(query)
+        if efficient_index is None:
+            efficient_keys = self.__get_all_primary_keys__()
+        else:
+            efficient_keys = efficient_index.get_primary_keys(query[efficient_index])
+        found_objects = self.__get_rows__(efficient_keys)
+        return self.__filter_by_query__(found_objects, query)
+
+    def __get_efficient_index__(self, query):
+        if not query or str(query).isspace:
+            return None
+        efficient_value = None
+        for index_name in query.keys():
+            current_index = self.__table_metadata__.get_index(index_name)
+            current_value = current_index.get_index_value(query[index_name])
+            if current_index and (not efficient_value or current_value.compare(efficient_value)) > 0:
+                efficient_value = current_value
+        return efficient_value.get_index()
+
+    def __get_all_primary_keys__(self):
+        primary_keys = []
+        for primary_key_path in os.listdir(self.__get_data_path__()):
+            primary_key = self.__get_primary_key_from_path__(primary_key_path)
+            primary_keys.append(primary_key)
+        return primary_keys
 
     def get_by_primary_key(self, primary_key):
-        path = os.path.join(self.__path__, "{}.json".format(primary_key))
-        if os.path.exists(path):
-            with open(path, 'r') as file:
-                return json.load(file)
+        path = self.__get_primary_key_path__(primary_key)
+        if path is None or not os.path.isfile(path):
+            return None
+        with open(path, 'r') as file:
+            data = json.load(file)
+        return Row(self, data)
+
+    @staticmethod
+    def __filter_by_query__(found_objects, query):
+        if not query or str(query).isspace():
+            return found_objects
+        filtered_objects = []
+        for object_to_compare in found_objects:
+            if Table.compare(object_to_compare.data, query):
+                filtered_objects.append(object_to_compare)
+        return filtered_objects
+
+    def __get_rows__(self, primary_keys):
+        if primary_keys is None or len(primary_keys) == 0:
+            raise WrongParameterError("No attributes found")
+        rows = []
+        for primary_key in primary_keys:
+            rows.append(self.get_by_primary_key(str(primary_key)))
+        return rows
+
+    def __get_primary_key_path__(self, primary_key):
+        path = os.path.join(self.__get_data_path__(), "{}.json".format(primary_key))
+        if os.path.isfile(path):
+            return path
+        return None
 
     def clear(self):
-        for row in os.listdir(self.__path__):
+        for row in os.listdir(self.__get_data_path__()):
             if ((row!= "{}_schema.json".format(self.__table_metadata__.name))and
                (row not in TableMetaData.get_indices_names(self.__table_metadata__.index_keys))):
-                    self.delete(self.get_by_primary_key(row.replace(".json","")))
+                    self.get_by_primary_key(row.replace(".json","")).delete()
+
+    @staticmethod
+    def compare(object_1, object_2):
+        for attribute in object_2.items():
+            if not object_1 or attribute[1] != object_1[attribute[0]]:
+                return False
+        return True

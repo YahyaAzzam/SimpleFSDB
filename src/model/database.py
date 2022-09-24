@@ -55,3 +55,7 @@ class Database:
     def clear(self):
         for table_name in self.tables:
             self.tables[table_name].clear()
+
+    def delete(self, table_name, data):
+        table = self.get_table(table_name)
+        table.delete(data)
