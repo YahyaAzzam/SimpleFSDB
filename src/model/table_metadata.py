@@ -1,4 +1,4 @@
-from model.index import *
+from model.primary_key_index import *
 
 
 class TableMetaData:
@@ -9,7 +9,7 @@ class TableMetaData:
         self.primary_key = table.table_schema[Keys.PRIMARY_KEY]
         self.columns = table.table_schema[Keys.COLUMNS]
         self.overwrite = table.table_schema[Keys.OVERWRITE]
-        self.index_keys = {}
+        self.index_keys = {self.primary_key: PrimaryKeyIndex(self.primary_key, self)}
         for index_name in table.table_schema[Keys.INDEX_KEYS]:
             self.index_keys[index_name] = Index(index_name, self)
 
@@ -43,7 +43,20 @@ class TableMetaData:
         for index_name in index_keys:
             indices_names.append(index_name)
         return indices_names
+        
     @staticmethod
     def load_table_schema(path, table_name):
         with open(os.path.join(path, "{}_schema.json".format(table_name)), 'r') as file:
             return json.load(file)
+
+    def get_index(self, index_name):
+        for index in self.index_keys:
+            if index.name == index_name:
+                return index
+        return None
+
+    def get_index_primary_keys(self, index_name, index_value):
+        for index in self.index_keys:
+            if index.name == index_name:
+                return index.get_primary_keys(index_value)
+        raise WrongParameterError("Wrong index name entered")

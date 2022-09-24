@@ -59,3 +59,7 @@ class Database:
     def delete(self, table_name, data):
         table = self.get_table(table_name)
         table.delete(data)
+        
+    def get(self, table_name, query):
+        table = self.get_table(table_name)
+        return table.get(query)

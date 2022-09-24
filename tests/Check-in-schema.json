@@ -7,7 +7,7 @@
             "primary_key"  : "ReservationId",
             "index_keys" : ["First_name", "Last_name", "Seat"],
             "overwrite" : "False",
-            "Consistently" : "Eventual"
+            "consistently" : "Eventual"
         },
         {
             "name" : "Flights",
@@ -15,7 +15,7 @@
             "primary_key"  : "FlightId",
             "index_keys" : ["PlaneId", "Seats_reserved"],
             "overwrite" : "False",
-            "Consistently" : "Eventual"
+            "consistently" : "Eventual"
         },
         {
             "name" : "Planes",
@@ -23,15 +23,15 @@
             "primary_key"  : "PlaneId",
             "index_keys" : ["Seats_number", "Rows_number", "Seats_distribution"],
             "overwrite" : "False",
-            "Consistently" : "Eventual"
+            "consistently" : "Eventual"
         },
-	{
+	      {
             "name" : "Seats",
             "columns" : ["FlightId_SeatId" ,"Last_name", "ReservationId"],
             "primary_key"  : "FlightId_SeatId",
             "index_keys" : ["Last_name"],
             "overwrite" : "True",
-            "Consistently" : "Strong"
+            "consistently" : "Strong"
         }
      ] 
 }

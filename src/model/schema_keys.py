@@ -9,4 +9,4 @@ class Keys(ABC):
     PRIMARY_KEY = "primary_key"
     INDEX_KEYS = "index_keys"
     OVERWRITE = "overwrite"
-    CONSISTENCY = "Consistency"
+    CONSISTENCY = "consistency"
