@@ -48,13 +48,9 @@ class Table:
             raise OverwriteError("data exists")
 
     def delete(self, data):
-        primary_key = data.get(self.get_primary_key())
-        if primary_key is not None:
-            Row(self, data).delete()
-        else:
-            rows = self.get(data)
-            for row in rows:
-                row.delete()
+        rows = self.get(data)
+        for row in rows:
+            row.delete()
 
     def get(self, query):
         efficient_index = self.__get_efficient_index__(query)

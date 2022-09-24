@@ -1,6 +1,4 @@
 import argparse
-
-
 def parse_args():
     parser = argparse.ArgumentParser(description="Auto Sizer agent")
     parser.add_argument(
@@ -34,15 +32,9 @@ def parse_args():
         help="Primary key is a unique key",
     )
     parser.add_argument(
-        "-p",
-        "--parameter",
+        "-q",
+        "--query",
         type=str,
-        help="Parameter desired to be set",
-    )
-    parser.add_argument(
-        "-v",
-        "--value",
-        type=str,
-        help="Value of the parameter",
+        help="Query desired to be found",
     )
     return parser.parse_args()
