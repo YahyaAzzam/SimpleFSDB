@@ -18,11 +18,6 @@ class Index:
         if index_name not in table_columns:
             raise WrongParameterError("Index {} not found".format(index_name))
 
-    @staticmethod
-    def __validate_value_name__(value_name):
-        if len(value_name) == 0 or value_name.isspace():
-            raise NoParameterError("value_name parameter not entered")
-
     def serialize(self):
         os.makedirs(self.__path__, exist_ok=True)
 

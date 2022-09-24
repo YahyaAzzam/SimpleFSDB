@@ -80,7 +80,7 @@ class Table:
 
     def __get_primary_key_path__(self, primary_key):
         path = os.path.join(self.__get_data_path__(), "{}.json".format(primary_key))
-        if os.path.isfile(primary_key):
+        if os.path.isfile(path):
             return path
         return None
 
