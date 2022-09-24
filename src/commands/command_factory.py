@@ -1,6 +1,6 @@
 from commands.create_command import *
 from commands.set_command import *
-from get_command import *
+from commands.get_command import *
 from commands.delete_command import *
 
 
