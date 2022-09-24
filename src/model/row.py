@@ -40,13 +40,13 @@ class Row:
     def __add_to_index__(self):
         indices = self.table.get_indices()
         for index in indices:
-            if index in self.data:
+            if index != self.table.get_primary_key() and index in self.data:
                 indices[index].add_value(self.data[index], self.primary_key)
 
     def delete_index(self):
         indices = self.table.get_indices()
         for index in indices:
-            if index in self.data:
+            if index != self.table.get_primary_key() and index in self.data:
                 indices[index].remove_value(self.data[index], self.primary_key)
 
     def delete(self):
