@@ -2,7 +2,7 @@ from model.table import *
 
 
 class Database:
-    DATABASE_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''), 'tests')
+    DATABASE_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''),'tests')
 
     def __init__(self, schema_data=None, database_name=None):
         Database.__validate__(schema_data, database_name)
