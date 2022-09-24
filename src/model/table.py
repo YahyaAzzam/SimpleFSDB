@@ -66,7 +66,8 @@ class Table:
         if not os.path.exists(path):
             return None
         with open(path, 'r') as file:
-            return json.load(file)
+            data = json.load(file)
+        return Row(self, data)
 
     @staticmethod
     def __filter_by_query__(found_objects, query):
@@ -83,7 +84,7 @@ class Table:
             raise WrongParameterError("No attributes found")
         rows = []
         for primary_key in primary_keys:
-            rows.append(Row(self, self.get_by_primary_key(str(primary_key))))
+            rows.append(self.get_by_primary_key(str(primary_key)))
         return rows
 
     def __get_primary_key_path__(self, primary_key):
