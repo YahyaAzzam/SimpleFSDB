@@ -1,5 +1,4 @@
 from model.table_metadata import *
-from model.row import *
 
 
 class Table:
@@ -11,7 +10,7 @@ class Table:
         self.__table_metadata__ = TableMetaData(self)
 
     def serialize(self):
-        os.makedirs(os.path.join(self.__get_data_path__()), exist_ok=True)
+        os.makedirs(os.path.join(self.__path__, "data"), exist_ok=True)
         self.__table_metadata__.serialize()
 
     def get_name(self):
@@ -35,13 +34,6 @@ class Table:
             efficient_keys = efficient_index.get_primary_keys(query[efficient_index])
         found_objects = self.__get_rows__(efficient_keys)
         return self.__filter_by_query__(found_objects, query)
-
-    def get_data(self, query):
-        rows = self.get(query)
-        data = []
-        for row in rows:
-            data.append(row.data)
-        return data
 
     def __get_efficient_index__(self, query):
         if not query or str(query).isspace:
@@ -74,7 +66,7 @@ class Table:
             return found_objects
         filtered_objects = []
         for object_to_compare in found_objects:
-            if Table.compare(object_to_compare.data, query):
+            if Table.compare(object_to_compare, query):
                 filtered_objects.append(object_to_compare)
         return filtered_objects
 
@@ -83,7 +75,7 @@ class Table:
             raise WrongParameterError("No attributes found")
         rows = []
         for primary_key in primary_keys:
-            rows.append(Row(self, self.get_by_primary_key(str(primary_key))))
+            rows.append(self.get_by_primary_key(str(primary_key)))
         return rows
 
     def __get_primary_key_path__(self, primary_key):

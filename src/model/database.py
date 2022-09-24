@@ -50,4 +50,4 @@ class Database:
 
     def get(self, table_name, query):
         table = self.get_table(table_name)
-        return table.get_data(query)
+        return table.get(query)
