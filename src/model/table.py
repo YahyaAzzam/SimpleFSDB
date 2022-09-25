@@ -1,5 +1,6 @@
 from model.table_metadata import *
 from model.row import *
+import shutil
 
 
 class Table:
@@ -26,9 +27,6 @@ class Table:
     def get_primary_key(self):
         return self.__table_metadata__.primary_key
 
-    def __get_primary_key_from_path__(self, path):
-        return str(path).replace(self.__path__, '').replace(".json", '').replace("data", '')
-
     def overwrite(self):
         return self.__table_metadata__.overwrite
 
@@ -47,8 +45,8 @@ class Table:
         except Exception:
             raise OverwriteError("data exists")
 
-    def delete(self, data):
-        rows = self.get(data)
+    def delete(self, query):
+        rows = self.get(query)
         for row in rows:
             row.delete()
 
@@ -75,17 +73,12 @@ class Table:
     def __get_all_primary_keys__(self):
         primary_keys = []
         for primary_key_path in os.listdir(self.__get_data_path__()):
-            primary_key = self.__get_primary_key_from_path__(primary_key_path)
+            primary_key = os.path.basename(primary_key_path)
             primary_keys.append(primary_key)
         return primary_keys
 
     def get_by_primary_key(self, primary_key):
-        path = self.__get_primary_key_path__(primary_key)
-        if path is None or not os.path.isfile(path):
-            return None
-        with open(path, 'r') as file:
-            data = json.load(file)
-        return Row(self, data)
+        return Row.load_by_primary_key(self, primary_key)
 
     @staticmethod
     def __filter_by_query__(found_objects, query):
@@ -93,7 +86,7 @@ class Table:
             return found_objects
         filtered_objects = []
         for object_to_compare in found_objects:
-            if Table.compare(object_to_compare.data, query):
+            if object_to_compare.compare(query):
                 filtered_objects.append(object_to_compare)
         return filtered_objects
 
@@ -105,17 +98,12 @@ class Table:
             rows.append(self.get_by_primary_key(str(primary_key)))
         return rows
 
-    def __get_primary_key_path__(self, primary_key):
-        path = os.path.join(self.__get_data_path__(), "{}.json".format(primary_key))
-        if os.path.isfile(path):
-            return path
-        return None
-
     def clear(self):
-        for row in os.listdir(self.__get_data_path__()):
-            if ((row!= "{}_schema.json".format(self.__table_metadata__.name))and
-               (row not in TableMetaData.get_indices_names(self.__table_metadata__.index_keys))):
-                    self.get_by_primary_key(row.replace(".json","")).delete()
+        for table_element in os.listdir(self.__path__):
+            path = os.path.join(self.__path__, table_element)
+            if os.path.isdir(path):
+                shutil.rmtree(path)
+                os.mkdir(path)
 
     @staticmethod
     def compare(object_1, object_2):
