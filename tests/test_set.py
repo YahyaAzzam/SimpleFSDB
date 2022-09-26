@@ -85,7 +85,7 @@ class Test(unittest.TestCase):
             SetCommand("csed25", database.tables[table].get_name(), str(value)).execute()
 
             #check create the file in the table
-            self.assertTrue(os.path.exists(os.path.join(database.tables[table].__get_data_path__(), "1.json")))
+            self.assertTrue(os.path.exists(os.path.join(database.tables[table].get_data_path(), "1.json")))
 
             #check blocking reset file
             if table_mate_data.overwrite == "False":

@@ -5,7 +5,7 @@ class Database:
     DATABASE_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''), 'storage')
     def __init__(self, schema_data = None, database_name = None):
         Database.__validate__(schema_data, database_name)
-        if schema_data is not None:
+        if schema_data:
             self.__initialize_by_schema_data__(schema_data)
         else:
             self.__initialize_by_database_name__(database_name)

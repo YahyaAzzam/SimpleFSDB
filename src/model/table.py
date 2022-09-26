@@ -12,7 +12,7 @@ class Table:
         self.__table_metadata__ = TableMetaData(self)
 
     def serialize(self):
-        os.makedirs(self.__get_data_path__(), exist_ok=True)
+        os.makedirs(os.path.join(self.get_data_path(), "Lock"), exist_ok=True)
         self.__table_metadata__.serialize()
 
     def get_name(self):
@@ -21,34 +21,32 @@ class Table:
     def get_path(self):
         return self.__path__
 
-    def __get_data_path__(self):
+    def get_data_path(self):
         return os.path.join(self.__path__, "data")
         
     def get_primary_key(self):
         return self.__table_metadata__.primary_key
 
-    def overwrite(self):
-        return self.__table_metadata__.overwrite
+    def can_overwrite(self):
+        return eval(self.__table_metadata__.overwrite)
 
     def get_indices(self):
         return self.__table_metadata__.index_keys
 
     def set(self, data):
         primary_key = data.get(self.get_primary_key())
-        existing_row = None
-        if primary_key is not None:
-            existing_row = self.get_by_primary_key(primary_key)
-        try:
-            row = Row(self, data)
-            row.serialize()
-            existing_row.delete_index() if existing_row else None
-        except Exception:
+        existing_row = self.get_by_primary_key(primary_key) if primary_key else None
+        row = Row(self, data)
+        if not self.can_overwrite() and row.row_exists():
             raise OverwriteError("data exists")
+        existing_row.delete() if existing_row else None
+        row.serialize()
 
     def delete(self, query):
         rows = self.get(query)
         for row in rows:
             row.delete()
+            pathlib.Path(row.get_row_path()).unlink()
 
     def get(self, query):
         efficient_index = self.__get_efficient_index__(query)
@@ -72,9 +70,9 @@ class Table:
 
     def __get_all_primary_keys__(self):
         primary_keys = []
-        for primary_key_path in os.listdir(self.__get_data_path__()):
-            primary_key = os.path.basename(primary_key_path)
-            primary_keys.append(primary_key)
+        for primary_key in os.listdir(self.get_data_path()):
+            if primary_key != "Lock":
+                primary_keys.append(primary_key.replace(".json",""))
         return primary_keys
 
     def get_by_primary_key(self, primary_key):
@@ -86,13 +84,11 @@ class Table:
             return found_objects
         filtered_objects = []
         for object_to_compare in found_objects:
-            if object_to_compare.compare(query):
+            if object_to_compare and object_to_compare.compare(query):
                 filtered_objects.append(object_to_compare)
         return filtered_objects
 
     def __get_rows__(self, primary_keys):
-        if primary_keys is None or len(primary_keys) == 0:
-            raise WrongParameterError("No attributes found")
         rows = []
         for primary_key in primary_keys:
             rows.append(self.get_by_primary_key(str(primary_key)))

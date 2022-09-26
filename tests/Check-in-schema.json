@@ -6,7 +6,7 @@
             "columns" : ["ReservationId", "First_name", "Last_name", "Passport_Id", "Gender", "Age", "Flight_Id", "Luggage_allowance", "Seat"],
             "primary_key"  : "ReservationId",
             "index_keys" : ["First_name", "Last_name", "Seat"],
-            "overwrite" : "CantOverwrite",
+            "overwrite" : "False",
             "consistently" : "Eventual"
         },
         {
@@ -14,7 +14,7 @@
             "columns" : ["FlightId", "PlaneId", "Seats_reserved", "Take_off", "Destination", "Stops", "Departure_time", "Departure_date", "Arrival_time", "Arrival_date"],
             "primary_key"  : "FlightId",
             "index_keys" : ["PlaneId", "Seats_reserved"],
-            "overwrite" : "CantOverwrite",
+            "overwrite" : "False",
             "consistently" : "Eventual"
         },
         {
@@ -22,7 +22,7 @@
             "columns" : ["PlaneId" ,"Plane_manufacture", "Seats_number", "Rows_number", "Seats_distribution"],
             "primary_key"  : "PlaneId",
             "index_keys" : ["Seats_number", "Rows_number", "Seats_distribution"],
-            "overwrite" : "CantOverwrite",
+            "overwrite" : "False",
             "consistently" : "Eventual"
         },
 	      {
@@ -30,7 +30,7 @@
             "columns" : ["FlightId_SeatId" ,"Last_name", "ReservationId"],
             "primary_key"  : "FlightId_SeatId",
             "index_keys" : ["Last_name"],
-            "overwrite" : "CanOverwrite",
+            "overwrite" : "True",
             "consistently" : "Strong"
         }
      ] 

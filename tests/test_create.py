@@ -88,7 +88,8 @@ class Test(unittest.TestCase):
             with open(os.path.join(path, table[Keys.NAME] + "_schema.json")) as file:
                 table = json.load(file)
             for index in table[Keys.INDEX_KEYS]:
-                self.assertTrue(os.path.exists(os.path.join(path, index)))
+                if index != table[Keys.PRIMARY_KEY]:
+                    self.assertTrue(os.path.exists(os.path.join(path, index)))
         # delete database
         if os.path.exists(self.DATABASE_PATH):
             shutil.rmtree(self.DATABASE_PATH)

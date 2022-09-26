@@ -86,7 +86,7 @@ class Test(unittest.TestCase):
             DeleteCommand("csed25", database.tables[table].get_name(), str(value)).execute()
 
             #check delete file in the table
-            self.assertFalse(os.path.exists(os.path.join(database.tables[table].__get_data_path__(), "1.json")))
+            self.assertFalse(os.path.exists(os.path.join(database.tables[table].get_data_path(), "1.json")))
 
             #check delete file without the primary_key
             try:
