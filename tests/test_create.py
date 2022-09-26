@@ -89,7 +89,7 @@ class Test(unittest.TestCase):
                 table = json.load(file)
             for index in table[Keys.INDEX_KEYS]:
                 if index != table[Keys.PRIMARY_KEY]:
-                    self.assertTrue(os.path.exists(os.path.join(path, index)))
+                    self.assertTrue(os.path.exists(os.path.join(path, "indices", index)))
         # delete database
         if os.path.exists(self.DATABASE_PATH):
             shutil.rmtree(self.DATABASE_PATH)
