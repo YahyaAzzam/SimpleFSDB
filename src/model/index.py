@@ -8,7 +8,7 @@ class Index:
     def __init__(self, index_name, table_metadata):
         Index.__validate_index__(index_name, table_metadata.columns)
         self.name = index_name
-        self.__path__ = os.path.join(table_metadata.get_path(), self.name)
+        self.__path__ = os.path.join(table_metadata.get_path(), "indices", self.name)
 
     def get_path(self):
         return self.__path__
@@ -17,11 +17,6 @@ class Index:
     def __validate_index__(index_name, table_columns):
         if index_name not in table_columns:
             raise WrongParameterError("Index {} not found".format(index_name))
-
-    @staticmethod
-    def __validate_value_name__(value_name):
-        if len(value_name) == 0 or value_name.isspace():
-            raise NoParameterError("value_name parameter not entered")
 
     def serialize(self):
         os.makedirs(self.__path__, exist_ok=True)

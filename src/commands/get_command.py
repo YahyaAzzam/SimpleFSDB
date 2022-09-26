@@ -1,18 +1,14 @@
-import json
 from commands.abstract_command import *
 from output.exceptions import *
 from model.database import *
 
 
 class GetCommand(AbstractCommand):
-
     def __init__(self, database_name, table_name, query):
         GetCommand.validate(database_name, table_name)
         self.database_name = database_name
         self.table_name = table_name
-        if not query or str(query.isspace()):
-            query = {}
-        self.query = json.loads(query)
+        self.query = {} if not query else eval(query)
 
     def execute(self):
         database = Database(database_name=self.database_name)

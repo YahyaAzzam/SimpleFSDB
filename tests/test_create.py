@@ -10,7 +10,7 @@ from main import *
 class Test(unittest.TestCase):
     schema_name = "Check-in-schema.json"
     SCHEMA_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''), 'tests')
-    DATABASE_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''), 'tests')
+    DATABASE_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''), 'storage')
     schema_path = os.path.join(SCHEMA_PATH, schema_name)
     file = open(schema_path, 'r')
     data = json.load(file)
@@ -88,11 +88,11 @@ class Test(unittest.TestCase):
             with open(os.path.join(path, table[Keys.NAME] + "_schema.json")) as file:
                 table = json.load(file)
             for index in table[Keys.INDEX_KEYS]:
-                self.assertTrue(os.path.exists(os.path.join(path, index)))
+                if index != table[Keys.PRIMARY_KEY]:
+                    self.assertTrue(os.path.exists(os.path.join(path, "indices", index)))
         # delete database
-        path = os.path.join(self.DATABASE_PATH, self.data[Keys.DATABASE])
-        if os.path.exists(path):
-            shutil.rmtree(path)
+        if os.path.exists(self.DATABASE_PATH):
+            shutil.rmtree(self.DATABASE_PATH)
 
 
 if __name__ == '__main__':
