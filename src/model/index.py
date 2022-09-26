@@ -8,7 +8,7 @@ class Index:
     def __init__(self, index_name, table_metadata):
         Index.__validate_index__(index_name, table_metadata.columns)
         self.name = index_name
-        self.__path__ = os.path.join(table_metadata.get_path(), self.name)
+        self.__path__ = os.path.join(table_metadata.get_path(), "indices", self.name)
 
     def get_path(self):
         return self.__path__

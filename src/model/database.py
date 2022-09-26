@@ -50,7 +50,7 @@ class Database:
 
     def set(self, table_name, data):
         table = self.get_table(table_name)
-        table.set(data)
+        table.set(Row(table, data))
 
     def clear(self):
         for table_name in self.tables:

@@ -12,7 +12,8 @@ class Table:
         self.__table_metadata__ = TableMetaData(self)
 
     def serialize(self):
-        os.makedirs(os.path.join(self.get_data_path(), "Lock"), exist_ok=True)
+        os.makedirs(os.path.join(self.get_data_path()), exist_ok=True)
+        os.makedirs(os.path.join(self.__path__, "Lock"), exist_ok=True)
         self.__table_metadata__.serialize()
 
     def get_name(self):
@@ -23,6 +24,9 @@ class Table:
 
     def get_data_path(self):
         return os.path.join(self.__path__, "data")
+
+    def get_lock_path(self):
+        return os.path.join(self.__path__, "lock")
         
     def get_primary_key(self):
         return self.__table_metadata__.primary_key
@@ -33,10 +37,9 @@ class Table:
     def get_indices(self):
         return self.__table_metadata__.index_keys
 
-    def set(self, data):
-        primary_key = data.get(self.get_primary_key())
+    def set(self, row):
+        primary_key = row.get_primary_key
         existing_row = self.get_by_primary_key(primary_key) if primary_key else None
-        row = Row(self, data)
         if not self.can_overwrite() and row.row_exists():
             raise OverwriteError("data exists")
         existing_row.delete() if existing_row else None
@@ -71,8 +74,7 @@ class Table:
     def __get_all_primary_keys__(self):
         primary_keys = []
         for primary_key in os.listdir(self.get_data_path()):
-            if primary_key != "Lock":
-                primary_keys.append(primary_key.replace(".json",""))
+            primary_keys.append(primary_key.replace(".json",""))
         return primary_keys
 
     def get_by_primary_key(self, primary_key):
@@ -84,7 +86,7 @@ class Table:
             return found_objects
         filtered_objects = []
         for object_to_compare in found_objects:
-            if object_to_compare and object_to_compare.compare(query):
+            if object_to_compare and object_to_compare.has_attribute(query):
                 filtered_objects.append(object_to_compare)
         return filtered_objects
 

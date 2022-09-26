@@ -19,6 +19,7 @@ class TableMetaData:
 
     def serialize(self):
         TableMetaData.__create_table_schema__(self.__dict__, self.__path__)
+        os.makedirs(self.__path__, exist_ok=True)
         self.__serialize_indices__()
 
     @staticmethod
