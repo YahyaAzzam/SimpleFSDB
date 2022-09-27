@@ -42,7 +42,7 @@ To use this database you need to pass the commands by CMD so we made [SimpleDBDr
   | Primary_key | String | No | |
   | Index_key | List of Strings | No | |
   | Overwrite | String | No | should be True or False only |
-  | Consistently | String | NO | |
+  | Consistently | String | No | |
   
 
 
