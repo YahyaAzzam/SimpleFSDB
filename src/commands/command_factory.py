@@ -2,11 +2,12 @@ from commands.create_command import *
 from commands.set_command import *
 from commands.get_command import *
 from commands.delete_command import *
+from commands.clear_command import *
 
 
 class CommandFactory:
     def __init__(self, input_adaptor):
-        available_commands = {"create", "set", "get", "delete"}
+        available_commands = {"create", "set", "get", "delete", "clear"}
         CommandFactory.validate(input_adaptor, available_commands)
         self.input_adaptor = input_adaptor
 
@@ -20,6 +21,9 @@ class CommandFactory:
             return GetCommand(self.input_adaptor.database, self.input_adaptor.table, self.input_adaptor.query)
         elif cmd == "delete":
             return DeleteCommand(self.input_adaptor.database, self.input_adaptor.table, self.input_adaptor.query)
+        elif cmd == "clear":
+            return ClearCommand(self.input_adaptor.database)
+
     @staticmethod
     def validate(input_adaptor, available_commands):
         if input_adaptor.command not in available_commands:
