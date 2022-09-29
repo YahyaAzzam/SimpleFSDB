@@ -7,9 +7,7 @@ class ParsedInput(IInputAdaptor):
         if parser.command == "none" or parser.command is None:
             raise NoParameterError("No command was entered")
         self.command = str(parser.command).lower()
-        self.schema = parser.schema
+        self.schema_path = parser.schema_path
         self.database = parser.database
         self.table = parser.table
-        self.primary_key = parser.primary_key
-        self.parameter = parser.parameter
-        self.value = parser.value
+        self.query = parser.query
