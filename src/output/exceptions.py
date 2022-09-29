@@ -1,3 +1,7 @@
+import sys
+import os
+
+sys.path.append(os.path.dirname(__file__).replace("output", ''))
 from output.status import *
 
 
@@ -12,8 +16,8 @@ class WrongParameterError(Exception):
         self.status_code = Status.WrongParameterError.name
         super().__init__(message)
 
+
 class OverwriteError(Exception):
     def __init__(self, message):
         self.status_code = Status.OverwriteError.name
         super().__init__(message)
-

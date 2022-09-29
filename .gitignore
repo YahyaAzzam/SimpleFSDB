@@ -1,2 +1,10 @@
 
 *.pyc
+.idea/workspace.xml
+.idea/vcs.xml
+.idea/SimpleFSDB.iml
+.idea/modules.xml
+.idea/misc.xml
+.idea/inspectionProfiles/Project_Default.xml
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/.name

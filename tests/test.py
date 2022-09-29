@@ -1,3 +1,5 @@
+import sys
+sys.path.append("C:\\Users\\yahya\\OneDrive\\Desktop\\coding\\code-blocks\\Check-in-flight-system\\SimpleFSDB\\src")
 from test_create import *
 from test_set import *
 from test_delete import *

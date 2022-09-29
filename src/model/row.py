@@ -3,6 +3,7 @@ import os
 import json
 import pathlib
 
+
 class Row:
     def __init__(self, table, data):
         self.table = table
@@ -11,7 +12,8 @@ class Row:
         self.__lock_path__ = os.path.join(self.table.get_lock_path(), "{}.json".format(self.get_primary_key()))
 
     def __get_primary_key__(self):
-        primary_key = self.data.get(self.table.get_primary_key()) if self.data.get(self.table.get_primary_key()) else str(uuid.uuid4().hex)
+        primary_key = self.data.get(self.table.get_primary_key()) if self.data.get(
+            self.table.get_primary_key()) else str(uuid.uuid4().hex)
         return primary_key
 
     def get_primary_key(self):
@@ -26,7 +28,7 @@ class Row:
     def serialize(self):
         self.__lock__()
         with open(self.get_row_path(), 'w') as file:
-           json.dump(self.data, file)
+            json.dump(self.data, file)
         self.__add_to_index__()
         self.__unlock__()
 
@@ -63,13 +65,13 @@ class Row:
 
     def __lock__(self):
         try:
-            with open(self.__lock_path__, 'x') as file:
+            with open(self.__lock_path__, 'x'):
                 pass
         except:
             self.__lock__()
 
     def __check_lock__(self):
-        while(os.path.exists(self.__lock_path__)):
+        while os.path.exists(self.__lock_path__):
             pass
 
     def __unlock__(self):

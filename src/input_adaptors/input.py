@@ -1,4 +1,6 @@
 import argparse
+
+
 def parse_args():
     parser = argparse.ArgumentParser(description="Auto Sizer agent")
     parser.add_argument(
@@ -24,12 +26,6 @@ def parse_args():
         "--table",
         type=str,
         help="Specific table in a database",
-    )
-    parser.add_argument(
-        "-pk",
-        "--primary-key",
-        type=str,
-        help="Primary key is a unique key",
     )
     parser.add_argument(
         "-q",

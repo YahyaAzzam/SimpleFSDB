@@ -1,3 +1,6 @@
+import sys
+import os
+sys.path.append(os.path.dirname(__file__).replace("commands", ''))
 from commands.create_command import *
 from commands.set_command import *
 from commands.get_command import *

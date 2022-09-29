@@ -1,4 +1,7 @@
 import pathlib
+import sys
+import os
+sys.path.append(os.path.dirname(__file__).replace("model", ''))
 from output.exceptions import *
 from model.schema_keys import *
 from model.index_value import *

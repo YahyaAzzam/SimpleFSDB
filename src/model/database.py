@@ -1,9 +1,13 @@
+import sys
+import os
+sys.path.append(os.path.dirname(__file__).replace("model", ''))
 from model.table import *
 
 
 class Database:
-    DATABASE_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''), 'storage')
-    def __init__(self, schema_data = None, database_name = None):
+    DATABASE_PATH = os.path.join(str(os.path.dirname(__file__)).replace("model", '').replace("src", ''), 'storage')
+
+    def __init__(self, schema_data=None, database_name=None):
         Database.__validate__(schema_data, database_name)
         if schema_data:
             self.__initialize_by_schema_data__(schema_data)
@@ -24,7 +28,7 @@ class Database:
         self.__database_name__ = database_name
         self.tables = {}
         for table_name in os.listdir(self.__path__):
-            self.tables[table_name] = Table(self, table_name = table_name)
+            self.tables[table_name] = Table(self, table_name=table_name)
 
     def get_path(self):
         return self.__path__
@@ -36,8 +40,8 @@ class Database:
     @staticmethod
     def __validate__(schema_data, database_name):
         if ((schema_data is None or schema_data[Keys.DATABASE].isspace()) and
-            (database_name is None or str(database_name).isspace())):
-                raise WrongParameterError("No database detected")
+                (database_name is None or str(database_name).isspace())):
+            raise WrongParameterError("No database detected")
 
     def __serialize_tables__(self):
         for table_name in self.tables:
@@ -59,7 +63,7 @@ class Database:
     def delete(self, table_name, data):
         table = self.get_table(table_name)
         table.delete(data)
-        
+
     def get(self, table_name, query):
         table = self.get_table(table_name)
         return table.get(query)

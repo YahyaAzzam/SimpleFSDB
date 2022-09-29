@@ -1,3 +1,6 @@
+import sys
+import os
+sys.path.append(os.path.dirname(__file__).replace("input_adaptors", ''))
 from input_adaptors.iadaptor import IInputAdaptor
 from output.exceptions import *
 
@@ -7,9 +10,7 @@ class ParsedInput(IInputAdaptor):
         if parser.command == "none" or parser.command is None:
             raise NoParameterError("No command was entered")
         self.command = str(parser.command).lower()
-        self.schema = parser.schema
+        self.schema_path = parser.schema_path
         self.database = parser.database
         self.table = parser.table
-        self.primary_key = parser.primary_key
-        self.parameter = parser.parameter
-        self.value = parser.value
+        self.query = parser.query

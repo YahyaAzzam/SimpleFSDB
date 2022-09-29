@@ -1,3 +1,6 @@
+import sys
+import os
+sys.path.append(os.path.dirname(__file__).replace("commands", ''))
 from commands.abstract_command import *
 from model.database import *
 

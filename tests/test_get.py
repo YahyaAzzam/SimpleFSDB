@@ -4,7 +4,7 @@ import sys
 import os
 import json
 sys.path.append(os.path.join(str(os.getcwd()).replace("tests", ''), "src"))
-from main import *
+from commands.command_factory import *
 
 
 class Test(unittest.TestCase):

@@ -1,3 +1,6 @@
+import sys
+import os
+sys.path.append(os.path.dirname(__file__).replace("model", ''))
 from model.primary_key_index import *
 
 
@@ -9,8 +12,7 @@ class TableMetaData:
         self.primary_key = table.table_schema[Keys.PRIMARY_KEY]
         self.columns = table.table_schema[Keys.COLUMNS]
         self.overwrite = table.table_schema[Keys.OVERWRITE]
-        self.index_keys = {}
-        self.index_keys[self.primary_key] = PrimaryKeyIndex(self.primary_key, self)
+        self.index_keys = {self.primary_key: PrimaryKeyIndex(self.primary_key, self)}
         for index_name in table.table_schema[Keys.INDEX_KEYS]:
             self.index_keys[index_name] = Index(index_name, self)
 
