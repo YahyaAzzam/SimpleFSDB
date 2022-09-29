@@ -26,12 +26,6 @@ def parse_args():
         help="Specific table in a database",
     )
     parser.add_argument(
-        "-pk",
-        "--primary-key",
-        type=str,
-        help="Primary key is a unique key",
-    )
-    parser.add_argument(
         "-q",
         "--query",
         type=str,

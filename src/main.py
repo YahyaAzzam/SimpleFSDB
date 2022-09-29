@@ -12,4 +12,4 @@ try:
 except Exception as e:
     output_object = OutputMessage(exception=e)
 
-print(json.dumps(output_object.__dict__))
+print(output_object.__dict__)
