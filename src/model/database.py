@@ -66,4 +66,8 @@ class Database:
 
     def get(self, table_name, query):
         table = self.get_table(table_name)
-        return table.get(query)
+        rows = table.get(query)
+        data = []
+        for row in rows:
+            data.append(row.data)
+        return data
