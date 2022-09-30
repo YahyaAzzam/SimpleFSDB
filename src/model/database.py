@@ -69,5 +69,5 @@ class Database:
         rows = table.get(query)
         data = []
         for row in rows:
-            data.append(row.data)
+            data.append(row.get_data())
         return data
