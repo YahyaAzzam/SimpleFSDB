@@ -1,7 +1,9 @@
+# Import the ABC module for reference
 from abc import ABC
 
-
-class Keys(ABC):
+# Define a class to hold constants for keys used in the database schema
+class Keys:
+    # Constants for keys
     TABLES = "Tables"
     DATABASE = "database_name"
     NAME = "name"
