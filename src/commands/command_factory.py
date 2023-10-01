@@ -1,6 +1,11 @@
+# Import necessary modules
 import sys
 import os
+
+# Append the parent directory of the current file to sys.path
 sys.path.append(os.path.dirname(__file__).replace("commands", ''))
+
+# Import custom command classes
 from commands.create_command import *
 from commands.set_command import *
 from commands.get_command import *
@@ -8,12 +13,19 @@ from commands.delete_command import *
 from commands.clear_command import *
 
 
+# Define a CommandFactory class
 class CommandFactory:
     def __init__(self, input_adaptor):
+        # Define a set of available commands
         available_commands = {"create", "set", "get", "delete", "clear"}
+
+        # Validate the input_adaptor and available_commands
         CommandFactory.validate(input_adaptor, available_commands)
+
+        # Store the input_adaptor for creating commands
         self.input_adaptor = input_adaptor
 
+    # Create and return an appropriate command based on the input command
     def create(self):
         cmd = str(self.input_adaptor.command).lower()
         if cmd == "create":
@@ -29,5 +41,6 @@ class CommandFactory:
 
     @staticmethod
     def validate(input_adaptor, available_commands):
+        # Check if the input command is in the set of available commands
         if input_adaptor.command not in available_commands:
             raise WrongParameterError("Wrong command entered")
