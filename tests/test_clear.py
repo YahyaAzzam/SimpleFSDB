@@ -1,14 +1,10 @@
 import unittest
-import shutil
-import os
-import json
-import sys
-sys.path.append(os.path.join(str(os.getcwd()).replace("tests", ''), "src"))
-from commands.command_factory import *
+
+from Querio.lib.commands.command_factory import *
 
 
 class Test(unittest.TestCase):
-    SCHEMA_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''), 'tests')
+    SCHEMA_PATH = os.getcwd()
     CreateCommand(os.path.join(SCHEMA_PATH, "Check-in-schema.json")).execute()
 
     def test_wrong_input_database(self):
@@ -44,7 +40,7 @@ class Test(unittest.TestCase):
 
     def test_clear(self):
         # test clear database
-        database = Database(database_name = "csed25")
+        database = Database(database_name="csed25")
         ClearCommand("csed25").execute()
 
         for table in database.tables:
@@ -59,7 +55,7 @@ class Test(unittest.TestCase):
 
         # end the test and delete the database
         # delete database
-        path = database.get_path().replace("csed25","")
+        path = database.get_path().replace("csed25", "")
         if os.path.exists(path):
             shutil.rmtree(path)
 

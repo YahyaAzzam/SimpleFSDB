@@ -1,16 +1,12 @@
 import unittest
-import shutil
-import sys
-import os
-import json
-sys.path.append(os.path.join(str(os.getcwd()).replace("tests", ''), "src"))
-from commands.command_factory import *
+
+from Querio.lib.commands.command_factory import *
 
 
 class Test(unittest.TestCase):
     schema_name = "Check-in-schema.json"
-    SCHEMA_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''), 'tests')
-    DATABASE_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''), 'storage')
+    SCHEMA_PATH = os.getcwd()
+    DATABASE_PATH = os.path.join(str(os.path.dirname(os.getcwd())), 'Querio', 'storage')
     schema_path = os.path.join(SCHEMA_PATH, schema_name)
     file = open(schema_path, 'r')
     data = json.load(file)

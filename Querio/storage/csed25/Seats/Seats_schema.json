@@ -1,0 +1,1 @@
+{"__path__": "C:\\Users\\pc\\OneDrive-AlexandriaUniversity\\Documents\\GitHub\\SimpleFSDB\\Querio\\storage\\csed25\\Seats", "name": "Seats", "primary_key": "FlightId_SeatId", "columns": ["FlightId_SeatId", "Last_name", "ReservationId"], "overwrite": "True", "index_keys": ["FlightId_SeatId", "Last_name"]}
