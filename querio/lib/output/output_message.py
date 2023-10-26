@@ -1,5 +1,5 @@
 # Import custom classes and modules
-from Querio.lib.output.status import *
+from querio.lib.output.status import *
 
 
 # Define an OutputMessage class to encapsulate command execution results

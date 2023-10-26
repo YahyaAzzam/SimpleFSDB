@@ -1,6 +1,6 @@
 import unittest
 
-from Querio.lib.commands.command_factory import *
+from querio.lib.commands.command_factory import *
 
 
 class Test(unittest.TestCase):

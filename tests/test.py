@@ -7,6 +7,6 @@ from test_get import *
 from test_clear import *
 
 
-DATABASE_PATH = os.path.join(os.path.dirname(os.getcwd()), 'Querio', 'storage')
+DATABASE_PATH = os.path.join(os.path.dirname(os.getcwd()), 'querio', 'storage')
 if os.path.exists(DATABASE_PATH):
     shutil.rmtree(DATABASE_PATH)

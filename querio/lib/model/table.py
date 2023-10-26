@@ -2,8 +2,8 @@
 import shutil
 
 # Import custom classes and modules
-from Querio.lib.model.table_metadata import *
-from Querio.lib.model.row import *
+from querio.lib.model.table_metadata import *
+from querio.lib.model.row import *
 
 
 # Define a Table class

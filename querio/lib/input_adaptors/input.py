@@ -5,7 +5,7 @@ import argparse
 # Define a function called parse_args() for parsing command-line arguments
 def parse_args():
     # Create an ArgumentParser object with a simplified description
-    parser = argparse.ArgumentParser(description="Querio - A tool for managing JSON file databases.")
+    parser = argparse.ArgumentParser(description="querio - A tool for managing JSON file databases.")
 
     # Define command-line arguments and their types, as well as improved help messages and examples
     parser.add_argument(

@@ -1,6 +1,6 @@
 # Import required classes from custom modules
-from Querio.lib.commands.abstract_command import *
-from Querio.lib.model.database import *
+from querio.lib.commands.abstract_command import *
+from querio.lib.model.database import *
 
 
 # Define a ClearCommand class that inherits from AbstractCommand
