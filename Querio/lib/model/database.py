@@ -1,5 +1,8 @@
+import sys, os
+
+sys.path.append(os.path.join(str(os.path.dirname(os.getcwd())),  "Querio", "lib"))
 # Import the Table class from a custom module
-from Querio.lib.model.table import *
+from model.table import *
 
 
 # Define a Database class

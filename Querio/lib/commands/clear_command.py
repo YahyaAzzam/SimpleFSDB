@@ -1,6 +1,9 @@
+import sys, os
+
+sys.path.append(os.path.join(str(os.path.dirname(os.getcwd())),  "Querio", "lib"))
 # Import required classes from custom modules
-from Querio.lib.commands.abstract_command import *
-from Querio.lib.model.database import *
+from commands.abstract_command import *
+from model.database import *
 
 
 # Define a ClearCommand class that inherits from AbstractCommand

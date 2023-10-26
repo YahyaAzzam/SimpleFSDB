@@ -1,8 +1,8 @@
 import sys, os
 import unittest
 
-sys.path.append(os.path.join(str(os.path.dirname(os.getcwd())), "Querio"))
-from lib.commands.command_factory import *
+sys.path.append(os.path.join(str(os.path.dirname(os.getcwd())), "Querio", "lib"))
+from commands.command_factory import *
 
 
 class Test(unittest.TestCase):

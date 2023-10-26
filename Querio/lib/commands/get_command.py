@@ -1,6 +1,9 @@
+import sys, os
+
+sys.path.append(os.path.join(str(os.path.dirname(os.getcwd())),  "Querio", "lib"))
 # Import custom classes and exceptions
-from Querio.lib.commands.abstract_command import *
-from Querio.lib.model.database import *
+from commands.abstract_command import *
+from model.database import *
 
 
 # Define a GetCommand class that inherits from AbstractCommand

@@ -1,9 +1,11 @@
 # Import necessary modules
 import pathlib
+import sys, os
 
+sys.path.append(os.path.join(str(os.path.dirname(os.getcwd())),  "Querio", "lib"))
 # Import custom exceptions and classes
-from Querio.lib.output.exceptions import *
-from Querio.lib.model.index_value import *
+from output.exceptions import *
+from model.index_value import *
 
 
 # Define an Index class

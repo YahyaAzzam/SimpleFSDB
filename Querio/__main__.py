@@ -1,8 +1,11 @@
+import sys, os
+
+sys.path.append(os.path.join(str(os.path.dirname(os.getcwd())), "Querio", "lib"))
 # Import necessary modules and classes from your application
-from Querio.lib.input_adaptors.input import *
-from Querio.lib.commands.command_factory import *
-from Querio.lib.input_adaptors.parser_adaptor import *
-from Querio.lib.output.output_message import *
+from input_adaptors.input import *
+from commands.command_factory import *
+from input_adaptors.parser_adaptor import *
+from output.output_message import *
 
 # Try to execute commands and handle exceptions
 try:

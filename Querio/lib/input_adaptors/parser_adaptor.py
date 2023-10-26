@@ -1,6 +1,9 @@
+import sys, os
+
+sys.path.append(os.path.join(str(os.path.dirname(os.getcwd())),  "Querio", "lib"))
 # Import the IInputAdaptor class and custom exceptions
-from Querio.lib.input_adaptors.iadaptor import IInputAdaptor
-from Querio.lib.output.exceptions import *
+from input_adaptors.iadaptor import IInputAdaptor
+from output.exceptions import *
 
 
 # Define a class named ParsedInput that inherits from IInputAdaptor

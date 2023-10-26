@@ -1,6 +1,9 @@
+import sys, os
+
+sys.path.append(os.path.join(str(os.path.dirname(os.getcwd())),  "Querio", "lib"))
 # Import custom classes and modules
-from Querio.lib.model.primary_key_index import *
-from Querio.lib.model.schema_keys import Keys
+from model.primary_key_index import *
+from model.schema_keys import Keys
 
 
 # Define a TableMetaData class

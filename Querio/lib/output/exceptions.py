@@ -1,5 +1,8 @@
+import sys, os
+
+sys.path.append(os.path.join(str(os.path.dirname(os.getcwd())),  "Querio", "lib"))
 # Import custom classes and modules
-from Querio.lib.output.status import *
+from output.status import *
 
 
 # Define a custom exception for missing parameters

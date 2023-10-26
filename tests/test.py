@@ -4,6 +4,6 @@ from test_delete import *
 from test_get import *
 from test_clear import *
 
-DATABASE_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("Querio", '').replace("tests", ''), 'storage')
+DATABASE_PATH = os.path.join(str(os.path.dirname(os.getcwd())), 'Querio', 'storage')
 if os.path.exists(DATABASE_PATH):
     shutil.rmtree(DATABASE_PATH)

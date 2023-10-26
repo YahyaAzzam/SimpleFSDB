@@ -1,9 +1,11 @@
 # Import necessary modules
 import shutil
+import sys, os
 
+sys.path.append(os.path.join(str(os.path.dirname(os.getcwd())), "Querio", "lib"))
 # Import custom classes and modules
-from Querio.lib.model.table_metadata import *
-from Querio.lib.model.row import *
+from model.table_metadata import *
+from model.row import *
 
 
 # Define a Table class
