@@ -1,6 +1,8 @@
+import sys, os
 import unittest
 
-from ..Querio.lib.commands.command_factory import *
+sys.path.append(os.path.join(str(os.getcwd()).replace("tests", ''), "Querio"))
+from Querio.lib.commands.command_factory import *
 
 
 class Test(unittest.TestCase):
