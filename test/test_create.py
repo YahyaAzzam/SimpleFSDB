@@ -1,7 +1,7 @@
 import sys, os
 import unittest
 
-sys.path.append(os.path.join(str(os.getcwd()).replace("tests", ''), "Querio"))
+sys.path.append(os.path.join(str(os.path.dirname(os.getcwd())), "Querio"))
 from Querio.lib.commands.command_factory import *
 
 
