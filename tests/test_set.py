@@ -73,7 +73,7 @@ class Test(unittest.TestCase):
             pass
 
     def test_set(self):
-        # test set file in different tables
+        # tests set file in different tables
         database = Database(database_name="csed25")
 
         for table in database.tables:
@@ -103,7 +103,7 @@ class Test(unittest.TestCase):
                 SetCommand("csed25", database.tables[table].get_name(), str(value)).execute()
                 self.assertEqual(database.tables[table].get_by_primary_key(1).get_data(), value)
 
-        # end the test and delete the database
+        # end the tests and delete the database
         # delete database
         path = database.get_path().replace("csed25", "")
         if os.path.exists(path):

@@ -35,7 +35,7 @@ class Test(unittest.TestCase):
             pass
 
     def test_Get(self):
-        # test Get file in different tables
+        # tests Get file in different tables
         database = Database(database_name="csed25")
 
         for table in database.tables:
@@ -47,7 +47,7 @@ class Test(unittest.TestCase):
             # check get file in the table
             self.assertEqual(file[0], value)
 
-        # end the test and delete the database
+        # end the tests and delete the database
         # delete database
         path = database.get_path().replace("csed25", "")
         if os.path.exists(path):

@@ -41,7 +41,7 @@ class Test(unittest.TestCase):
             pass
 
     def test_clear(self):
-        # test clear database
+        # tests clear database
         database = Database(database_name="csed25")
         ClearCommand("csed25").execute()
 
@@ -55,7 +55,7 @@ class Test(unittest.TestCase):
             # check data_dir is empty
             self.assertFalse(os.listdir(os.path.join(database.tables[table].get_path(), "indices")))
 
-        # end the test and delete the database
+        # end the tests and delete the database
         # delete database
         path = database.get_path().replace("csed25", "")
         if os.path.exists(path):

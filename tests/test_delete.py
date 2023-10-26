@@ -72,7 +72,7 @@ class Test(unittest.TestCase):
             pass
 
     def test_Delete(self):
-        # test Delete file in different tables
+        # tests Delete file in different tables
         database = Database(database_name="csed25")
 
         for table in database.tables:
@@ -91,7 +91,7 @@ class Test(unittest.TestCase):
             except Exception:
                 self.assertTrue(False)
 
-        # end the test and delete the database
+        # end the tests and delete the database
         # delete database
         path = database.get_path().replace("csed25", "")
         if os.path.exists(path):
