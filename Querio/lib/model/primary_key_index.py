@@ -1,5 +1,5 @@
 # Import the Index class
-from querio.lib.model.index import *
+from Querio.lib.model.index import *
 
 
 # Define a PrimaryKeyIndex class that inherits from Index

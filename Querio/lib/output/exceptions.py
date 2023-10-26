@@ -1,5 +1,5 @@
 # Import custom classes and modules
-from querio.lib.output.status import *
+from Querio.lib.output.status import *
 
 
 # Define a custom exception for missing parameters

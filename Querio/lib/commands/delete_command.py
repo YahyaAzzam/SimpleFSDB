@@ -1,6 +1,6 @@
 # Import custom classes
-from querio.lib.commands.abstract_command import *
-from querio.lib.model.database import *
+from Querio.lib.commands.abstract_command import *
+from Querio.lib.model.database import *
 
 
 # Define a DeleteCommand class that inherits from AbstractCommand

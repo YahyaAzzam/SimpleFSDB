@@ -1,6 +1,6 @@
 # Import custom classes and modules
-from querio.lib.model.primary_key_index import *
-from querio.lib.model.schema_keys import Keys
+from Querio.lib.model.primary_key_index import *
+from Querio.lib.model.schema_keys import Keys
 
 
 # Define a TableMetaData class

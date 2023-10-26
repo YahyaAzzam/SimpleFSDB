@@ -2,8 +2,8 @@
 import pathlib
 
 # Import custom exceptions and classes
-from querio.lib.output.exceptions import *
-from querio.lib.model.index_value import *
+from Querio.lib.output.exceptions import *
+from Querio.lib.model.index_value import *
 
 
 # Define an Index class

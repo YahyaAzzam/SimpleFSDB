@@ -1,8 +1,8 @@
 # Import necessary modules and classes from your application
-from querio.lib.input_adaptors.input import *
-from querio.lib.commands.command_factory import *
-from querio.lib.input_adaptors.parser_adaptor import *
-from querio.lib.output.output_message import *
+from Querio.lib.input_adaptors.input import *
+from Querio.lib.commands.command_factory import *
+from Querio.lib.input_adaptors.parser_adaptor import *
+from Querio.lib.output.output_message import *
 
 # Try to execute commands and handle exceptions
 try:

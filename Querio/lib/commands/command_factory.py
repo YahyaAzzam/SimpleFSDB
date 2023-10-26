@@ -1,9 +1,9 @@
 # Import custom command classes
-from querio.lib.commands.create_command import *
-from querio.lib.commands.set_command import *
-from querio.lib.commands.get_command import *
-from querio.lib.commands.delete_command import *
-from querio.lib.commands.clear_command import *
+from Querio.lib.commands.create_command import *
+from Querio.lib.commands.set_command import *
+from Querio.lib.commands.get_command import *
+from Querio.lib.commands.delete_command import *
+from Querio.lib.commands.clear_command import *
 
 
 # Define a CommandFactory class

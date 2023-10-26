@@ -1,6 +1,6 @@
 # Import the IInputAdaptor class and custom exceptions
-from querio.lib.input_adaptors.iadaptor import IInputAdaptor
-from querio.lib.output.exceptions import *
+from Querio.lib.input_adaptors.iadaptor import IInputAdaptor
+from Querio.lib.output.exceptions import *
 
 
 # Define a class named ParsedInput that inherits from IInputAdaptor

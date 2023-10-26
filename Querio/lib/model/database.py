@@ -1,5 +1,5 @@
 # Import the Table class from a custom module
-from querio.lib.model.table import *
+from Querio.lib.model.table import *
 
 
 # Define a Database class
