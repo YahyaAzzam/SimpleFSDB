@@ -55,11 +55,6 @@ class Test(unittest.TestCase):
             # check get file in the table
             self.assertEqual(file[0], value)
 
-        # end the tests and delete the database
-        # delete database
-        path = database.get_path().replace("csed25", "")
-        if os.path.exists(path):
-            shutil.rmtree(path)
 
 
 if __name__ == '__main__':
