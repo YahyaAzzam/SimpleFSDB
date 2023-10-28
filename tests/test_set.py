@@ -111,11 +111,7 @@ class Test(unittest.TestCase):
                 SetCommand("csed25", database.tables[table].get_name(), str(value)).execute()
                 self.assertEqual(database.tables[table].get_by_primary_key(1).get_data(), value)
 
-        # end the tests and delete the database
-        # delete database
-        path = database.get_path().replace("csed25", "")
-        if os.path.exists(path):
-            shutil.rmtree(path)
+
 
 
 if __name__ == '__main__':
