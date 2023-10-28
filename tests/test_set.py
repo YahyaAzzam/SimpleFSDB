@@ -1,7 +1,5 @@
-import sys, os
 import unittest
 
-sys.path.append(str(os.path.dirname(os.getcwd())))
 from Querio.lib.commands.command_factory import *
 
 
@@ -74,7 +72,7 @@ class Test(unittest.TestCase):
 
         # enter integers as table name
         try:
-            SetCommand("csed25", "6546455522", str({"FlightId_SeatId": "1", "Last_name": "goda"})).execute()
+            SetCommand("csed25", "654646422", str({"FlightId_SeatId": "1", "Last_name": "goda"})).execute()
         except WrongParameterError:
             pass
 
