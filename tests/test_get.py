@@ -56,6 +56,5 @@ class Test(unittest.TestCase):
             self.assertEqual(file[0], value)
 
 
-
 if __name__ == '__main__':
     unittest.main()

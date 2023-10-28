@@ -72,7 +72,7 @@ class Test(unittest.TestCase):
 
         # enter integers as table name
         try:
-            SetCommand("csed25", "654646422", str({"FlightId_SeatId": "1", "Last_name": "goda"})).execute()
+            SetCommand("csed25", "6546455522", str({"FlightId_SeatId": "1", "Last_name": "goda"})).execute()
         except WrongParameterError:
             pass
 
@@ -110,8 +110,6 @@ class Test(unittest.TestCase):
                 value[table_mate_data.columns[1]] = "mahmoud"
                 SetCommand("csed25", database.tables[table].get_name(), str(value)).execute()
                 self.assertEqual(database.tables[table].get_by_primary_key(1).get_data(), value)
-
-
 
 
 if __name__ == '__main__':
