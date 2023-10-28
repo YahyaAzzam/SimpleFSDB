@@ -1,8 +1,5 @@
-import sys, os
-
-sys.path.append(os.path.join(str(os.path.dirname(os.getcwd())),  "Querio", "lib"))
 # Import the Index class
-from model.index import *
+from Querio.lib.model.index import *
 
 
 # Define a PrimaryKeyIndex class that inherits from Index

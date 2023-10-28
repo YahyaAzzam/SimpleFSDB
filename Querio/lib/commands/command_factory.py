@@ -1,12 +1,9 @@
-import sys, os
-
-sys.path.append(os.path.join(str(os.path.dirname(os.getcwd())),  "Querio", "lib"))
 # Import custom command classes
-from commands.create_command import *
-from commands.set_command import *
-from commands.get_command import *
-from commands.delete_command import *
-from commands.clear_command import *
+from Querio.lib.commands.create_command import *
+from Querio.lib.commands.set_command import *
+from Querio.lib.commands.get_command import *
+from Querio.lib.commands.delete_command import *
+from Querio.lib.commands.clear_command import *
 
 
 # Define a CommandFactory class

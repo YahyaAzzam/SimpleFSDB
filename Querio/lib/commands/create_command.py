@@ -1,9 +1,6 @@
-import sys, os
-
-sys.path.append(os.path.join(str(os.path.dirname(os.getcwd())),  "Querio", "lib"))
 # Import custom classes
-from commands.abstract_command import *
-from model.database import *
+from Querio.lib.commands.abstract_command import *
+from Querio.lib.model.database import *
 
 
 # Define a CreateCommand class that inherits from AbstractCommand

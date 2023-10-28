@@ -1,16 +1,24 @@
-import sys, os
 import unittest
 
-sys.path.append(os.path.join(str(os.path.dirname(os.getcwd())), "Querio", "lib"))
-from commands.command_factory import *
+from Querio.lib.commands.command_factory import *
 
 
 class Test(unittest.TestCase):
     schema_name = "Check-in-schema.json"
     SCHEMA_PATH = os.getcwd()
-    DATABASE_PATH = os.path.join(str(os.path.dirname(os.getcwd())), 'Querio', 'storage')
+    DATABASE_PATH = os.path.join(os.path.dirname(os.getcwd()), 'Querio', 'storage')
     schema_path = os.path.join(SCHEMA_PATH, schema_name)
-    CreateCommand(schema_path).execute()
+
+    @classmethod
+    def setUpClass(cls):
+        # Create the database schema once for the entire class
+        CreateCommand(cls.schema_path).execute()
+
+    @classmethod
+    def tearDownClass(cls):
+        # Perform cleanup after all test methods in the class if needed
+        if os.path.exists(cls.DATABASE_PATH):
+            shutil.rmtree(cls.DATABASE_PATH)
 
     def test_wrong_get(self):
         try:  # No database entered

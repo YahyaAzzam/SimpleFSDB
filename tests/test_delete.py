@@ -1,13 +1,23 @@
-import sys, os
 import unittest
 
-sys.path.append(os.path.join(str(os.path.dirname(os.getcwd())), "Querio", "lib"))
-from commands.command_factory import *
+from Querio.lib.commands.command_factory import *
 
 
 class Test(unittest.TestCase):
     SCHEMA_PATH = os.getcwd()
-    CreateCommand(os.path.join(SCHEMA_PATH, "Check-in-schema.json")).execute()
+    DATABASE_PATH = os.path.join(os.path.dirname(os.getcwd()), 'Querio', 'storage')
+
+    @classmethod
+    def setUpClass(cls):
+        # Create the database schema once for the entire class
+        schema_path = os.path.join(cls.SCHEMA_PATH, "Check-in-schema.json")
+        CreateCommand(schema_path).execute()
+
+    @classmethod
+    def tearDownClass(cls):
+        # Perform cleanup after all test methods in the class if needed
+        if os.path.exists(cls.DATABASE_PATH):
+            shutil.rmtree(cls.DATABASE_PATH)
 
     def test_wrong_input_database(self):
         # didn't enter database name
@@ -90,12 +100,6 @@ class Test(unittest.TestCase):
                 DeleteCommand("csed25", database.tables[table].get_name(), str({"Last_name": "goda"})).execute()
             except Exception:
                 self.assertTrue(False)
-
-        # end the tests and delete the database
-        # delete database
-        path = database.get_path().replace("csed25", "")
-        if os.path.exists(path):
-            shutil.rmtree(path)
 
 
 if __name__ == '__main__':

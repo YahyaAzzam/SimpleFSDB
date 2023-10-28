@@ -1,8 +1,5 @@
-import sys, os
-
-sys.path.append(os.path.join(str(os.path.dirname(os.getcwd())),  "Querio", "lib"))
 # Import the Table class from a custom module
-from model.table import *
+from Querio.lib.model.table import *
 
 
 # Define a Database class
@@ -63,6 +60,9 @@ class Database:
         if ((schema_data is None or schema_data[Keys.DATABASE].isspace()) and
                 (database_name is None or str(database_name).isspace())):
             raise WrongParameterError("No database detected")
+        # for table_schema in schema_data[Keys.TABLES]:
+        #     if Keys.NAME not in table_schema:
+        #         raise WrongParameterError("table name not found in the schema")
 
     # Serialize all tables in the database
     def __serialize_tables__(self):

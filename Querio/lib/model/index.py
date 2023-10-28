@@ -1,11 +1,10 @@
 # Import necessary modules
 import pathlib
-import sys, os
 
-sys.path.append(os.path.join(str(os.path.dirname(os.getcwd())),  "Querio", "lib"))
+
 # Import custom exceptions and classes
-from output.exceptions import *
-from model.index_value import *
+from Querio.lib.output.exceptions import *
+from Querio.lib.model.index_value import *
 
 
 # Define an Index class
@@ -26,7 +25,7 @@ class Index:
     @staticmethod
     def __validate_index__(index_name, table_columns):
         if index_name not in table_columns:
-            raise WrongParameterError("Index {} not found".format(index_name))
+            raise WrongParameterError("Index {} not found in table columns".format(index_name))
 
     # Serialize the index by creating its directory
     def serialize(self):

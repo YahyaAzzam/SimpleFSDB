@@ -1,18 +1,28 @@
-import sys, os
 import unittest
 
-sys.path.append(os.path.join(str(os.path.dirname(os.getcwd())), "Querio", "lib"))
-from commands.command_factory import *
+from Querio.lib.commands.command_factory import *
+from Querio.lib.model.schema_keys import Keys
 
 
 class Test(unittest.TestCase):
     schema_name = "Check-in-schema.json"
     SCHEMA_PATH = os.getcwd()
-    DATABASE_PATH = os.path.join(str(os.path.dirname(os.getcwd())), 'Querio', 'storage')
+    DATABASE_PATH = os.path.join(os.path.dirname(os.getcwd()), 'Querio', 'storage')
     schema_path = os.path.join(SCHEMA_PATH, schema_name)
     file = open(schema_path, 'r')
     data = json.load(file)
     file.close()
+
+    @classmethod
+    def setUpClass(cls):
+        # Create the database schema once for the entire class
+        CreateCommand(cls.schema_path).execute()
+
+    @classmethod
+    def tearDownClass(cls):
+        # Perform cleanup after all test methods in the class if needed
+        if os.path.exists(cls.DATABASE_PATH):
+            shutil.rmtree(cls.DATABASE_PATH)
 
     def test_wrong_input(self):
         # didn't enter schema path
@@ -52,16 +62,16 @@ class Test(unittest.TestCase):
             pass
 
     def test_create(self):
-        # create and delete database many times
+        # create and delete the database many times
         path = os.path.join(self.DATABASE_PATH, self.data[Keys.DATABASE])
         if os.path.exists(path):
-            shutil.rmtree(path)  # delete database
+            shutil.rmtree(path)  # delete the database
         CreateCommand(os.path.join(self.SCHEMA_PATH, "Check-in-schema.json")).execute()
         self.assertTrue(os.path.exists(path))
-        shutil.rmtree(path)  # delete database
+        shutil.rmtree(path)  # delete the database
 
     def test_create_tables(self):
-        # delete single table from database and then create it
+        # delete a single table from the database and then create it
         CreateCommand(os.path.join(self.SCHEMA_PATH, "Check-in-schema.json")).execute()
 
         # delete each table in the database and recreate it
@@ -75,7 +85,7 @@ class Test(unittest.TestCase):
             shutil.rmtree(path)
 
     def test_create_tables_indices_file(self):
-        # check creating two json files in each table
+        # check creating two JSON files in each table
         CreateCommand(os.path.join(self.SCHEMA_PATH, "Check-in-schema.json")).execute()
 
         for table in self.data[Keys.TABLES]:
@@ -88,9 +98,6 @@ class Test(unittest.TestCase):
             for index in table[Keys.INDEX_KEYS]:
                 if index != table[Keys.PRIMARY_KEY]:
                     self.assertTrue(os.path.exists(os.path.join(path, "indices", index)))
-        # delete database
-        if os.path.exists(self.DATABASE_PATH):
-            shutil.rmtree(self.DATABASE_PATH)
 
 
 if __name__ == '__main__':
