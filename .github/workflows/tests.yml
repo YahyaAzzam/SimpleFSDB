@@ -14,5 +14,5 @@ jobs:
         run: |
           python -m pip install --upgrade pip
       - name: Run tests
-        working-directory: SimpleFSDB  # Set the working directory to the 'tests' directory
+        working-directory: Querio  # Set the working directory to the 'tests' directory
         run: python test.py  # Update the path to your test script as needed
