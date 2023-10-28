@@ -1,5 +1,7 @@
+import sys, os
 import unittest
 
+sys.path.append(str(os.path.dirname(os.getcwd())))
 from Querio.lib.commands.command_factory import *
 
 
