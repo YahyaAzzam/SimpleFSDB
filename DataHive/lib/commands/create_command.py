@@ -1,13 +1,6 @@
-# Import necessary modules
-import sys
-import os
-
-# Append the parent directory of the current file to sys.path
-sys.path.append(os.path.dirname(__file__).replace("commands", ''))
-
 # Import custom classes
-from commands.abstract_command import *
-from model.database import *
+from DataHive.lib.commands.abstract_command import *
+from DataHive.lib.model.database import *
 
 
 # Define a CreateCommand class that inherits from AbstractCommand
@@ -25,6 +18,7 @@ class CreateCommand(AbstractCommand):
         # Create a Database instance using the schema data
         database = Database(self.schema_data)
         # Serialize and store the database
+        database.serialize()
 
     @staticmethod
     def __validate__(schema_path):

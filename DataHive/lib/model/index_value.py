@@ -2,6 +2,7 @@
 import os
 import json
 
+
 # Define an IndexValue class
 class IndexValue:
     def __init__(self, index, value_name):

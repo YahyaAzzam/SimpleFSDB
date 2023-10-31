@@ -1,12 +1,6 @@
-# Import necessary modules
-import sys
-import os
-
-# Append the parent directory of the current file to sys.path
-sys.path.append(os.path.dirname(__file__).replace("model", ''))
-
 # Import the Index class
-from model.index import *
+from DataHive.lib.model.index import *
+
 
 # Define a PrimaryKeyIndex class that inherits from Index
 class PrimaryKeyIndex(Index):
@@ -19,7 +13,7 @@ class PrimaryKeyIndex(Index):
         pass
 
     # Override the add_value method (no action for PrimaryKeyIndex)
-    def add_value(self):
+    def add_value(self, **kwargs):
         pass
 
     # Override the __update_value__ method (no action for PrimaryKeyIndex)
@@ -27,5 +21,5 @@ class PrimaryKeyIndex(Index):
         pass
 
     # Override the remove_value method (no action for PrimaryKeyIndex)
-    def remove_value(self):
+    def remove_value(self, **kwargs):
         pass

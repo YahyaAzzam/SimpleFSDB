@@ -1,8 +1,9 @@
 # Import the ABC module for reference
 from abc import ABC
 
+
 # Define a class to hold constants for keys used in the database schema
-class Keys:
+class Keys(ABC):
     # Constants for keys
     TABLES = "Tables"
     DATABASE = "database_name"
@@ -11,4 +12,4 @@ class Keys:
     PRIMARY_KEY = "primary_key"
     INDEX_KEYS = "index_keys"
     OVERWRITE = "overwrite"
-    CONSISTENCY = "consistency"
+    CONSISTENCY = "consistency"  # TODO: still not supported

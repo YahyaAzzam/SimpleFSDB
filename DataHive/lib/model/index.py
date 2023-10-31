@@ -1,15 +1,10 @@
 # Import necessary modules
 import pathlib
-import sys
-import os
 
-# Append the parent directory of the current file to sys.path
-sys.path.append(os.path.dirname(__file__).replace("model", ''))
 
 # Import custom exceptions and classes
-from output.exceptions import *
-from model.schema_keys import *
-from model.index_value import *
+from DataHive.lib.output.exceptions import *
+from DataHive.lib.model.index_value import *
 
 
 # Define an Index class
@@ -30,7 +25,7 @@ class Index:
     @staticmethod
     def __validate_index__(index_name, table_columns):
         if index_name not in table_columns:
-            raise WrongParameterError("Index {} not found".format(index_name))
+            raise WrongParameterError("Index {} not found in table columns".format(index_name))
 
     # Serialize the index by creating its directory
     def serialize(self):

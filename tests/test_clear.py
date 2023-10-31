@@ -1,15 +1,28 @@
+import sys, os
 import unittest
-import shutil
-import os
-import json
-import sys
-sys.path.append(os.path.join(str(os.getcwd()).replace("tests", ''), "src"))
-from commands.command_factory import *
+
+sys.path.append(os.path.dirname(os.getcwd()))
+from DataHive.lib.commands.command_factory import *
 
 
 class Test(unittest.TestCase):
-    SCHEMA_PATH = os.path.join(str(os.getcwd()).replace("commands", '').replace("src", '').replace("tests", ''), 'tests')
-    CreateCommand(os.path.join(SCHEMA_PATH, "Check-in-schema.json")).execute()
+    schema_path = None
+    SCHEMA_PATH = None
+
+    @classmethod
+    def setUpClass(cls):
+        cls.SCHEMA_PATH = os.getcwd()
+        cls.schema_path = os.path.join(cls.SCHEMA_PATH, "Check-in-schema.json")
+
+        # Create the database schema once for the entire class
+        CreateCommand(cls.schema_path).execute()
+
+    @classmethod
+    def tearDownClass(cls):
+        # Perform cleanup after all test methods in the class if needed
+        database_path = os.path.join(os.path.dirname(os.getcwd()), 'DataHive', 'storage')
+        if os.path.exists(database_path):
+            shutil.rmtree(database_path)
 
     def test_wrong_input_database(self):
         # didn't enter database name
@@ -43,8 +56,8 @@ class Test(unittest.TestCase):
             pass
 
     def test_clear(self):
-        # test clear database
-        database = Database(database_name = "csed25")
+        # tests clear database
+        database = Database(database_name="csed25")
         ClearCommand("csed25").execute()
 
         for table in database.tables:
@@ -56,12 +69,6 @@ class Test(unittest.TestCase):
 
             # check data_dir is empty
             self.assertFalse(os.listdir(os.path.join(database.tables[table].get_path(), "indices")))
-
-        # end the test and delete the database
-        # delete database
-        path = database.get_path().replace("csed25","")
-        if os.path.exists(path):
-            shutil.rmtree(path)
 
 
 if __name__ == '__main__':

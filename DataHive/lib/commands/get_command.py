@@ -1,14 +1,6 @@
-# Import necessary modules
-import sys
-import os
-
-# Append the parent directory of the current file to sys.path
-sys.path.append(os.path.dirname(__file__).replace("commands", ''))
-
 # Import custom classes and exceptions
-from commands.abstract_command import *
-from output.exceptions import *
-from model.database import *
+from DataHive.lib.commands.abstract_command import *
+from DataHive.lib.model.database import *
 
 
 # Define a GetCommand class that inherits from AbstractCommand

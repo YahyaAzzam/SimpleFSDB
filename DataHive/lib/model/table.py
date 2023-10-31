@@ -1,14 +1,11 @@
 # Import necessary modules
-import sys
-import os
 import shutil
 
-# Append the parent directory of the current file to sys.path
-sys.path.append(os.path.dirname(__file__).replace("model", ''))
 
 # Import custom classes and modules
-from model.table_metadata import *
-from model.row import *
+from DataHive.lib.model.table_metadata import *
+from DataHive.lib.model.row import *
+
 
 # Define a Table class
 class Table:

@@ -1,16 +1,9 @@
-# Import necessary modules
-import sys
-import os
-
-# Append the parent directory of the current file to sys.path
-sys.path.append(os.path.dirname(__file__).replace("commands", ''))
-
 # Import custom command classes
-from commands.create_command import *
-from commands.set_command import *
-from commands.get_command import *
-from commands.delete_command import *
-from commands.clear_command import *
+from DataHive.lib.commands.create_command import *
+from DataHive.lib.commands.set_command import *
+from DataHive.lib.commands.get_command import *
+from DataHive.lib.commands.delete_command import *
+from DataHive.lib.commands.clear_command import *
 
 
 # Define a CommandFactory class

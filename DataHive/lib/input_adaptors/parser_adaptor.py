@@ -1,13 +1,6 @@
-# Import necessary modules
-import sys
-import os
-
-# Append the parent directory of the current file to sys.path
-sys.path.append(os.path.dirname(__file__).replace("input_adaptors", ''))
-
 # Import the IInputAdaptor class and custom exceptions
-from input_adaptors.iadaptor import IInputAdaptor
-from output.exceptions import *
+from DataHive.lib.input_adaptors.iadaptor import IInputAdaptor
+from DataHive.lib.output.exceptions import *
 
 
 # Define a class named ParsedInput that inherits from IInputAdaptor

@@ -1,12 +1,6 @@
-# Import necessary modules
-import sys
-import os
-
-# Append the parent directory of the current file to sys.path
-sys.path.append(os.path.dirname(__file__).replace("output", ''))
-
 # Import custom classes and modules
-from output.status import *
+from DataHive.lib.output.status import *
+
 
 # Define an OutputMessage class to encapsulate command execution results
 class OutputMessage:

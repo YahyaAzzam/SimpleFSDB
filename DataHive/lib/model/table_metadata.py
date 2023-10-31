@@ -1,12 +1,7 @@
-# Import necessary modules
-import sys
-import os
-
-# Append the parent directory of the current file to sys.path
-sys.path.append(os.path.dirname(__file__).replace("model", ''))
-
 # Import custom classes and modules
-from model.primary_key_index import *
+from DataHive.lib.model.primary_key_index import *
+from DataHive.lib.model.schema_keys import Keys
+
 
 # Define a TableMetaData class
 class TableMetaData:
@@ -23,7 +18,7 @@ class TableMetaData:
         self.index_keys = {self.primary_key: PrimaryKeyIndex(self.primary_key, self)}
 
         # Create Index objects for each defined index in the schema
-        for index_name in table.table_schema[Keys.INDEX_KEYS]:
+        for index_name in table.table_schema.get(Keys.INDEX_KEYS):
             self.index_keys[index_name] = Index(index_name, self)
 
     # Get the path to the table's directory
@@ -44,8 +39,16 @@ class TableMetaData:
     # Validate the table schema
     @staticmethod
     def __validate__(table_schema):
-        if table_schema[Keys.PRIMARY_KEY] is None or table_schema[Keys.PRIMARY_KEY] not in table_schema[Keys.COLUMNS]:
-            raise WrongParameterError("Primary_key not found")
+        if Keys.COLUMNS not in table_schema:
+            raise WrongParameterError("columns not found in the schema")
+        if Keys.PRIMARY_KEY is table_schema and table_schema[Keys.PRIMARY_KEY] is None:
+            raise WrongParameterError("Primary_key not found in the schema")
+        if table_schema[Keys.PRIMARY_KEY] not in table_schema[Keys.COLUMNS]:
+            raise WrongParameterError(f"Primary_key {table_schema[Keys.PRIMARY_KEY]} not found in the table: {table_schema[Keys.NAME]} schema")
+        if Keys.INDEX_KEYS not in table_schema:
+            table_schema[Keys.INDEX_KEYS] = []
+        if Keys.OVERWRITE not in table_schema:
+            table_schema[Keys.OVERWRITE] = False
 
     # Create the table schema JSON file
     @staticmethod

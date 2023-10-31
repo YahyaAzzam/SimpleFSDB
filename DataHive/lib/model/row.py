@@ -4,6 +4,7 @@ import os
 import json
 import pathlib
 
+
 # Define a class called 'Row'
 class Row:
     # Initialize the 'Row' object with the provided 'table' and 'data'
@@ -11,10 +12,10 @@ class Row:
         # Store the 'table' and 'data' attributes
         self.__table__ = table
         self.__data__ = data
-        
+
         # Generate a primary key if not provided in 'data'
         self.__data__[table.get_primary_key()] = self.__get_primary_key__()
-        
+
         # Define the path for the lock file
         self.__lock_path__ = os.path.join(self.__table__.get_lock_path(), "{}.json".format(self.get_primary_key()))
 

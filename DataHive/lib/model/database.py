@@ -1,18 +1,11 @@
-# Import necessary modules
-import sys
-import os
-
-# Append the parent directory of the current file to sys.path
-sys.path.append(os.path.dirname(__file__).replace("model", ''))
-
 # Import the Table class from a custom module
-from model.table import *
+from DataHive.lib.model.table import *
 
 
 # Define a Database class
 class Database:
     # Define the path to the database storage directory
-    DATABASE_PATH = os.path.join(str(os.path.dirname(__file__)).replace("model", '').replace("src", ''), 'storage')
+    DATABASE_PATH = os.path.join(str(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 'storage')
 
     # Initialize the Database instance
     def __init__(self, schema_data=None, database_name=None):
@@ -67,6 +60,9 @@ class Database:
         if ((schema_data is None or schema_data[Keys.DATABASE].isspace()) and
                 (database_name is None or str(database_name).isspace())):
             raise WrongParameterError("No database detected")
+        # for table_schema in schema_data[Keys.TABLES]:
+        #     if Keys.NAME not in table_schema:
+        #         raise WrongParameterError("table name not found in the schema")
 
     # Serialize all tables in the database
     def __serialize_tables__(self):
