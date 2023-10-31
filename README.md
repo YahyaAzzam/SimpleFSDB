@@ -13,7 +13,7 @@ DataHive is a meticulously crafted, lightweight database system tailored for the
 3. [Usage](#usage)
     - [Schema formate](#schema)
     - [Command-Line Interface](#commands)
-4. [Example Usage](#exmaples)
+4. [Example Usage](#examples)
 5. [FAQs](#faqs)
 6. [Contributing](#contributing)
 7. [License](#license)
@@ -94,7 +94,7 @@ Below is an example of the schema format that defines the structure of the datab
 
 This Command-Line Interface (CLI) provides a set of commands for creating, updating, querying, deleting data, and resetting databases, offering comprehensive control over your data management tasks.
 
-## 4. Example Usage <a name="exmaples"></a>
+## 4. Example Usage <a name="examples"></a>
 - **The general format for any command in the program is as follows**:
 
    ```python
@@ -102,7 +102,7 @@ This Command-Line Interface (CLI) provides a set of commands for creating, updat
    ```
    Replace `[command]` with the desired database command and `[options]` with relevant command options.
 
-- **Commands Exmaples**:
+- **Commands Examples**:
 
     - Creating a new database:
          ```python
@@ -166,7 +166,7 @@ DataHive is released under the MIT License. See the [LICENSE](https://github.com
 
 ## 8. Upcoming Features <a name="upcoming-features">
    - Stay tuned for future updates and additional features. We are constantly working on enhancing DataHive to provide an even better data storage solution for your needs.
----
+-----
 *Note: This documentation provides an overview of DataHive's functionality and usage. For detailed code explanations, refer to the source code and comments in SimpleFSDB's repository.*
 
 
