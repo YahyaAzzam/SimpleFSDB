@@ -14,8 +14,8 @@ def parse_args():
         '-c',
         "--command",
         type=str,
-        help="Specify the operation (create, get, set, or delete).",
-        choices=["create", "get", "set", "delete"],
+        help="Specify the operation (create, get, set, delete or clear).",
+        choices=["create", "get", "set", "delete", "clear"],
         required=True  # Make the 'command' argument required
     )
     parser.add_argument(

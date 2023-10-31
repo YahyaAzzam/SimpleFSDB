@@ -9,7 +9,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
     long_description = fh.read()
 
-VERSION = '0.0.0'
+VERSION = '0.0.1'
 DESCRIPTION = 'DataHive is a Python library and tool for managing and querying JSON-based file system databases (FSDB). ' \
               'It provides a simple and efficient way to work with structured data stored in JSON format on your ' \
               '-mlocal file system. '
