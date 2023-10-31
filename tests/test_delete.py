@@ -2,12 +2,12 @@ import sys, os
 import unittest
 
 sys.path.append(os.path.dirname(os.getcwd()))
-from Querio.lib.commands.command_factory import *
+from DataHive.lib.commands.command_factory import *
 
 
 class Test(unittest.TestCase):
     SCHEMA_PATH = os.getcwd()
-    DATABASE_PATH = os.path.join(os.path.dirname(os.getcwd()), 'Querio', 'storage')
+    DATABASE_PATH = os.path.join(os.path.dirname(os.getcwd()), 'DataHive', 'storage')
 
     @classmethod
     def setUpClass(cls):

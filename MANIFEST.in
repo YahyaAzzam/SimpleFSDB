@@ -1,2 +1,2 @@
 include LICENSE
-recursive-include Querio/lib *
+recursive-include DataHive/lib *

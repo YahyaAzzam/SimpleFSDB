@@ -2,7 +2,7 @@ import sys, os
 import unittest
 
 sys.path.append(os.path.dirname(os.getcwd()))
-from Querio.lib.commands.command_factory import *
+from DataHive.lib.commands.command_factory import *
 
 
 class Test(unittest.TestCase):
@@ -20,7 +20,7 @@ class Test(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         # Perform cleanup after all test methods in the class if needed
-        database_path = os.path.join(os.path.dirname(os.getcwd()), 'Querio', 'storage')
+        database_path = os.path.join(os.path.dirname(os.getcwd()), 'DataHive', 'storage')
         if os.path.exists(database_path):
             shutil.rmtree(database_path)
 
