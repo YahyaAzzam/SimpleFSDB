@@ -78,7 +78,7 @@ Below is an example of the schema format that defines the structure of the datab
       | Columns | List of Strings | No | List of column names, including the primary key. |
       | Primary_key | String | No | The primary key for the table. |
       | Index_key | List of Strings | Yes | List of column names that serve as index keys. |
-      | Overwrite | boolean (true/false) | Yes | Initial value is 'false'; you can set its value to 'true' to enable overwriting.|
+      | Overwrite | string | Yes | Initial value is 'False'; you can set its value to 'True' to enable overwriting.|
    
 ### Command-Line Interface <a name="commands"></a>
 
