@@ -11,16 +11,13 @@ DataHive is a meticulously crafted, lightweight database system tailored for the
 1. [Features](#features)
 2. [Installation](#installation)
 3. [Usage](#usage)
-    - [Initialization](#initialization)
-    - [Scraping](#scraping)
-4. [Command-Line Interface](#command-line-interface)
-5. [Scraper Configuration](#scraper-configuration)
-6. [Customization](#customization)
-7. [Data Storage](#data-storage)
-8. [FAQs](#faqs)
-9. [Contributing](#contributing)
-10. [License](#license)
-11. [Upcoming Features](#upcoming-features)
+    - [Schema formate](#schema)
+    - [Command-Line Interface](#commands)
+4. [Example Usage](#exmaples)
+5. [FAQs](#faqs)
+6. [Contributing](#contributing)
+7. [License](#license)
+8. [Upcoming Features](#upcoming-features)
 
 ## 1. Features <a name="features"></a>
 - **Data Storage Excellence**
@@ -39,51 +36,140 @@ DataHive is a meticulously crafted, lightweight database system tailored for the
   - **ead-Write Consistency**: Guarantee synchronization between read and write operations for up-to-date data.
   - **Data Integrity**: Maintain reliable and trustworthy data, preventing inconsistencies.
 
-- **Clearing Database**: Wipe the database clean, starting fresh for new data.
+- **Clearing Database**:
+    - **clear the data**: Wipe the database clean, starting fresh for new data.
 - **Java Integration**
   - **Cross-Language Compatibility**: Our meticulously crafted Java driver ([SimpleDBDriver](https://github.com/YahyaAzzam/SimpleDBDriver)) seamlessly integrates with the Simple File System Database, allowing Java applications to interact with the database effortlessly. This cross-language compatibility enhances the database's versatility, extending its usability to diverse programming ecosystems.
 
 ## 2. Installation <a name="installation"></a>
-To use this database you need to pass the commands by CMD so we made [SimpleDBDriver](https://github.com/YahyaAzzam/SimpleDBDriver) in jave you can use it to call the database 
+To use DataHive, follow these installation steps:
+1. **Install python**: Python 3.x installed on your machine.
 
-## Commands
-| Name | parameters | Description |
-|------|------------|-------------|
-| CreateCommand() | DatabaseSchemaPath | Create database which follow input [schema](#schema-sample) |
-| SetCommand() | DatabaseName, TableName, Inputdata | Set row with the inputdata |
-| GetCommand() | DatabaseName, TableName, InputQuery | Use the query to get specific data |
-| DeleteCommand() |  DatabaseName, TableName, InputQuery | Use the query to delete specific data |
-| ClearCommand() |  DatabaseName | retrun the database to the initial state |
+2. **Install DataHive**: Install DataHive package on your local machine:
 
-## Schema
+```shell
+pip install DataHive
+```
+## 3. Usage <a name="usage"></a>
 
-1. ### Schema sample:
-  ```
-  {
-      "database_name" : "ClassA1",
-      "Tables" : [
-          {
-              "name" : "student",
-              "columns" : ["First_name", "Last_name", "CGPA", "Gender", "Age"],
-              "primary_key"  : "Last_name",
-              "index_keys" : ["First_name", "Last_name", "CGPA"],
-              "overwrite" : "True",
-              "consistently" : "Eventual"
-         }
-                  ]
-   }
-  ```
-  
-2. ### Table Contents:
+### Schema Format <a name="schema"></a>
+Below is an example of the schema format that defines the structure of the database, including the database name and tables with their respective attributes:
+   1. **Schema Example**:
+      ```
+      {
+          "database_name" : "ClassA1",
+          "Tables" : [
+              {
+                  "name" : "student",
+                  "columns" : ["First_name", "Last_name", "CGPA", "Gender", "Age"],
+                  "primary_key"  : "Last_name",
+                  "index_keys" : ["First_name", "Last_name", "CGPA"],
+                  "overwrite" : "True",
+             }
+                      ]
+       }
+      ```
+2. **Table Contents**:
+  The schema format consists of the following elements for defining tables within the database:
 
-  | Name | Type | Nullable | Notes |
-  | ---- | ---- | -------- | ----- |
-  | Name | string | No | |
-  | Columns | List of Strings | No | should contain the primary-key |
-  | Primary_key | String | No | |
-  | Index_key | List of Strings | No | |
-  | Overwrite | String | No | should be True or False only |
-  | Consistently | String | No | |
+      | Name | Type | Nullable | Notes |
+      | ---- | ---- | -------- | ----- |
+      | Name | string | No | Name of the table. |
+      | Columns | List of Strings | No | List of column names, including the primary key. |
+      | Primary_key | String | No | The primary key for the table. |
+      | Index_key | List of Strings | Yes | List of column names that serve as index keys. |
+      | Overwrite | boolean (true/false) | Yes | Initial value is 'false'; you can set its value to 'true' to enable overwriting.|
+   
+### Command-Line Interface <a name="commands"></a>
+
+*Note: Ensure that you have a JSON file containing your schema before creating the database.*
+
+| Command | Parameters | Description |
+|---------|------------|-------------|
+| `Create` | `DatabaseSchemaPath` | Creates a database following the specified [schema](#schema).
+| `Set` | `DatabaseName`, `TableName`, `InputData` | Sets a row with the provided input data.
+| `Get` | `DatabaseName`, `TableName`, `InputQuery` | Utilizes the input query to retrieve specific data from the database.
+| `Delete` | `DatabaseName`, `TableName`, `InputQuery` | Uses the input query to delete specific data from the database.
+| `Clear` | `DatabaseName` | Resets the specified database to its initial state.
+
+This Command-Line Interface (CLI) provides a set of commands for creating, updating, querying, deleting data, and resetting databases, offering comprehensive control over your data management tasks.
+
+## 4. Example Usage <a name="exmaples"></a>
+- **The general format for any command in the program is as follows**:
+
+   ```python
+   python DataHive -c [command] [options]
+   ```
+   Replace `[command]` with the desired database command and `[options]` with relevant command options.
+
+- **Commands Exmaples**:
+
+    - Creating a new database:
+         ```python
+         python DataHive -c create -sc <your_schema_path>
+         ```
+    
+    - Sets a row with the provided input data:
+         ```python
+         python DataHive -c set -db <your_database> -t <your_table> -q '{"key": "value"}'
+         ```
+
+    - Utilizes the input query to retrieve specific data from the database:
+         ```python
+         python DataHive -c get -db <your_database> -t <your_table> -q '{"key": "value"}'
+                 # if you didn't add -q it will get all data in the table
+         ```
+
+    - Uses the input query to delete specific data from the database:
+         ```python
+         python DataHive -c delete -db <your_database> -t <your_table> -q '{"key": "value"}'
+         ```
+
+   - Resets the specified database to its initial state:
+     ```python
+     python DataHive -c clear -db <your_database>'
+     ```
+## 5. FAQs <a name="faqs"></a>
+
+- **Q1: What is DataHive?**
+  - **A1:** DataHive is a lightweight database system designed for storing data in JSON files. It provides essential CRUD (Create, Read, Update, Delete) operations and ensures synchronization between read and write operations. DataHive is an ideal solution for small-scale applications where a simple and reliable data storage system is required.
+
+- **Q2: How do I install DataHive?**
+  - **A2:** To install DataHive, you need to have Python 3.x installed on your machine. After ensuring Python is installed, run the following command:
+
+    ```shell
+    pip install DataHive
+    ```
+
+- **Q3: What is the schema format for defining the database structure?**
+  - **A3:** The schema format defines the structure of the database, including the database name, tables, and their attributes. It consists of elements like table names, column names, primary keys, index keys, and overwriting settings. You can find a detailed example of the schema format in the [Schema Format](#schema) section of this README.
+
+- **Q4: How do I use the Command-Line Interface (CLI) to interact with DataHive?**
+  - **A4:** The CLI offers a set of commands for creating, updating, querying, deleting data, and resetting databases. You can use the general command format:
+
+    ```shell
+    python DataHive -c [command] [options]
+    ```
+
+    Replace `[command]` with the desired database command and `[options]` with relevant command options. Examples of various commands can be found in the [Example Usage](#examples) section.
+
+- **Q5: Is DataHive compatible with Java?**
+  - **A5:** Yes, DataHive is cross-language compatible. We have developed a dedicated Java driver (SimpleDBDriver) that seamlessly integrates with DataHive. This Java driver allows Java applications to interact with the database, extending its usability to diverse programming ecosystems.
+
+## 6. Contributing <a name="contributing"></a>
+
+Contributions to DataHive are welcome! Feel free to fork the repository, make improvements, and create pull requests.
+
+## 7. License <a name="license"></a>
+
+DataHive is released under the MIT License. See the [LICENSE](https://github.com/YahyaAzzam/SimpleFSDB/blob/master/LICENSE) file for details.
+
+## 8. Upcoming Features <a name="upcoming-features">
+   - Stay tuned for future updates and additional features. We are constantly working on enhancing DataHive to provide an even better data storage solution for your needs.
+---
+*Note: This documentation provides an overview of DataHive's functionality and usage. For detailed code explanations, refer to the source code and comments in SimpleFSDB's repository.*
+
+
   
 
 
